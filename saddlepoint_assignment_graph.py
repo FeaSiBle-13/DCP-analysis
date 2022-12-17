@@ -1,10 +1,16 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-list_20 = [228, 6, 226, 171, 208, 2, 237, 1, 235, 211, 1, 7, 28, 1, 2, 1, 1, 1, 7, 26, 3, 3, 1, 4, 1, 1, 1, 4, 1, 1, 3, 2, 1, 1, 1, 1, 2, 1, 1, 3, 2, 1, 1, 2, 4, 5, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 261, 13, 13]
-
-list_barrier = [0.0337, 0.0326, 0.0337, 2.49e-06, 0.0337, 0.164, 0.0334, 2.04, 0.0337, 0.0334, 0.418, 0.0326, 0.164, 0.177, 0.0326, 9.32, 2.5, 0.177, 0.221, 0.164, 1.23, 0.0323, 1.51, 0.0328, 0.0438, 0.0438, 1.72, 0.0326, 12.1, 0.778, 0.0684, 0.0328, 1.16, 2.49e-06, 0.0893, 0.0678, 1.23, 2.04, 4.4, 1.23, 0.068, 0.236, 19.1, 1.23, 0.0328, 0.0323, 5.88, 0.0678, 0.434, 1.43, 3.44, 0.182, 0.0328, 3.32, 1.23, 2.5, 0.0326, 1.23, 0.23, 0.068, 2.2, 0.0667, 2.04, 0.0328, 2.04, 5.58, 1.23, 25.6, 0.0684, 0.0326, 0.0323, 10.9, 11.5, 17.9, 1.28, 0.181, 1.99, 3.16, 0.068, 0.068, 2.04, 4.04, 1.84, 0.759, 8.84, 3.92, 0.0932, 1.72, 1.51, 1.18, 2.04, 1.52, 0.0138, 1.87, 0.386, 1.36, 4.18, 28.9, 2.04, 1.51, 'none', 'none', 'none']
-
+with open(f'DCP-analysis.csv', 'r') as reffile:
+    list_barrier = []
+    list_frequency = []
+    line = reffile.readline()
+    line = reffile.readline()
+    for line in reffile:
+        words = line.split()
+        list_barrier.append(words[2])
+        list_frequency.append(words[1])
+        
 
 CH_ion = 0
 three_same_spin = 0
@@ -14,13 +20,13 @@ not_dedicated = 0
 
 for i_barrier, barrier in enumerate(list_barrier):
     if barrier == 0.0337 or barrier == 0.0334:
-        CH_ion += list_20[i_barrier]
+        CH_ion += list_frequency[i_barrier]
     elif barrier == 1.23:
-        three_same_spin += list_20[i_barrier]
+        three_same_spin += list_frequency[i_barrier]
     elif barrier == 0.164:
-        CC_cov += list_20[i_barrier]
+        CC_cov += list_frequency[i_barrier]
     elif barrier != 0.0337 or barrier != 0.0334 or barrier != 1.23 or barrier != 0.164 or barrier != 'none':
-        not_dedicated += list_20[i_barrier] 
+        not_dedicated += list_frequecy[i_barrier] 
     
 DCP_notfound = 261
 no_basin_change = 13
