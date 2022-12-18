@@ -5,75 +5,55 @@ import matplotlib.pyplot as plt
 with open(f'DCP-analysis.csv', 'r') as reffile:
     list_barrier = []
     list_frequency = []
+    list_lable_temp = []
+    list_frequency_temp = []
     line = reffile.readline()
     line = reffile.readline()
     for line in reffile:
-        if 'none' not in line:
-            words = line.split()
-            list_barrier.append(words[2])
-            list_frequency.append(words[1])
-        else:
-            list_barrier.append(words[0])
-            list_frequency.append(words[1])            
+        words = line.split()
+        list_barrier.append(words[2])
+        ist_frequency.append(words[1])
+        if 'none' in line:
+            list_lable_temp.append(words[0])
+            list_frequency_temp.append(words[1])            
 
 #reads out the input information for the plot 
 with open('saddlepoint_assignment_gaph.in', 'r') as reffile:
     list_category = []
     list_lable = []
     for line in reffile:
-        if 'sum_up' in line:
+        if 'category' in line:
             numbers = float(line.split())
-            for number in numbers:
+            for number in numbers[1:]:
                 list_category.append(number)
         if 'lable' in line:
             words = line.split()
-            for word in words:
+            for word in words[1:]:
                 list_lable.append(number)
 
 #sums up the frequencies into the categories from the input file
 list_category_frequency = []
 
+for _ in list_category:
+    list_category_frequency.append(0)
+list_lable.append('other DCPs')
+list_category_frequency.append(0)
+    
 for i_barrier, barrier in enumerate(list_barrier):
     for i_category, category in enumerate(list.category):
         if barrier == category:
+            list_category_frequency[i_category] += list_frequency[i_barrier]
+            break
+        elif barrier != category and barrier != 'none':
+            list_category_frequency[-1] += list_frequency[i_barrier]
+
+list_lable += list_lable_temp
+list_category_frequency += list_frequency_temp
+
+print(list_lable)
+print(list_category_frequency) 
         
-    
-CH_ion = 0
-three_same_spin = 0
-CC_cov = 0
-not_dedicated = 0
 
-
-for i_barrier, barrier in enumerate(list_barrier):
-    if barrier == 0.0337 or barrier == 0.0334:
-        CH_ion += list_frequency[i_barrier]
-    elif barrier == 1.23:
-        three_same_spin += list_frequency[i_barrier]
-    elif barrier == 0.164:
-        CC_cov += list_frequency[i_barrier]
-    elif barrier != 0.0337 or barrier != 0.0334 or barrier != 1.23 or barrier != 0.164 or barrier != 'none':
-        not_dedicated += list_frequecy[i_barrier] 
-    
-DCP_notfound = 261
-no_basin_change = 13
-walked_to_infty = 13
-
-        
-list_result = [CH_ion, three_same_spin, CC_cov, not_dedicated-(DCP_notfound + walked_to_infty + no_basin_change), DCP_notfound, no_basin_change, walked_to_infty ] 
-list_label = ['CH_ion', 'three_same_spin', 'CC_cov', 'not_dedicated', 'DCP not found', 'no basin change', 'walked from basin to infty'] 
-    
-print(list_result)
-print(list_label)
-    
-
-
-print(f'sum = {CH_ion + three_same_spin + CC_cov + not_dedicated}')
-        
-list_20 = [1312, 30, 59, 269, 316, 0, 14]
-list_17 = [1342, 24, 68, 262, 283, 0, 21]
-list_15 = [1345, 14, 56, 298, 261, 13, 13]
-list_label = ['CH_ion', '3 same', 'CC_cov', 'not_ddctd', 'no DCP', 'same basin', 'to infty']
-    
 
 
 plt.rcParams['figure.figsize'] = (10, 8.5)
@@ -90,15 +70,8 @@ plt.rc ('xtick', labelsize = 10)
 #plt.xlabel('Maximum probability path', labelpad = 15) 
 plt.ylabel('frequency', labelpad = 15) 
 
-x_values = range(len(list_20))
+x_values = range(len(list_category_frequency))
 
-x_values15 = []
-for x in range(len(list_15)):
-    x_values15.append(x-0.25)
-
-x_values20 = []
-for x in range(len(list_20)):
-    x_values20.append(x+0.25)
 
 plt.xticks(x_values, list_label)  
 
@@ -107,8 +80,6 @@ plt.xticks(x_values, list_label)
 #plt.xticks(np.arange(8, step=1), list_ordered_pot)  
 
 
-plt.bar(x_values20, list_20, width = 0.25, label = legend_con)
-plt.bar(x_values, list_17, width = 0.25)
-plt.bar(x_values15, list_15, width = 0.25)
+plt.bar(x_values, list_category_frequency, width = 1, label = list_lable)
 
-plt.savefig('bar_Ethane_stat-22-12-15.png')
+#plt.savefig('bar_Ethane_stat-22-12-15.png')
