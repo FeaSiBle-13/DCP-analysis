@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+#reads out the different DCP from DCP-analysis.csv
 with open(f'DCP-analysis.csv', 'r') as reffile:
     list_barrier = []
     list_frequency = []
