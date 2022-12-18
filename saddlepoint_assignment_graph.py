@@ -40,12 +40,19 @@ list_lable.append('other DCPs')
 list_category_frequency.append(0)
     
 for i_barrier, barrier in enumerate(list_barrier):
-    for i_category, category in enumerate(list.category):
+    for i_category, category in enumerate(list_category):
         if barrier == category:
             list_category_frequency[i_category] += list_frequency[i_barrier]
             break
         elif barrier != category and barrier != 'none':
             list_category_frequency[-1] += list_frequency[i_barrier]
+
+#finish here
+for compare_value in list_category:
+    for category in list_category:
+        if compare_value == category:
+            list_category
+    
 
 list_lable += list_lable_temp
 list_category_frequency += list_frequency_temp
