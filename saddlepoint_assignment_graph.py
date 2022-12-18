@@ -8,11 +8,36 @@ with open(f'DCP-analysis.csv', 'r') as reffile:
     line = reffile.readline()
     line = reffile.readline()
     for line in reffile:
-        words = line.split()
-        list_barrier.append(words[2])
-        list_frequency.append(words[1])
-        
+        if 'none' not in line:
+            words = line.split()
+            list_barrier.append(words[2])
+            list_frequency.append(words[1])
+        else:
+            list_barrier.append(words[0])
+            list_frequency.append(words[1])            
 
+#reads out the input information for the plot 
+with open('saddlepoint_assignment_gaph.in', 'r') as reffile:
+    list_category = []
+    list_lable = []
+    for line in reffile:
+        if 'sum_up' in line:
+            numbers = float(line.split())
+            for number in numbers:
+                list_category.append(number)
+        if 'lable' in line:
+            words = line.split()
+            for word in words:
+                list_lable.append(number)
+
+#sums up the frequencies into the categories from the input file
+list_category_frequency = []
+
+for i_barrier, barrier in enumerate(list_barrier):
+    for i_category, category in enumerate(list.category):
+        if barrier == category:
+        
+    
 CH_ion = 0
 three_same_spin = 0
 CC_cov = 0
