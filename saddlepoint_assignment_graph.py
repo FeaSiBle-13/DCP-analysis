@@ -89,4 +89,4 @@ plt.xticks(x_values, list_final_label)
 
 plt.bar(x_values, list_final_frequencies, width = 1, label = list_label)
 
-plt.savefig('saddlepoint_assignment_graph.png')
+plt.savefig('assignment_graph.png')
