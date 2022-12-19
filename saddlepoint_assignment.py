@@ -220,3 +220,5 @@ with open(f'DCP-analysis.csv', 'w') as reffile:
     reffile.write(f'\tfrequency\tDelta_phi\torder\ttrajectories\n')
     for i_item, item in enumerate(enumeration):
         reffile.write(f'{enumeration[i_item]}\t{statistics[i_item]}\t{Delta_phi[i_item]}\t{order[i_item]}\t{trajectories[i_item]}\n')
+
+print('DCP-analysis.csv was generated')
