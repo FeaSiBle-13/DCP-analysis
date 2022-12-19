@@ -1,3 +1,5 @@
+#!/bin/env python3
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -10,26 +12,26 @@ with open(f'DCP-analysis.csv', 'r') as reffile:
     line = reffile.readline()
     line = reffile.readline()
     for line in reffile:
-        words = line.split()
+        words = line.split('\t')
         list_barrier.append(words[2])
-        ist_frequency.append(words[1])
+        list_frequency.append(int(words[1]))
         if 'none' in line:
             list_label_temp.append(words[0])
-            list_frequency_temp.append(words[1])            
+            list_frequency_temp.append(int(words[1]))            
 
 #reads out the input information for the plot 
-with open('saddlepoint_assignment_gaph.in', 'r') as reffile:
+with open('assignment_graph.in', 'r') as reffile:
     list_category = []
     list_label = []
     for line in reffile:
         if 'category' in line:
-            numbers = float(line.split())
+            numbers = line.split()
             for number in numbers[1:]:
                 list_category.append(number)
         if 'label' in line:
             words = line.split()
             for word in words[1:]:
-                list_label.append(number)
+                list_label.append(word)
 
 #sums up the frequencies into the categories from the input file
 list_category_frequency = []
@@ -44,23 +46,21 @@ for i_barrier, barrier in enumerate(list_barrier):
         if barrier == category:
             list_category_frequency[i_category] += list_frequency[i_barrier]
             break
-        elif barrier != category and barrier != 'none':
+        elif barrier not in list_category and barrier != 'none':
             list_category_frequency[-1] += list_frequency[i_barrier]
 
 list_label += list_label_temp
 list_category_frequency += list_frequency_temp            
             
 #sums up the barriers which are slightly different, but are set equal in the input file
-list_final_categories = []
 list_final_label = []
 list_final_frequencies = []
-for i_category, category in enumerate(list_category):
-    if category not in list_final_categories:
-        list_final_categories.append(category)
-        list_final_frequencies.append(list_category_frequency[i_category])
-        list_final_label.append(list_label[i_category])
+for i_label, label in enumerate(list_label):
+    if label not in list_final_label:
+        list_final_label.append(label)
+        list_final_frequencies.append(list_category_frequency[i_label])
     else:
-        list_final_frequencies[list_final_label.index(list_label[i_category])] += list_category_frequency[i_category]) 
+        list_final_frequencies[list_final_label.index(label)] += list_category_frequency[i_label]
         
         
 
