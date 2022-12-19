@@ -75,6 +75,8 @@ def reading_n_elecs():
         words = line.split()
         n_elecs = int(words[0])
     return n_elecs
+
+
 def extend_elec_conf(R_new, trajectory):
     found = False
     for i_DCP, R_DCP in enumerate(list_DCP):
