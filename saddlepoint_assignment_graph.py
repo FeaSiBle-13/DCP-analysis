@@ -64,7 +64,7 @@ for i_label, label in enumerate(list_label):
         list_final_frequencies[list_final_label.index(label)] += list_category_frequency[i_label]
 
 #relabels import names from .csv
-list_final_label[list_final_label.index('walked from basin to infty')] = 'to infty'
+list_final_label[list_final_label.index('walked from basin to infty')] = 'to_infty'
 list_final_label[list_final_label.index('no DCP found')] = 'no_DCP'
 
 #creates output file
