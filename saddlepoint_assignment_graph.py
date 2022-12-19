@@ -66,7 +66,9 @@ for i_label, label in enumerate(list_label):
 #relabels import names from .csv
 list_final_label[list_final_label.index('walked from basin to infty')] = 'to_infty'
 list_final_label[list_final_label.index('no DCP found')] = 'no_DCP'
-
+if 'no basin change' in list_final_label:
+    list_final_label[list_final_label.index('no basin change')] = 'same_basin'
+    
 #creates output file
 with open ('assignment_graph.out', 'w') as printfile:
     printfile.write('categories: ')
