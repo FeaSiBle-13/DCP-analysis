@@ -145,7 +145,7 @@ for trajectory in range(1, count + 1):
             if words[1] == 'Infinity':
                 no_DCP = True
 
-if found and not infty and not no_DCP:
+    if found and not infty and not no_DCP:
         with open(f'trajectory-{trajectory}/DCP_newton/fort.100') as reffile:
             R_new = []
             line = reffile.readline()
