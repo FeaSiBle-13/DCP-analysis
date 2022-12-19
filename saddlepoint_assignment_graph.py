@@ -42,13 +42,14 @@ list_label.append('other DCPs')
 list_category_frequency.append(0)
     
 for i_barrier, barrier in enumerate(list_barrier):
-    for i_category, category in enumerate(list_category):
-        if barrier == category:
-            list_category_frequency[i_category] += list_frequency[i_barrier]
-            break
-        elif barrier not in list_category and barrier != 'none':
-            list_category_frequency[-1] += list_frequency[i_barrier]
-
+    if barrier not in list_category and barrier != 'none':
+        list_category_frequency[-1] += list_frequency[i_barrier]
+    else:    
+        for i_category, category in enumerate(list_category):
+            if barrier == category:
+                list_category_frequency[i_category] += list_frequency[i_barrier]
+                break
+       
 list_label += list_label_temp
 list_category_frequency += list_frequency_temp            
             
@@ -62,13 +63,18 @@ for i_label, label in enumerate(list_label):
     else:
         list_final_frequencies[list_final_label.index(label)] += list_category_frequency[i_label]
         
-        
+#creates output file
+with open ('assignment_graph.out', 'w') as printfile:
+    printfile.write('categories: ')
+    for item in list_final_label: 
+        printfile.write(f'{item} ')
+    printfile.write('\n')
+    printfile.write('frequency: ')
+    for item in list_final_frequencies: 
+        printfile.write(f'{item} ')
+print('assignment_graph.out was generated') 
 
-
-print(list_final_label)
-print(list_final_frequencies) 
-        
-
+#makes bar diagram
 plt.rcParams['figure.figsize'] = (10, 8.5)
 plt.rcParams['font.size'] = 14
 plt.rcParams['lines.linewidth'] = 2
@@ -76,17 +82,13 @@ plt.rc ('axes', titlesize = 20)
 plt.rc ('axes', labelsize = 18)
 plt.rc ('xtick', labelsize = 10) 
 
-#plt.title('Potentials $\Delta\phi$', pad= 20) 
-
-#plt.xlabel('Maximum probability path', labelpad = 15) 
 plt.ylabel('frequency', labelpad = 15) 
 
 x_values = range(len(list_final_frequencies))
 
 plt.xticks(x_values, list_final_label)  
 
-#plt.xticks(np.arange(8, step=1), list_ordered_pot)  
-
 plt.bar(x_values, list_final_frequencies, width = 1, label = list_label)
 
 plt.savefig('assignment_graph.png')
+print('assignment_graph.png was generated')
