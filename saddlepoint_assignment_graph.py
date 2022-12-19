@@ -38,7 +38,7 @@ list_category_frequency = []
 
 for _ in list_category:
     list_category_frequency.append(0)
-list_label.append('other DCPs')
+list_label.append('other_DCPs')
 list_category_frequency.append(0)
     
 for i_barrier, barrier in enumerate(list_barrier):
@@ -63,8 +63,9 @@ for i_label, label in enumerate(list_label):
     else:
         list_final_frequencies[list_final_label.index(label)] += list_category_frequency[i_label]
 
-#makes 'walked from basin to infty' to 'to infty'
+#relabels import names from .csv
 list_final_label[list_final_label.index('walked from basin to infty')] = 'to infty'
+list_final_label[list_final_label.index('no DCP')] = 'no_DCP'
 
 #creates output file
 with open ('assignment_graph.out', 'w') as printfile:
