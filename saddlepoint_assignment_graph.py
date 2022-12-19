@@ -62,7 +62,10 @@ for i_label, label in enumerate(list_label):
         list_final_frequencies.append(list_category_frequency[i_label])
     else:
         list_final_frequencies[list_final_label.index(label)] += list_category_frequency[i_label]
-        
+
+#makes 'walked from basin to infty' to 'to infty'
+list_final_label[list_final_label.index('walked from basin to infty')] = 'to infty'
+
 #creates output file
 with open ('assignment_graph.out', 'w') as printfile:
     printfile.write('categories: ')
