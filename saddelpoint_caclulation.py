@@ -213,8 +213,14 @@ $sample(create, size=1, single_point)
 $maximize_sample()''')
 
 #creates .yml file
-                            
-                            
+        with open(f'trajectory-{trajectory}/DCP_{method}/cluster.yml', 'w') as printfile:
+            printfile.write(f'''-- # MaximaProcessing
+MaximaProcessing:
+  binaryFileBasename: {method}
+  calculateSpinCorrelations: false
+  shuffleMaxima: false
+...''')
+                             
 #executes amolqc and Processmaxima
         with cd(f'trajectory-{trajectory}/DCP_{method}'):
             success = True
