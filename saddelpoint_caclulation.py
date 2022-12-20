@@ -178,8 +178,8 @@ $maximize_sample()''')
         R_int = ( basin_left(trajectory) + basin_enter(trajectory) ) / 2
 
 
-        #creates the newton.ami with the interpolated vectors and the input with the fixed e positions
-        with open(f'trajectory-{trajectory}/DCP_{method}newton/{method}.ami', 'w') as printfile:
+        #creates the {method}.ami with the interpolated vectors and the input with the fixed e positions
+        with open(f'trajectory-{trajectory}/DCP_{method}/{method}.ami', 'w') as printfile:
             printfile.write(f'''! seed for random number generation, not important
 $gen(seed=101)
 ! reading the wave function file
@@ -212,26 +212,29 @@ $sample(create, size=1, single_point)
 ! maximize the walker
 $maximize_sample()''')
 
+#creates .yml file
+                            
+                            
 #executes amolqc and Processmaxima
-        with cd(f'trajectory-{trajectory}/DCP_newton'):
+        with cd(f'trajectory-{trajectory}/DCP_{method}'):
             success = True
             try:
-                run('amolqc newton.ami')
+                run(f'amolqc {method}.ami')
             except subprocess.CalledProcessError:
                 success = False
 
             if success:
                 run('ProcessMaxima cluster.yml')
-                cp('cluster-out.yml', '../result/cluster_trans-out.yml')
+                cp('cluster-out.yml', f'../result/cluster_{method}_trans-out.yml')
             else:
-                print(f'newton method did not work for trajectory-{trajectory}')
+                print(f'method {method} did not work for trajectory-{trajectory}')
 
 
         #executesEVanalysis
         if success:
             with cd(f'trajectory-{trajectory}/result'):
                 try:
-                    run(f'/home/theochem/Scripts/EVanalysis/EVanalysis.py ../minimum/{name}.wf cluster_trans-out.yml')
+                    run(f'/home/theochem/Scripts/EVanalysis/EVanalysis.py ../minimum/{name}.wf cluster_{method}_trans-out.yml')
                 except subprocess.CalledProcessError:
                     pass
 
