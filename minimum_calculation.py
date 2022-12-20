@@ -121,4 +121,6 @@ $maximize_sample()''')
             run('ProcessMaxima cluster.yml')
             cp('cluster-out.yml', '../result/cluster_end-out.yml')
 
-        print(f'Minimum for trajectory-{trajectory} was calculated')
+        print(f'Second minimum for trajectory-{trajectory} was calculated')
+        
+    else: print(f'Second minimum for trajectory-{trajectory} does not exist')   
