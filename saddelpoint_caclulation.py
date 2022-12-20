@@ -7,6 +7,7 @@ import re
 import numpy as np
 
 threshold_DCP_guess = 1e-1
+method = 'newton'
 
 
 def reading_n_elecs():
@@ -115,8 +116,9 @@ for trajectory in range(1, count+1):
                 if words[4] == 'Infinity':
                     infty = True
 
+    #calculates the minimum
     if found and not infty:
-        #calculates the minima
+        
         #makes folders
         mkdir(f'trajectory-{trajectory}')
         mkdir(f'trajectory-{trajectory}/result')
@@ -157,7 +159,7 @@ $sample(create, size=1, single_point)
 ! maximize the walker
 $maximize_sample()''')
 
-        #makes the run
+        #makes the amolqc run for the minimum single point calculation
         with cd(f'trajectory-{trajectory}/minimum'):
             run('amolqc stedes.ami')
             run('ProcessMaxima cluster.yml')
@@ -165,19 +167,19 @@ $maximize_sample()''')
 
 
 
-#calculates saddlepoints with newton
+#calculates saddlepoints with method input
         #makes folders
-        mkdir(f'trajectory-{trajectory}/DCP_newton')
-        for obj in ls('trajectory-source/DCP_newton'):
-            cp(f'trajectory-source/DCP_newton/{obj}', f'trajectory-{trajectory}/DCP_newton')
+        mkdir(f'trajectory-{trajectory}/DCP_{method}')
+        for obj in ls(f'trajectory-source/DCP'):
+            cp(f'trajectory-source/DCP/{obj}', f'trajectory-{trajectory}/DCP_{method}')
 
 
         #interpolation of both -traj- vectors
-        R_int = (basin_left(trajectory)+basin_enter(trajectory))/2
+        R_int = ( basin_left(trajectory) + basin_enter(trajectory) ) / 2
 
 
         #creates the newton.ami with the interpolated vectors and the input with the fixed e positions
-        with open(f'trajectory-{trajectory}/DCP_newton/newton.ami', 'w') as printfile:
+        with open(f'trajectory-{trajectory}/DCP_{method}newton/{method}.ami', 'w') as printfile:
             printfile.write(f'''! seed for random number generation, not important
 $gen(seed=101)
 ! reading the wave function file
@@ -186,8 +188,17 @@ $init_rawdata_generation()
 $init_max_search(
 step_size=0.1,
 correction_mode=none,
-singularity_threshold=0.0001,
-method=newton,
+singularity_threshold=0.0001,'''
+             #continue here
+            if method == 'newton':
+                printfile.write('method=newton')
+            elif method == 'none':
+                printfile.write('method=none')
+            elif method ==. 'gradient_norm':
+                printfile.write('minimize_gradient_norm,\n') 
+                printfile.write('switch_step=50,\n')
+            printfile.write('\n')
+            printfile.write('''
 verbose=2,
 negative_eigenvalues=-1,
 eigenvalue_threshold=1e-10)
