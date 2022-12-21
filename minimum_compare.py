@@ -38,22 +38,6 @@ def start_potential():
 count = read_count()
 n_elecs = reading_n_elecs()
 start_potential = start_potential()
- 
-#reads saddlepoint_calculation.in file (would be nicer here with regular expressions)
-with open('saddlepoint_calculation.in', 'r') as reffile:
-    for line in reffile:
-        if 'threshold_DCP_guess' in line:
-            words = line.split()
-            threshold_DCP_guess = float(words[1])
-        else:
-            threshold_DCP_guess = 1e-1
-            
-        if 'method' in line:
-            words = line.split()
-            method = words[1]
-        else: 
-            method = 'gradient_norm'
-
 
 #reads out different potentials and electron movements for same potential as start potetnial and creates statistic
 list_potentials = []
