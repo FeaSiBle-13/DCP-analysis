@@ -139,7 +139,7 @@ $init_rawdata_generation()
 $init_max_search(
 step_size=0.1,
 correction_mode=none,
-singularity_threshold=0.0001,'''
+singularity_threshold=0.0001,''')
              #continue here
             if method == 'newton':
                 printfile.write('method=newton')
