@@ -87,7 +87,7 @@ def reading_n_elecs():
     return n_elecs
 
 
-def compare_saddlepoint(R_new, trajectory):
+def compare_saddlepoints(R_new, trajectory):
     found = False
     for i_DCP, R_DCP in enumerate(list_DCP):
         norm = np.linalg.norm(R_new - R_DCP)
