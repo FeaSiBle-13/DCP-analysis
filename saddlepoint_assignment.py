@@ -36,36 +36,43 @@ def read_count():
 def phi_value(x, trajectory):
     if x == 0:
         with open(f'./trajectory-start/minimum/fort.100') as reffile:
+            found = False
             for line in reffile:
+                found = True
                 if 'Phi:' in line:
                    words = line.split()
                    phi = float(words[1])
-                else:
-                    print('Phi from trajectory-start was not found')
+            if not found:
+                print('Phi from trajectory-start was not found')
     elif x == 1:
         with open(f'./trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:
-          for line in reffile:
-                if 'Phi:' in line:
-                    words = line.split()
-                    phi = float(words[1])
-                else:
-                    print(f'Phi from trajectory-{trajectory}/DCP_{method} was not found')
-    elif x == 2:
-        with open(f'./trajectory-{trajectory}/minimum/fort.100') as reffile:
+            found = False
             for line in reffile:
                 if 'Phi:' in line:
                     words = line.split()
                     phi = float(words[1])
-                else:
-                    print('Phi from trajectory-start was not found')
+            if not found:
+                print(f'Phi from trajectory-{trajectory}/DCP_{method} was not found')
+    elif x == 2:
+        with open(f'./trajectory-{trajectory}/minimum/fort.100') as reffile:
+            found = False
+            for line in reffile:
+                if 'Phi:' in line:
+                    found = True
+                    words = line.split()
+                    phi = float(words[1])
+            if not found:
+                print('Phi from trajectory-start was not found')
     return phi
 
 
 def reading_order(trajectory):
     with open(f'trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:
         order = 0
+        found = False
         for line in reffile:
             if 'hessian eigenvalues and -vectors:' in line:
+                found = True
                 for _ in range(10):
                     line = reffile.readline()
                     words = line.split()
@@ -75,8 +82,8 @@ def reading_order(trajectory):
                         break
                     for _ in range(n_elecs):
                         line = reffile.readline()
-            else:
-                print(f'hessian eigenvalues and -vectors: was not found in file trajectory-{trajectory}/DCP_{method}/fort.100')
+        if not found:
+            print(f'hessian eigenvalues and -vectors: was not found in file trajectory-{trajectory}/DCP_{method}/fort.100')
     return order
 
 
