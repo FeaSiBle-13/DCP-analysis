@@ -38,8 +38,8 @@ def phi_value(x, trajectory):
         with open(f'./trajectory-start/minimum/fort.100') as reffile:
             found = False
             for line in reffile:
-                found = True
                 if 'Phi:' in line:
+                   found = True
                    words = line.split()
                    phi = float(words[1])
             if not found:
@@ -49,6 +49,7 @@ def phi_value(x, trajectory):
             found = False
             for line in reffile:
                 if 'Phi:' in line:
+                    found = True
                     words = line.split()
                     phi = float(words[1])
             if not found:
