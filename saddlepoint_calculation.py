@@ -164,7 +164,7 @@ singularity_threshold=0.0001,
                 printfile.write('method=none,')
             elif method == 'gradient_norm':
                 printfile.write('method=bfgs,\n')
-                printfile.write('minimize_gradient_norm,\n') 
+                printfile.write('minimize_grad_norm,\n') 
                 printfile.write('switch_step=50,')
             printfile.write('''
 verbose=2,
