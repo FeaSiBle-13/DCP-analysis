@@ -7,6 +7,7 @@ from sigfig import round
 
 threshold = 1e-2
 
+
 list_DCP = []
 list_phi_values = []
 list_enumerate_DCP =[]
@@ -121,6 +122,23 @@ with open(f'trajectory.ami', 'r') as ami_file:
             count = int(re.search(r'\d+', line).group())
             notdone_count = False
 
+            
+#reads saddlepoint_calculation.in file (would be nicer here with regular expressions)
+with open('saddlepoint_calculation.in', 'r') as reffile:
+    for line in reffile:
+        if 'threshold_DCP_guess' in line:
+            words = line.split()
+            threshold_DCP_guess = float(words[1])
+        else:
+            threshold_DCP_guess = 1e-1
+            
+        if 'method' in line:
+            words = line.split()
+            method = words[1]
+        else: 
+            method = 'gradient_norm'            
+            
+            
 #starts evaluation
 for trajectory in range(1, count + 1):
     #checks if DCP was calculated
