@@ -1,7 +1,5 @@
 #!/bin/env python3
 
-#testCHANGE
-
 import numpy as np
 from pyscript import *
 import re
