@@ -172,14 +172,14 @@ for trajectory in range(1, count + 1):
         with open(f'trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:
             R_new = []
             for line in reffile:
-            if 'after minimize:' in line:
-                line = reffile.readline()
-                line = reffile.readline()
-                for _ in range(n_elecs):
+                if 'after minimize:' in line:
                     line = reffile.readline()
-                    words = line.split()
-                    for word in words[1:]:
-                        R_new.append(float(word))
+                    line = reffile.readline()
+                    for _ in range(n_elecs):
+                        line = reffile.readline()
+                        words = line.split()
+                        for word in words[1:]:
+                            R_new.append(float(word))
 
         compare_saddlepoints(np.array(R_new), trajectory)
 
