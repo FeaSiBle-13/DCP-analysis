@@ -81,7 +81,7 @@ def basin_enter(trajectory):
                 R_j.append(float(word))
     return np.array(R_j)
  
- def DCP_guess_point(R_max1, R_max2, threshold_DCP_guess):
+def DCP_guess_point(R_max1, R_max2, threshold_DCP_guess):
     for l in range(n_elecs):
         norm = np.linalg.norm(R_max1[l*3:l*3+3]-R_max2[l*3:l*3+3])
         if norm < threshold_DCP_guess:
