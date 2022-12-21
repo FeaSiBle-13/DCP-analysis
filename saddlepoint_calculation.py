@@ -106,19 +106,19 @@ with open(f'trajectory.ami', 'r') as ami_file:
 n_elecs = reading_n_elecs()
 
 #reads saddlepoint_calculation.in file (would be nicer here wirth regular expressions)
-    with open('saddlepoint_calculation.in', 'r') as reffile:
-        for line in reffile:
-            if 'threshold_DCP_guess' in line:
-                words = line.split()
-                threshold_DCP_guess = int(words[1])
-            else:
-                threshold_DCP_guess = 1e-1
-                
-            if 'method' in line:
-                words = line.split()
-                method = words[1]
-            else: 
-                method = 'gradient_norm'
+with open('saddlepoint_calculation.in', 'r') as reffile:
+    for line in reffile:
+        if 'threshold_DCP_guess' in line:
+            words = line.split()
+            threshold_DCP_guess = int(words[1])
+        else:
+            threshold_DCP_guess = 1e-1
+            
+        if 'method' in line:
+            words = line.split()
+            method = words[1]
+        else: 
+            method = 'gradient_norm'
         
 #loop for trajectories starts here        
 for trajectory in range(1, count+1):
