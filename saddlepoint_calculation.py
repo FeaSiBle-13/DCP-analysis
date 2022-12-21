@@ -104,7 +104,10 @@ with open(f'trajectory.ami', 'r') as ami_file:
         elif 'file' in line and notdone_file:
             name = re.search(r'file=([\'"]?)(.+?)\.wf\1', line).group(2)
             notdone_file = False
-
+            
+#reads n_elecs
+n_elecs = reading_n_elecs()
+            
 for trajectory in range(1, count+1):
     with open(f'trajectory-{trajectory}-max.ref') as reffile:
         found = False
