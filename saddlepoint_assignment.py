@@ -22,6 +22,17 @@ list_failure_phi_values = []
 list_failure_order = []
 
 
+def read_count():
+    with open(f'trajectory.ami', 'r') as ami_file:
+    notdone_count = True
+    notdone_file = True
+    for line in ami_file:
+        if 'count' in line and notdone_count:
+            count = int(re.search(r'\d+', line).group())
+            notdone_count = False
+    return(count)
+
+
 def phi_value(x, trajectory):
     if x == 0:
         with open(f'./trajectory-start/minimum/fort.100') as reffile:
@@ -31,7 +42,7 @@ def phi_value(x, trajectory):
             words = line.split()
             phi = float(words[1])
     elif x == 1:
-        with open(f'./trajectory-{trajectory}/DCP_newton/fort.100') as reffile:
+        with open(f'./trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:
             line= reffile.readline()
             while 'Phi:' not in line:
                 line = reffile.readline()
@@ -48,7 +59,7 @@ def phi_value(x, trajectory):
 
 
 def reading_order(trajectory):
-    with open(f'trajectory-{trajectory}/DCP_newton/fort.100') as reffile:
+    with open(f'trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:
         order = 0
         line = reffile.readline()
         while 'hessian eigenvalues and -vectors:' not in line:
@@ -76,7 +87,7 @@ def reading_n_elecs():
     return n_elecs
 
 
-def extend_elec_conf(R_new, trajectory):
+def compare_saddlepoint(R_new, trajectory):
     found = False
     for i_DCP, R_DCP in enumerate(list_DCP):
         norm = np.linalg.norm(R_new - R_DCP)
@@ -111,17 +122,9 @@ def runtime_hours(runtime):
     return np.round(runtime_hours, decimals = 3)
 
 
-#defines n_elecs
+#reads out and defines count and n_elecs
 n_elecs = reading_n_elecs()
-
-#defines count
-with open(f'trajectory.ami', 'r') as ami_file:
-    notdone_count = True
-    for line in ami_file:
-        if 'count' in line and notdone_count:
-            count = int(re.search(r'\d+', line).group())
-            notdone_count = False
-
+count = read_count()
             
 #reads saddlepoint_calculation.in file (would be nicer here with regular expressions)
 with open('saddlepoint_calculation.in', 'r') as reffile:
@@ -154,7 +157,7 @@ for trajectory in range(1, count + 1):
 
     #checks if DCP was found
     if found and not infty:
-        with open(f'trajectory-{trajectory}/DCP_newton/fort.100') as reffile:
+        with open(f'trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:
             no_DCP = False
             line = reffile.readline()
             while 'Phi:' not in line:
@@ -164,7 +167,7 @@ for trajectory in range(1, count + 1):
                 no_DCP = True
 
     if found and not infty and not no_DCP:
-        with open(f'trajectory-{trajectory}/DCP_newton/fort.100') as reffile:
+        with open(f'trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:
             R_new = []
             line = reffile.readline()
             while 'after minimize:' not in line:
@@ -177,7 +180,7 @@ for trajectory in range(1, count + 1):
                 for word in words[1:]:
                     R_new.append(float(word))
 
-        extend_elec_conf(np.array(R_new), trajectory)
+        compare_saddlepoints(np.array(R_new), trajectory)
 
     elif not found:
         found = False
@@ -233,10 +236,10 @@ order = list_order + list_failure_order
 
 
 #prints out .csv file
-with open(f'DCP-analysis.csv', 'w') as reffile:
+with open(f'DCP-analysis_{method}.csv', 'w') as reffile:
     reffile.write(f'runtime\t {runtime()}\t{runtime_hours(runtime())}\thours\t\n')
     reffile.write(f'\tfrequency\tDelta_phi\torder\ttrajectories\n')
     for i_item, item in enumerate(enumeration):
         reffile.write(f'{enumeration[i_item]}\t{statistics[i_item]}\t{Delta_phi[i_item]}\t{order[i_item]}\t{trajectories[i_item]}\n')
 
-print('DCP-analysis.csv was generated')
+print(f'DCP-analysis_{method}.csv was generated')
