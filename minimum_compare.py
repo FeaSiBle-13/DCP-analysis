@@ -15,6 +15,20 @@ with open(f'trajectory-1-max.ref', 'r') as newP_file:
     words = newP_line.split()
     n_elecs = int(words[0])
 
+#reads saddlepoint_calculation.in file (would be nicer here with regular expressions)
+with open('saddlepoint_calculation.in', 'r') as reffile:
+    for line in reffile:
+        if 'threshold_DCP_guess' in line:
+            words = line.split()
+            threshold_DCP_guess = float(words[1])
+        else:
+            threshold_DCP_guess = 1e-1
+            
+        if 'method' in line:
+            words = line.split()
+            method = words[1]
+        else: 
+            method = 'gradient_norm'
 
 
 #reads out different potentials and electron movements for same potential as start potetnial and creates statistic
