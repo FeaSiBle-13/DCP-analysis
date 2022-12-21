@@ -110,7 +110,7 @@ with open('saddlepoint_calculation.in', 'r') as reffile:
     for line in reffile:
         if 'threshold_DCP_guess' in line:
             words = line.split()
-            threshold_DCP_guess = int(words[1])
+            threshold_DCP_guess = float(words[1])
         else:
             threshold_DCP_guess = 1e-1
             
