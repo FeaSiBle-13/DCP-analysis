@@ -37,7 +37,7 @@ def ending_maximum(trajectory):
     with open(f'trajectory-{trajectory}-max.ref', 'r') as reffile:
         R_max = []
         line = reffile.readline()
-    while '2 F(MAX):' not in line:
+        while '2 F(MAX):' not in line:
             line = reffile.readline()
         line = reffile.readline()
         for _ in range(n_elecs):
