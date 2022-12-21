@@ -36,54 +36,57 @@ def read_count():
 def phi_value(x, trajectory):
     if x == 0:
         with open(f'./trajectory-start/minimum/fort.100') as reffile:
-            line= reffile.readline()
-            while 'Phi:' not in line:
-                line = reffile.readline()
-            words = line.split()
-            phi = float(words[1])
+            for line in reffile:
+                if 'Phi:' in line:
+                   words = line.split()
+                   phi = float(words[1])
+                else:
+                    print('Phi from trajectory-start was not found')
     elif x == 1:
         with open(f'./trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:
-            line= reffile.readline()
-            while 'Phi:' not in line:
-                line = reffile.readline()
-            words = line.split()
-            phi = float(words[1])
+          for line in reffile:
+                if 'Phi:' in line:
+                    words = line.split()
+                    phi = float(words[1])
+                else:
+                    print(f'Phi from trajectory-{trajectory}/DCP_{method} was not found')
     elif x == 2:
         with open(f'./trajectory-{trajectory}/minimum/fort.100') as reffile:
-            line= reffile.readline()
-            while 'Phi:' not in line:
-                line = reffile.readline()
-            words = line.split()
-            phi = float(words[1])
+            for line in reffile:
+                if 'Phi:' in line:
+                    words = line.split()
+                    phi = float(words[1])
+                else:
+                    print('Phi from trajectory-start was not found')
     return phi
 
 
 def reading_order(trajectory):
     with open(f'trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:
         order = 0
-        line = reffile.readline()
-        while 'hessian eigenvalues and -vectors:' not in line:
-            line = reffile.readline()
-        for n in range(10):
-            line = reffile.readline()
-            words = line.split()
-            if float(words[1]) < 0:
-                order += 1
+        for line in reffile:
+            if 'hessian eigenvalues and -vectors:' in line:
+                for _ in range(10):
+                    line = reffile.readline()
+                    words = line.split()
+                    if float(words[1]) < 0:
+                        order += 1
+                    else:
+                        break
+                    for _ in range(n_elecs):
+                        line = reffile.readline()
             else:
-                break
-            for _ in range(n_elecs):
-                line = reffile.readline()
+                print(f'hessian eigenvalues and -vectors: was not found in file trajectory-{trajectory}/DCP_{method}/fort.100')
     return order
 
 
 def reading_n_elecs():
     with open(f'trajectory-1-max.ref', 'r') as reffile:
-        line = reffile.readline()
-        while 'MAX:' not in line:
-            line = reffile.readline()
-        line = reffile.readline()
-        words = line.split()
-        n_elecs = int(words[0])
+        for line in reffile:
+            if 'MAX:' in line:  
+                line = reffile.readline()
+                words = line.split()
+                n_elecs = int(words[0])
     return n_elecs
 
 
@@ -159,26 +162,24 @@ for trajectory in range(1, count + 1):
     if found and not infty:
         with open(f'trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:
             no_DCP = False
-            line = reffile.readline()
-            while 'Phi:' not in line:
-                line = reffile.readline()
-            words = line.split()
-            if words[1] == 'Infinity':
-                no_DCP = True
-
+            for line in reffile:
+                if 'Phi:' in line:
+                    words = line.split()
+                    if words[1] == 'Infinity':
+                        no_DCP = True
+            
     if found and not infty and not no_DCP:
         with open(f'trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:
             R_new = []
-            line = reffile.readline()
-            while 'after minimize:' not in line:
+            for line in reffile:
+            if 'after minimize:' in line:
                 line = reffile.readline()
-            line = reffile.readline()
-            line = reffile.readline()
-            for _ in range(n_elecs):
                 line = reffile.readline()
-                words = line.split()
-                for word in words[1:]:
-                    R_new.append(float(word))
+                for _ in range(n_elecs):
+                    line = reffile.readline()
+                    words = line.split()
+                    for word in words[1:]:
+                        R_new.append(float(word))
 
         compare_saddlepoints(np.array(R_new), trajectory)
 
