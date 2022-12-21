@@ -168,7 +168,7 @@ $maximize_sample()''')
 
 #creates .yml file
         with open(f'trajectory-{trajectory}/DCP_{method}/cluster.yml', 'w') as printfile:
-            printfile.write(f'''-- # MaximaProcessing
+            printfile.write(f'''--- # MaximaProcessing
 MaximaProcessing:
   binaryFileBasename: {method}
   calculateSpinCorrelations: false
