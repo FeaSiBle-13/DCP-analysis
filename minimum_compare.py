@@ -2,8 +2,17 @@
 import matplotlib.pyplot as plt 
 import numpy as np
 
-count = int(input('How many trajectories are to check (from 1- x) ?')) 
 
+def read_count():
+    with open(f'trajectory.ami', 'r') as ami_file:
+    notdone_count = True
+    notdone_file = True
+    for line in ami_file:
+        if 'count' in line and notdone_count:
+            count = int(re.search(r'\d+', line).group())
+            notdone_count = False
+    return(count)
+        
 #reads out start potential and defines n_elecs
 with open(f'trajectory-1-max.ref', 'r') as newP_file:
     newP_line = newP_file.readline()
