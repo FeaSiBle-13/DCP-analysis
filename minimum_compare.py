@@ -12,7 +12,12 @@ def read_count():
             count = int(re.search(r'\d+', line).group())
             notdone_count = False
     return(count)
+
+
+#defines count (number of calculated trajectories)
+count = read_count()
         
+    
 #reads out start potential and defines n_elecs
 with open(f'trajectory-1-max.ref', 'r') as newP_file:
     newP_line = newP_file.readline()
