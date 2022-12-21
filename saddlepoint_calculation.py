@@ -155,16 +155,17 @@ $init_rawdata_generation()
 $init_max_search(
 step_size=0.1,
 correction_mode=none,
-singularity_threshold=0.0001,''')
+singularity_threshold=0.0001,
+''')
              #continue here
             if method == 'newton':
-                printfile.write('method=newton,\n')
+                printfile.write('method=newton,')
             elif method == 'none':
-                printfile.write('method=none,\n')
+                printfile.write('method=none,')
             elif method == 'gradient_norm':
                 printfile.write('method=bfgs,\n')
                 printfile.write('minimize_gradient_norm,\n') 
-                printfile.write('switch_step=50,\n')
+                printfile.write('switch_step=50,')
             printfile.write('''
 verbose=2,
 negative_eigenvalues=-1,
