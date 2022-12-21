@@ -24,12 +24,12 @@ list_failure_order = []
 
 def read_count():
     with open(f'trajectory.ami', 'r') as ami_file:
-    notdone_count = True
-    notdone_file = True
-    for line in ami_file:
-        if 'count' in line and notdone_count:
-            count = int(re.search(r'\d+', line).group())
-            notdone_count = False
+        notdone_count = True
+        notdone_file = True
+        for line in ami_file:
+            if 'count' in line and notdone_count:
+                count = int(re.search(r'\d+', line).group())
+                notdone_count = False
     return(count)
 
 
