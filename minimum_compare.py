@@ -14,21 +14,31 @@ def read_count():
     return(count)
 
 
-#defines count (number of calculated trajectories)
-count = read_count()
-        
-    
-#reads out start potential and defines n_elecs
-with open(f'trajectory-1-max.ref', 'r') as newP_file:
-    newP_line = newP_file.readline()
-    while f'MAX:' not in newP_line:
-        newP_line = newP_file.readline()
-    words = newP_line.split()
-    p_start = np.round(float(words[4]),5)
-    newP_line = newP_file.readline()
-    words = newP_line.split()
-    n_elecs = int(words[0])
+def reading_n_elecs():
+    with open(f'trajectory-1-max.ref', 'r') as reffile:
+        for line in reffile:
+            if '1 F(MAX):' in line:
+                line = reffile.readline()
+                words = line.split()
+                n_elecs = int(words[0])
+            else:
+                print('n_elecs was not found in trajectory-1-max.ref')
+    return(n_elecs)
 
+
+def start_potential():
+    with open(f'trajectory-1-max.ref', 'r') as newP_file:
+        for line in reffile:
+            if '1 F(MAX):' in line:
+                words = newP_line.split()
+    return(np.round(float(words[4]),5))
+
+
+#reads in count (number of calculated trajectories), n_elecs and potential of start minimum
+count = read_count()
+n_elecs = reading_n_elecs()
+start_potential = start_potential()
+ 
 #reads saddlepoint_calculation.in file (would be nicer here with regular expressions)
 with open('saddlepoint_calculation.in', 'r') as reffile:
     for line in reffile:
@@ -54,27 +64,27 @@ list_elec_movements = []
 list_statistics_mov = []
 list_traj_mov = []
 
-for traj in range(count):
-    with open(f'trajectory-{traj+1}-max.ref','r') as newP_file:
-        newP_line = newP_file.readline()
-        while f'MAX:' not in newP_line:
-            newP_line = newP_file.readline()
-        newP_line = newP_file.readline()
-        for __ in range(n_elecs+1):
-            newP_line = newP_file.readline()    
-    newP_words = newP_line.split()
-    if len(newP_words) < 5:
-        print(f'WARNING: no second minimum in {traj + 1} found')
+for trajectory in range(count+1):
+    with open(f'trajectory-{trajectory}-max.ref','r') as reffile:
+        line = reffile.readline()
+        while f'MAX:' not in line:
+            line = reffile.readline()
+        line = reffile.readline()
+        for _ in range(n_elecs+1):
+            line = reffile.readline()    
+    words = line.split()
+    if len(words) < 5:
+        print(f'WARNING: no second minimum in {trajectory} found')
     else:
-        if np.round(float(newP_words[4]),5) not in list_potentials:
-            list_potentials.append(np.round(float(newP_words[4]),5)) 
+        if np.round(float(words[4]),5) not in list_potentials:
+            list_potentials.append(np.round(float(words[4]),5)) 
             list_statistics.append(1)
-            list_traj.append(f'{traj+1}')
+            list_traj.append(f'{trajectory}')
         else:
-            list_statistics[list_potentials.index(np.round(float(newP_words[4]),5))] +=1 
-            list_traj[list_potentials.index(np.round(float(newP_words[4]),5))] += f', {traj+1}'
-        if round(float(newP_words[4]),5) == round(p_start, 5): 
-            with open(f'trajectory-{traj+1}.idx') as idx_file:
+            list_statistics[list_potentials.index(np.round(float(words[4]),5))] +=1 
+            list_traj[list_potentials.index(np.round(float(words[4]),5))] += f', {trajectory}'
+        if round(float(words[4]),5) == round(start_potential, 5): 
+            with open(f'trajectory-{trajectory}.idx') as idx_file:
                 idx_line = idx_file.readline()
                 idx_line = idx_file.readline()
                 words_1 = idx_line.split()
@@ -88,60 +98,23 @@ for traj in range(count):
                 if elec_mov not in list_elec_movements:
                     list_elec_movements.append(elec_mov)
                     list_statistics_mov.append(1)
-                    list_traj_mov.append(f'{traj+1}')
+                    list_traj_mov.append(f'{trajectory}')
                 elif elec_mov in list_elec_movements:
                     list_statistics_mov[list_elec_movements.index(elec_mov)] +=  1
-                    list_traj_mov[list_elec_movements.index(elec_mov)] += f', {traj+1}'
+                    list_traj_mov[list_elec_movements.index(elec_mov)] += f', {trajectory}'
 
 
 #prints out a .csv file
-with open(f'compare_combined.csv', 'w') as reffile:
-    reffile.write(f'minimum potential\tDelta start potential\tmovement\tfrequency\ttrajectories\n')
-    reffile.write(f'{p_start}\t{int(0)}\t \t{int(0)}\tstart minimum\n')
+with open(f'minimum_compare.csv', 'w') as printfile:
+    printfile.write(f'minimum potential\tDelta start potential\tmovement\tfrequency\ttrajectories\n')
+    printfile.write(f'{start_potential}\t{int(0)}\t \t{int(0)}\tstart minimum\n')
 
-    for item in list_potentials:
-        if item != p_start:
-            reffile.write(f'{list_potentials[list_potentials.index(item)]}\t{np.round(np.abs(p_start-list_potentials[list_potentials.index(item)]), 4)}\t \t{list_statistics[list_potentials.index(item)]}\t{list_traj[list_potentials.index(item)]}\n')
+    for i_item, item in enumerate(list_potentials):
+        if item != start_potential:
+            printfile.write(f'{item}\t{np.round(np.abs(start_potential-list_potentials[i_item]), 4)}\t \t{list_statistics[i_item]}\t{list_traj[i_item]}\n')
         else:
-            reffile.write(f'{list_potentials[list_potentials.index(item)]}\t{np.round(np.abs(p_start-list_potentials[list_potentials.index(item)]), 4)}\t \t{list_statistics[list_potentials.index(item)]}\t{list_traj[list_potentials.index(item)]}\n')
-            for item_mov in list_elec_movements:
-                reffile.write(f' \t \t{list_elec_movements[list_elec_movements.index(item_mov)]}\t{int(list_statistics_mov[list_elec_movements.index(item_mov)])}\t{list_traj_mov[list_elec_movements.index(item_mov)]}\n')
+            printfile.write(f'{list_potentials[i_item]}\t{np.round(np.abs(start_potential-list_potentials[i_item]), 4)}\t \t{list_statistics[i_item]}\t{list_traj[i_item]}\n')
+            for i_item, item in enumerate(list_elec_movements):
+                printfile.write(f' \t \t{item}\t{int(list_statistics_mov[i_item])}\t{list_traj_mov[i_item]}\n')
 
-
-#makes a bad bar diagram
-list_ordered_pot = []
-list_ordered_stat = []
-
-len_ = len(list_potentials)
-
-for _ in range(len_):
-    list_ordered_pot.append(min(list_potentials))
-    list_ordered_stat.append(list_statistics[list_potentials.index(min(list_potentials))])
-    if len(list_potentials) != 1:
-        list_statistics.remove(list_statistics[list_potentials.index(min(list_potentials))])
-        list_potentials.remove(min(list_potentials))
-    
-
-plt.rcParams['figure.figsize'] = (10, 8.5)
-plt.rcParams['font.size'] = 14
-plt.rcParams['lines.linewidth'] = 2 
-plt.rc ('axes', titlesize = 20) 
-plt.rc ('axes', labelsize = 18) 
-plt.rc ('xtick', labelsize = 10) 
-
-
-plt.title('Potentials $\Delta\phi$', pad= 20) 
-
-plt.xlabel('Maximum probability path', labelpad = 15) 
-plt.ylabel('$\Delta\phi$', labelpad = 15) 
-
-iter_step = 0 
-for freq in list_ordered_stat:
-    plt.annotate(f'{freq}', (iter_step-0.1, freq+3))
-    iter_step += 1
-
-x_values = range(len(list_ordered_pot))
-plt.xticks(np.arange(len(list_ordered_pot), step=1), list_ordered_pot)  
-
-plt.bar(x_values, list_ordered_stat)
-plt.savefig('compare_potentials.png')
+print('minimum_compare.csv was generated')
