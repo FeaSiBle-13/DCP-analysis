@@ -6,9 +6,6 @@ from pyscript import *
 import re
 import numpy as np
 
-threshold_DCP_guess = 1e-1
-method = 'newton'
-
 
 def reading_n_elecs():
     with open(f'trajectory-1-max.ref', 'r') as reffile:
@@ -107,7 +104,23 @@ with open(f'trajectory.ami', 'r') as ami_file:
             
 #reads n_elecs
 n_elecs = reading_n_elecs()
-            
+
+#reads saddlepoint_calculation.in file (would be nicer here wirth regular expressions)
+    with open('saddlepoint_calculation.in', 'r') as reffile:
+        for line in reffile:
+            if 'threshold_DCP_guess' in line:
+                words = line.split()
+                threshold_DCP_guess = int(words[1])
+            else:
+                threshold_DCP_guess = 1e-1
+                
+            if 'method' in line:
+                words = line.split()
+                method = words[1]
+            else: 
+                method = 'gradient_norm'
+        
+#loop for trajectories starts here        
 for trajectory in range(1, count+1):
     with open(f'trajectory-{trajectory}-max.ref') as reffile:
         found = False
