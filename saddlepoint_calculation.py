@@ -145,7 +145,7 @@ singularity_threshold=0.0001,''')
                 printfile.write('method=newton')
             elif method == 'none':
                 printfile.write('method=none')
-            elif method ==. 'gradient_norm':
+            elif method == 'gradient_norm':
                 printfile.write('minimize_gradient_norm,\n') 
                 printfile.write('switch_step=50,\n')
             printfile.write('\n')
