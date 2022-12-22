@@ -5,6 +5,9 @@ import re
 
 list_trajectory = []
 list_potential = []
+list_trajectory_change = []
+list_potential_gradient = []
+list_potential_newton = []
 
 with open(f'DCP-analysis_newton.csv', 'r') as reffile:
     line = reffile.readline()
@@ -30,7 +33,15 @@ with open(f'DCP-analysis_gradient_norm.csv', 'r') as reffile:
             for i_item, item in enumerate(list_trajectory):
                 if item == trajectory:
                     if potential != list_potential[i_item]:
-                        print(f'trajectory {item} changed from potential {list_potential[i_item]} to {potential}')
+                        list_trajectory_change.append(item)
+                        list_potential_newton.append(list_potential[i_item])
+                        list_potential_gradient.append(potential)
+       
+with open('method_compare.out', 'w') as printfile:
+    printfile.write('trajectory\t potential_newton\t potential_gradient_norm')
+    for i_item, item in enumerate(list_trajectory_change):
+        printfile.write(f'{item}\t{list_potential_newton[i_item]}\t{list_potential_gradient[i_item]}')
+                       
                         
                         
         
