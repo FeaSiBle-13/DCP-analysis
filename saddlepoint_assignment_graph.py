@@ -78,7 +78,7 @@ if 'no basin change' in list_final_label:
     list_final_label[list_final_label.index('no basin change')] = 'same_basin'
     
 #creates output file
-with open ('assignment_graph.out', 'w') as printfile:
+with open (f'assignment_graph_{method}.out', 'w') as printfile:
     printfile.write('categories: ')
     for item in list_final_label: 
         printfile.write(f'{item} ')
@@ -86,7 +86,7 @@ with open ('assignment_graph.out', 'w') as printfile:
     printfile.write('frequency: ')
     for item in list_final_frequencies: 
         printfile.write(f'{item} ')
-print('assignment_graph.out was generated') 
+print(f'assignment_graph_{method}.out was generated') 
 
 #makes bar diagram
 plt.rcParams['figure.figsize'] = (10, 8.5)
@@ -104,5 +104,5 @@ plt.xticks(x_values, list_final_label)
 
 plt.bar(x_values, list_final_frequencies, width = 0.5, label = list_label)
 
-plt.savefig('assignment_graph.png')
-print('assignment_graph.png was generated')
+plt.savefig(f'assignment_graph_{method}.png')
+print(f'assignment_graph_{method}.png was generated')
