@@ -24,7 +24,7 @@ with open(f'DCP-analysis_gradient_norm.csv', 'r') as reffile:
     for line in reffile:
         words = line.split('\t')
         trajectories = words[4].split(',')
-         for item in trajectories:
+        for item in trajectories:
             trajectory = re.search(r'\d+', item).group()
             potential = words[2]
             for i_item, item in enumerate(list_trajectory):
