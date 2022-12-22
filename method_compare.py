@@ -1,3 +1,5 @@
+!/bin/env python3
+
 from pyscript import *
 
 with open(f'DCP-analysis_newton', 'r') as reffile:
