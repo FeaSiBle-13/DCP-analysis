@@ -7,7 +7,8 @@ with open(f'DCP-analysis_newton.csv', 'r') as reffile:
     line = reffile.readline()
     for line in reffile:
         words = line.split('\t')
-        print(f'traj = {words[4]}  pot = {words[1]}')
+        trajectories = int(words[4].split(,))
+        print(f'traj = trajectories  pot = {words[1]}')
         
     
         
