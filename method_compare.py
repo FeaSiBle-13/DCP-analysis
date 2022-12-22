@@ -40,7 +40,9 @@ with open(f'DCP-analysis_gradient_norm.csv', 'r') as reffile:
 with open('method_compare.out', 'w') as printfile:
     printfile.write('trajectory\t potential_newton\t potential_gradient_norm')
     for i_item, item in enumerate(list_trajectory_change):
-        printfile.write(f'{item}\t{list_potential_newton[i_item]}\t{list_potential_gradient[i_item]}')
+        printfile.write(f'{item}\t{list_potential_newton[i_item]}\t{list_potential_gradient[i_item]}\n')
+  
+print('file method_compare.out was generated')
                        
                         
                         
