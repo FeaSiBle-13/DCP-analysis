@@ -9,7 +9,7 @@ with open(f'DCP-analysis_newton.csv', 'r') as reffile:
         words = line.split('\t')
         trajectories = words[4].split(',')
         for trajectory in trajectories:
-            print(f'traj = {trajectoriy}  pot = {words[1]}')
+            print(f'traj = {trajectory}  pot = {words[1]}')
         
         
     
