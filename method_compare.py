@@ -2,7 +2,7 @@
 
 from pyscript import *
 
-with open(f'DCP-analysis_newton', 'r') as reffile:
+with open(f'DCP-analysis_newton.csv', 'r') as reffile:
     line = reffile.readline()
     line = reffile.readline()
     for line in reffile:
