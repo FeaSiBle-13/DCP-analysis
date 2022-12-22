@@ -11,7 +11,7 @@ with open(f'DCP-analysis_newton.csv', 'r') as reffile:
         trajectories = words[4].split(',')
         for item in trajectories:
             trajectory = re.search(r'\d+', item).group()
-            print(f'traj = {trajectory}  pot = {words[1]}')
+            print(f'traj = {trajectory}  pot = {words[2]}')
         
         
     
