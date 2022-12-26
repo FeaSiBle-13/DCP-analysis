@@ -49,6 +49,12 @@ for i_item, item in enumerate(list_potential_newton):
             list_stat_potential_newton.append(item)
             list_stat_potential_gradient.append(list_stat_potential[element])
             list_statistic.append(1)
+            
+if len(list_statistic) == 0
+    list_stat_potential_newton.append(item)
+    list_stat_potential_gradient.append(list_stat_potential[element])
+    list_statistic.append(1)
+            
 
  
     
