@@ -47,6 +47,9 @@ for i_item, item in enumerate(list_potential_newton):
         list_stat_potential_newton.append(item)
         list_stat_potential_gradient.append(list_potential_gradient[i_item])
         list_statistic.append(1)
+        print(list_statistic)
+        print(list_stat_potential_newton)
+        print(list_stat_potential_gradient)
         empty = True
     if not empty:
         for i_element, element in enumerate(list_stat_potential_newton):
