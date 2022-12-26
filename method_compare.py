@@ -53,12 +53,15 @@ for i_item, item in enumerate(list_potential_newton):
         empty = True
     if not empty:
         for i_element, element in enumerate(list_stat_potential_newton):
+            found = False
             if item == element and list_potential_gradient[i_item] == list_stat_potential_gradient[i_element]:
                 list_statistic[i_item] += 1
-            else:
-                list_stat_potential_newton.append(item)
-                list_stat_potential_gradient.append(list_potential_gradient[i_item])
-                list_statistic.append(1)
+                found = True
+                break
+        if not found:
+            list_stat_potential_newton.append(item)
+            list_stat_potential_gradient.append(list_potential_gradient[i_item])
+            list_statistic.append(1)
             print(list_statistic)
             print(list_stat_potential_newton)
             print(list_stat_potential_gradient)
