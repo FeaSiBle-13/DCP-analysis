@@ -42,18 +42,22 @@ list_statistic = []
 list_stat_potential_gradient = []
 list_stat_potential_newton = []
 for i_item, item in enumerate(list_potential_newton):
-    for i_element, element in enumerate(list_stat_potential_newton):
-        if item == element and list_potential_gradient[item] == list_stat_potential_gradient[element]:
-            list_statistic[item] += 1
-        else:
-            list_stat_potential_newton.append(item)
-            list_stat_potential_gradient.append(list_stat_potential[element])
-            list_statistic.append(1)
+    empty = False
+    if len(list_statistic) == 0
+        list_stat_potential_newton.append(item)
+        list_stat_potential_gradient.append(list_potential_gradient[i_item])
+        list_statistic.append(1)
+        empty = True
+    if not empty:
+        for i_element, element in enumerate(list_stat_potential_newton):
+            if item == element and list_potential_gradient[item] == list_stat_potential_gradient[element]:
+                list_statistic[item] += 1
+            else:
+                list_stat_potential_newton.append(item)
+                list_stat_potential_gradient.append(list_stat_potential[element])
+                list_statistic.append(1)
             
-if len(list_statistic) == 0
-    list_stat_potential_newton.append(item)
-    list_stat_potential_gradient.append(list_stat_potential[element])
-    list_statistic.append(1)
+
             
 
  
