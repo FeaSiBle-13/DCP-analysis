@@ -13,8 +13,9 @@ def print_statistic(list_potential_gradient, list_potential_newton):
     list_statistic = []
     list_stat_potential_gradient = []
     list_stat_potential_netwon = []
-    for i_item, item in enumerate{list_potential_newton}:
-        if item
+    for i_item, item in enumerate(list_potential_newton):
+        for i_element, element in enumerate(list_stat_potential_newton):
+            
 
 
 with open(f'DCP-analysis_newton.csv', 'r') as reffile:
