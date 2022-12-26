@@ -43,7 +43,7 @@ list_stat_potential_gradient = []
 list_stat_potential_newton = []
 for i_item, item in enumerate(list_potential_newton):
     empty = False
-    if len(list_statistic) == 0
+    if len(list_statistic) == 0:
         list_stat_potential_newton.append(item)
         list_stat_potential_gradient.append(list_potential_gradient[i_item])
         list_statistic.append(1)
