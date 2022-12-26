@@ -40,10 +40,10 @@ with open(f'DCP-analysis_gradient_norm.csv', 'r') as reffile:
 
 list_statistic = []
 list_stat_potential_gradient = []
-list_stat_potential_netwon = []
+list_stat_potential_newton = []
 for i_item, item in enumerate(list_potential_newton):
     for i_element, element in enumerate(list_stat_potential_newton):
-        if item == element and list_potential_newton[item] == list_stat_potential[element]:
+        if item == element and list_potential_gradient[item] == list_stat_potential_gradient[element]:
             list_statistic[item] += 1
         else:
             list_stat_potential_newton.append(item)
