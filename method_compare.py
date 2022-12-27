@@ -69,6 +69,9 @@ with open('method_compare.out', 'w') as printfile:
     for i_item, item in enumerate(list_trajectory_change):
         printfile.write(f'{item}\t{list_potential_newton[i_item]}\t{list_potential_gradient[i_item]}\n')
   
+print(list_statistic)
+print(list_stat_potential_newton)
+print(list_stat_potential_gradient)
 print('file method_compare.out was generated')
                        
                         
