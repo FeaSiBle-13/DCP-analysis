@@ -91,8 +91,19 @@ def DCP_guess_point(R_max1, R_max2, threshold_DCP_guess):
         printfile.write('\n')
         
 
-def DCP_coordinates(trajectory):
-
+def DCP_coordinates(trajectory, method):
+    with open(f'trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:
+            R_new = []
+            for line in reffile:
+                if 'after minimize:' in line:
+                    line = reffile.readline()
+                    line = reffile.readline()
+                    for _ in range(n_elecs):
+                        line = reffile.readline()
+                        words = line.split()
+                        for word in words[1:]:
+                            R_new.append(float(word))
+    return(R_new)
         
     
 
