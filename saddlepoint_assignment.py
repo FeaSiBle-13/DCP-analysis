@@ -98,6 +98,21 @@ def reading_n_elecs():
     return n_elecs
 
 
+def saddlepoint_coordinates(trajectory, method):
+    with open(f'trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:
+            R_new = []
+            for line in reffile:
+                if 'after minimize:' in line:
+                    line = reffile.readline()
+                    line = reffile.readline()
+                    for _ in range(n_elecs):
+                        line = reffile.readline()
+                        words = line.split()
+                        for word in words[1:]:
+                            R_new.append(float(word))
+    return(R_new)
+
+
 def compare_saddlepoints(R_new, trajectory):
     found = False
     for i_DCP, R_DCP in enumerate(list_DCP):
@@ -177,17 +192,7 @@ for trajectory in range(1, count + 1):
                         no_DCP = True
             
     if found and not infty and not no_DCP:
-        with open(f'trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:
-            R_new = []
-            for line in reffile:
-                if 'after minimize:' in line:
-                    line = reffile.readline()
-                    line = reffile.readline()
-                    for _ in range(n_elecs):
-                        line = reffile.readline()
-                        words = line.split()
-                        for word in words[1:]:
-                            R_new.append(float(word))
+        R_new = saddlepoint_coordinates(trajectory, method)
 
         compare_saddlepoints(np.array(R_new), trajectory)
 
