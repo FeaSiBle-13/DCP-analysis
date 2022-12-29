@@ -68,7 +68,11 @@ def phi_value(x, trajectory):
 
 
 def reading_order(trajectory):
-    with open(f'trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:
+    if method == 'gradient_norm':
+        x = with open(f'trajectory-{trajectory}/DCP_{method}/newton_singlepoint/fort.100') as reffile:
+    else:
+        x = with open(f'trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:    
+    x
         order = 0
         found = False
         for line in reffile:
@@ -82,7 +86,7 @@ def reading_order(trajectory):
                     else:
                         break
                     for _ in range(n_elecs):
-                        line = reffile.readline()
+                    line = reffile.readline()
         if not found:
             print(f'hessian eigenvalues and -vectors: was not found in file trajectory-{trajectory}/DCP_{method}/fort.100')
     return order
