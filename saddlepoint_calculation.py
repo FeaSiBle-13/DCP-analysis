@@ -78,6 +78,7 @@ def basin_enter(trajectory):
                 R_j.append(float(word))
     return np.array(R_j)
  
+    
 def DCP_guess_point(R_max1, R_max2, threshold_DCP_guess):
     for l in range(n_elecs):
         norm = np.linalg.norm(R_max1[l*3:l*3+3]-R_max2[l*3:l*3+3])
@@ -88,7 +89,12 @@ def DCP_guess_point(R_max1, R_max2, threshold_DCP_guess):
             for t in R_int[l*3:l*3+3]:
                 printfile.write(f'{t} ')
         printfile.write('\n')
+        
 
+def DCP_coordinates(trajectory):
+
+        
+    
 
 #reads count from .ami
 with open(f'trajectory.ami', 'r') as ami_file:
@@ -145,7 +151,7 @@ for trajectory in range(1, count+1):
         R_int = ( basin_left(trajectory) + basin_enter(trajectory) ) / 2
 
 
-        #creates the {method}.ami with the interpolated vectors and the input with the fixed e positions
+#creates the {method}.ami with the interpolated vectors and the input with the fixed e positions
         with open(f'trajectory-{trajectory}/DCP_{method}/{method}.ami', 'w') as printfile:
             printfile.write(f'''! seed for random number generation, not important
 $gen(seed=101)
@@ -203,18 +209,52 @@ MaximaProcessing:
                 cp('cluster-out.yml', f'../result/cluster_{method}_trans-out.yml')
             else:
                 print(f'method {method} did not work for trajectory-{trajectory}')
-
-        if method == 'gradient_norm':
-            reading_DCP()
-            
-
-        #executesEVanalysis
+                
+#executesEVanalysis
         if success:
             with cd(f'trajectory-{trajectory}/result'):
                 try:
                     run(f'/home/theochem/Scripts/EVanalysis/EVanalysis.py ../minimum/{name}.wf cluster_{method}_trans-out.yml')
                 except subprocess.CalledProcessError:
                     pass
+
+                
+#makes a single point newton calculation to obtain the order of the saddlepoint and the eigenvectors if gradient norm is method
+        if method == 'gradient_norm':
+            mkdir(f'trajectory-{trajectory}/DCP_{method}/newton_singlepoint')
+            cp(f'{name}.wf', f'trajectory-{trajectory}/DCP_{method}/newton_singlepoint')
+            
+            with open(f'trajectory-{trajectory}/DCP_{method}/newton_singlepoint/newton_singlepoint.ami', 'w') as printfile:
+                printfile.write(f'''! seed for random number generation, not important
+$gen(seed=101)
+! reading the wave function file
+$wf(read,file='{name}.wf')
+$init_rawdata_generation()
+$init_max_search(
+step_size=0.1,
+correction_mode=none,
+singularity_threshold=0.0001,
+method=newton,
+verbose=2,
+negative_eigenvalues=-1,
+eigenvalue_threshold=1e-10)
+! setting the initial position
+$init_walker(
+free
+''')
+                DCP_coordinates()
+                printfile.write(''')
+$sample(create, size=1, single_point)
+! maximize the walker
+$maximize_sample()''')
+                
+            with cd(f'trajectory-{trajectory}/DCP_{method}/newton_singlepoint'):
+            success = True
+            try:
+                run(f'amolqc newton_singlepoint.ami')
+            except subprocess.CalledProcessError:
+                success = False
+
 
 
     else:
