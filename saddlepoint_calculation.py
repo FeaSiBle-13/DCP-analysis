@@ -253,7 +253,11 @@ eigenvalue_threshold=1e-10)
 $init_walker(
 free
 ''')
-                DCP_coordinates()
+                R_DCP = DCP_coordinates(trajectory, method)
+                for l in range(n_elecs):    
+                    for t in R_int[l*3:l*3+3]:
+                        printfile.write(f'{t} ')
+                        printfile.write('\n')
                 printfile.write(''')
 $sample(create, size=1, single_point)
 ! maximize the walker
@@ -270,5 +274,3 @@ $maximize_sample()''')
 
     else:
         print(f'trajectory-{trajectory} could not be calculated')                                                     
-
-
