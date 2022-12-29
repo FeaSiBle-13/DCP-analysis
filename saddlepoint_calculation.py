@@ -262,12 +262,15 @@ $sample(create, size=1, single_point)
 $maximize_sample()''')
             with cd(f'trajectory-{trajectory}/DCP_{method}/newton_singlepoint'):
                 success = True
-            try:
-                run('amolqc newton_singlepoint.ami')
-            except subprocess.CalledProcessError:
-                success = False
-
-
+                try:
+                    run('amolqc newton_singlepoint.ami')
+                except subprocess.CalledProcessError:
+                    success = False
+                    
+            if success:
+                print('newton_singlepoint was calculated')
+            else:
+                print('newton_singlepoint could not be calculated')
 
     else:
         print(f'trajectory-{trajectory} could not be calculated')                                                     
