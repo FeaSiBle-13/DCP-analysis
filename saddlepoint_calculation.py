@@ -260,11 +260,10 @@ free
 $sample(create, size=1, single_point)
 ! maximize the walker
 $maximize_sample()''')
-                
             with cd(f'trajectory-{trajectory}/DCP_{method}/newton_singlepoint'):
                 success = True
             try:
-                run(f'amolqc newton_singlepoint.ami')
+                run('amolqc newton_singlepoint.ami')
             except subprocess.CalledProcessError:
                 success = False
 
