@@ -69,10 +69,10 @@ def phi_value(x, trajectory):
 
 def reading_order(trajectory):
     if method == 'gradient_norm':
-        x = with open(f'trajectory-{trajectory}/DCP_{method}/newton_singlepoint/fort.100') as reffile:
+        path = f'trajectory-{trajectory}/DCP_{method}/newton_singlepoint/fort.100'
     else:
-        x = with open(f'trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:    
-    x
+        path = f'trajectory-{trajectory}/DCP_{method}/fort.100'
+    with open(f'{path}') as reffile:    
         order = 0
         found = False
         for line in reffile:
