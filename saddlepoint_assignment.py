@@ -86,7 +86,7 @@ def reading_order(trajectory):
                     else:
                         break
                     for _ in range(n_elecs):
-                    line = reffile.readline()
+                        line = reffile.readline()
         if not found:
             print(f'hessian eigenvalues and -vectors: was not found in file trajectory-{trajectory}/DCP_{method}/fort.100')
     return order
