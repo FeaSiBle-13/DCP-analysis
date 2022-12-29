@@ -107,7 +107,7 @@ def DCP_coordinates(trajectory, method):
         
     
 
-#reads count from .ami
+#reads count and wafefunction from .ami
 with open(f'trajectory.ami', 'r') as ami_file:
     notdone_count = True
     notdone_file = True
@@ -154,9 +154,7 @@ for trajectory in range(1, count+1):
     #calculates saddlepoints with method input
         #makes folders
         mkdir(f'trajectory-{trajectory}/DCP_{method}')
-        for obj in ls(f'trajectory-source/DCP'):
-            cp(f'trajectory-source/DCP/{obj}', f'trajectory-{trajectory}/DCP_{method}')
-
+        cp(f'{name}.wf', f'trajectory-{trajectory}/DCP_{method}')
 
         #interpolation of both -traj- vectors
         R_int = ( basin_left(trajectory) + basin_enter(trajectory) ) / 2
