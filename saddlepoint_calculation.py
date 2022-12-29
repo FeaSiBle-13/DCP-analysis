@@ -253,7 +253,7 @@ free
 ''')
                 R_DCP = DCP_coordinates(trajectory, method)
                 for l in range(n_elecs):    
-                    for t in R_int[l*3:l*3+3]:
+                    for t in R_DCP[l*3:l*3+3]:
                         printfile.write(f'{t} ')
                     printfile.write('\n')
                 printfile.write(''')
