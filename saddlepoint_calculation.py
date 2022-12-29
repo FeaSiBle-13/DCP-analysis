@@ -204,6 +204,9 @@ MaximaProcessing:
             else:
                 print(f'method {method} did not work for trajectory-{trajectory}')
 
+        if method == 'gradient_norm':
+            reading_DCP()
+            
 
         #executesEVanalysis
         if success:
