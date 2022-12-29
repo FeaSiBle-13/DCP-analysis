@@ -255,7 +255,7 @@ free
                 for l in range(n_elecs):    
                     for t in R_int[l*3:l*3+3]:
                         printfile.write(f'{t} ')
-                        printfile.write('\n')
+                    printfile.write('\n')
                 printfile.write(''')
 $sample(create, size=1, single_point)
 ! maximize the walker
