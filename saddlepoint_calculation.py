@@ -262,7 +262,7 @@ $sample(create, size=1, single_point)
 $maximize_sample()''')
                 
             with cd(f'trajectory-{trajectory}/DCP_{method}/newton_singlepoint'):
-            success = True
+                success = True
             try:
                 run(f'amolqc newton_singlepoint.ami')
             except subprocess.CalledProcessError:
