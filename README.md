@@ -15,9 +15,8 @@ After a trajectory run with Amolqc and after a run with minimum_calcuation.py, s
 
 
 ### saddlepoint_assignment
-After a run with saddlepoint_calculation.py the saddlepoints are compared which eachother and are summarized in groups of same saddlepoints. A DCP-analysis_method.csv file is generated, in which the saddlepoints are summarized with information about the frequency, the potentialbarrier, order and the trajectories according to the group. Additionally the runtime for the saddlepoint_calculation run is given.
+After a run with saddlepoint_calculation.py the saddlepoints are compared which eachother and are summarized in groups of same saddlepoints. A DCP-analysis_method.csv file is generated, in which the saddlepoints are summarized with information about the **frequency**, the **potentialbarrier**, **order** and the **trajectories** according to the group. Additionally the **runtime** for the saddlepoint_calculation run is given.
 
 ### saddlepoint_categorization
-
 An assignment_graph.in file is required. It needs to contain a line with 'category:' followed by the barriers which should be shown as bars in the bar diagram. As seperator a space is used. A line with 'label:' is required where the categories are named. If several categories are accorded to one bar (so the same label) just label the categories in line label with the same name.
 
