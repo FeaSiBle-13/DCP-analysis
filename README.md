@@ -3,6 +3,7 @@
 ### minimum_calculation
 After a trajectory run with Amolqc the second minima of a trajectory run is calculated. The results are to find in the folder trajectory-X/result. 
 
+
 ### saddlepoint_calculation
 After a trajectory run with Amolqc and after a run with minimum_calcuation.py, saddlepoints can be calculated with this script. The script is to be started in the folder where the Amolqc run was started. An input file 'saddlepoint_calculation.in' is required. For example:
 
@@ -11,6 +12,7 @@ After a trajectory run with Amolqc and after a run with minimum_calcuation.py, s
   
 'threshold_DCP_guess' defines above which value the electron positions of two vectors are set as different.
 'method' can be 'newton', 'gradient_norm' or 'none'.
+
 
 ### saddlepoint_assignment_graph
 
