@@ -1,6 +1,6 @@
 # DCP-analysis
 
-### minimum_calculation
+## minimum_calculation
 After a trajectory run with Amolqc, the second minima of a trajectory run are calculated with this script. The script is to be started in the folder where the Amolqc run was started. The results are to find in the folder trajectory-X/result. 
 
 
