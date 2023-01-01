@@ -22,7 +22,7 @@ After a run with saddlepoint_calculation.py the saddlepoints are compared which 
 The saddlepoint_categorization.py script can be used, when a DCP-analysis_method.csv file was generated with the script saddlepoint_assignment. The script is to be started in the folder where the Amolqc run was started.
 An assignment_graph.in file is required. For example:
 
->category: 0.0337 0.0334 0.164 1.23 0.0326 0.0328 0.0323
+>category: 0.0337 0.0334 0.164 1.23 0.0326 0.0328 0.0323 
 >label: CH_ion CH_ion CC_cov 3_same_spin CH_ion CH_ion CH_ion
  
 As seperator a space is used. 
