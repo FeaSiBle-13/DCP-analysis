@@ -1,10 +1,10 @@
 # DCP-analysis
 
 ### minimum_calculation
-
+After a trajectory run with Amolqc the second minima of a trajectory run is calculated. The results are to find in the folder trajectory-X/result. 
 
 ### saddlepoint_calculation
-After a trajectory run with Amolqc and after a run with minimum_calcuation.py, saddlepoints can be calculated with this script. The script is to be startedin the folder where the Amolqc run was started. An input file 'saddlepoint_calculation.in' is required. For example:
+After a trajectory run with Amolqc and after a run with minimum_calcuation.py, saddlepoints can be calculated with this script. The script is to be started in the folder where the Amolqc run was started. An input file 'saddlepoint_calculation.in' is required. For example:
 
 > threshold_DCP_guess= 1e-1  
   method= gradient_norm 
