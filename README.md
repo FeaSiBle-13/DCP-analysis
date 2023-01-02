@@ -1,7 +1,7 @@
 # DCP-analysis
 
 ## minimum_calculation
-After a trajectory run with Amolqc, the second minima of a trajectory run are calculated with this script. The script is to be started in the folder where the Amolqc run was started. The results are to find in the folder trajectory-X/result. 
+After a trajectory run with Amolqc, the second minima of a trajectory run are calculated with this script. The script is to be started in the folder where the Amolqc run was started. A folder is required in the level, where the Amolqc run was started with the path 'trajectory-start/result/cluster_start-out.yml'. The .yml file should contain the allocation of the starting minimum. The results of the minimum calculation of each trajectory are to find in the folder trajectory-X/result. 
 
 
 ## saddlepoint_calculation
