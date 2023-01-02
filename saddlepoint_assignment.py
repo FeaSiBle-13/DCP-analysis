@@ -35,35 +35,20 @@ def read_count():
 
 def phi_value(x, trajectory):
     if x == 0:
-        with open(f'./trajectory-start/minimum/fort.100') as reffile:
-            found = False
-            for line in reffile:
-                if 'Phi:' in line:
-                   found = True
-                   words = line.split()
-                   phi = float(words[1])
-            if not found:
-                print('Phi from trajectory-start was not found')
+        path = f'trajectory-start/minimum/fort.100'
     elif x == 1:
-        with open(f'./trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:
-            found = False
-            for line in reffile:
-                if 'Phi:' in line:
-                    found = True
-                    words = line.split()
-                    phi = float(words[1])
-            if not found:
-                print(f'Phi from trajectory-{trajectory}/DCP_{method} was not found')
+        path = f'trajectory-{trajectory}/DCP_{method}/fort.100'
     elif x == 2:
-        with open(f'./trajectory-{trajectory}/minimum/fort.100') as reffile:
-            found = False
-            for line in reffile:
-                if 'Phi:' in line:
-                    found = True
-                    words = line.split()
-                    phi = float(words[1])
-            if not found:
-                print('Phi from trajectory-start was not found')
+        path = f'trajectory-{trajectory}/minimum/fort.100'
+    with open(path) as reffile:
+        found = False
+        for line in reffile:
+            if 'Phi:' in line:
+               found = True
+               words = line.split()
+               phi = float(words[1])
+        if not found:
+            print(f'Phi from {path} was not found')
     return phi
 
 
@@ -72,7 +57,7 @@ def reading_order(trajectory):
         path = f'trajectory-{trajectory}/DCP_{method}/newton_singlepoint/fort.100'
     else:
         path = f'trajectory-{trajectory}/DCP_{method}/fort.100'
-    with open(f'{path}') as reffile:    
+    with open(path) as reffile:    
         order = 0
         found = False
         for line in reffile:
@@ -102,8 +87,12 @@ def reading_n_elecs():
     return n_elecs
 
 
-def saddlepoint_coordinates(trajectory, method):
-    with open(f'trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:
+def reading_coordinates(trajectory, calculation_type):
+    if calculation_type == method:
+        path = f'trajectory-{trajectory}/DCP_{method}/fort.100'
+    elif calculation_type == 'stedes_eigvec':
+        path = f'eigenvector_check/fort.100'
+    with open(path) as reffile:
             R = []
             for line in reffile:
                 if 'after minimize:' in line:
@@ -114,7 +103,93 @@ def saddlepoint_coordinates(trajectory, method):
                         words = line.split()
                         for word in words[1:]:
                             R.append(float(word))
-    return(R)
+    return(np.array(R))
+
+
+def minimum(trajectory, x):
+    with open(f'trajectory-{trajectory}-max.ref', 'r') as reffile:
+        R = []
+        line = reffile.readline()
+        while f'{x} F(MAX):' not in line:
+            line = reffile.readline()
+        line = reffile.readline()
+        for _ in range(n_elecs):
+            line = reffile.readline()
+            words = line.split()
+            for word in words:
+                R.append(float(word))
+        return np.array(R)
+    
+    
+def read_eigenvector(trajectory):
+    with open(f'trajectory-{trajectory}/DCP_newton/fort.100') as reffile:
+        R = []
+        for line in reffile:
+            found = True
+            if 'hessian eigenvalues and -vectors' in line:
+                line = reffile.readline()
+                for _ in range(n_elecs):
+                    line = reffile.readline()
+                    coordinates = line.split()
+                    for coordinate in coordinates[1:]:
+                        R.append(float(coordinate))
+    return np.array(R)
+
+
+def deflection_saddlepoint(eigenvector, saddlepoint, deflection_factor):
+    return(eigenvector * deflection_factor + saddlepoint)
+
+
+def stepest_descent(trajectory, molecule, R):
+    cp('ethane.wf', f'eigenvector_check')
+    with open(f'eigenvector_check/stedes.ami', 'w') as printfile:
+        printfile.write(f'''! seed for random number generation, not important
+$gen(seed=101)
+! reading the wave function file
+$wf(read,file='{name}.wf')
+$init_rawdata_generation()
+$init_max_search(
+step_size=0.1,
+correction_mode=cut,
+singularity_threshold=0.001,
+method=steepest_descent,
+verbose=2,
+negative_eigenvalues=0,
+eigenvalue_threshold=1e-10)
+! setting the initial position
+$init_walker(
+free
+''')
+        for s in range(n_elecs):
+            for t in R[s*3:s*3+3]:
+                printfile.write(f'{t} ')
+            printfile.write('\n')
+        printfile.write(''')
+$sample(create, size=1, single_point)
+! maximize the walker
+$maximize_sample()''')
+
+
+    with open(f'eigenvector_check/cluster.yml', 'w') as printfile:
+        printfile.write(f'''--- # MaximaProcessing
+MaximaProcessing:
+  binaryFileBasename: stedes
+  calculateSpinCorrelations: false
+  shuffleMaxima: false
+...''')
+
+    #makes the amolqc run for the minimum single point calculation
+    with cd(f'eigenvector_check'):
+        run('amolqc stedes.ami')
+    return(print(f'minimum for eigenvector_check for trajectory-{trajectory} was calculated'))
+
+
+def compare_position(R1, R2, threshold):
+    norm = np.linalg.norm(R1 - R2)
+    if norm <= threshold:
+        return(True)
+    else:
+        return(False)
 
 
 def compare_saddlepoints(R_new, trajectory):
@@ -152,6 +227,7 @@ def runtime_hours(runtime):
     return np.round(runtime_hours, decimals = 3)
 
 
+#script starts here
 #reads out and defines count and n_elecs
 n_elecs = reading_n_elecs()
 count = read_count()
@@ -196,9 +272,9 @@ for trajectory in range(1, count + 1):
                         no_DCP = True
             
     if found and not infty and not no_DCP:
-        R_new = saddlepoint_coordinates(trajectory, method)
+        R_new = reading_coordinates(trajectory, method)
 
-        compare_saddlepoints(np.array(R_new), trajectory)
+        compare_saddlepoints(R_new, trajectory)
 
     elif not found:
         found = False
