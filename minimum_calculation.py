@@ -80,8 +80,7 @@ for trajectory in range(1, count+1):
         mkdir(f'trajectory-{trajectory}/result')
         cp(f'trajectory-start/result/cluster_start-out.yml', f'trajectory-{trajectory}/result')
         mkdir(f'trajectory-{trajectory}/minimum')
-        for obj in ls('trajectory-source/minimum'):
-            cp(f'trajectory-source/minimum/{obj}', f'trajectory-{trajectory}/minimum')
+        cp(f'{name}.wf', f'trajectory-{trajectory}/minimum')
 
         #reads out the coordinates of the starting minimum
         n_elecs = reading_n_elecs()
