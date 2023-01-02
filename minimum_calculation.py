@@ -113,6 +113,15 @@ free
 $sample(create, size=1, single_point)
 ! maximize the walker
 $maximize_sample()''')
+       
+        #creates .yml file
+        with open(f'trajectory-{trajectory}/minimum/cluster.yml', 'w') as printfile:
+            printfile.write(f'''--- # MaximaProcessing
+MaximaProcessing:
+  binaryFileBasename: stedes
+  calculateSpinCorrelations: false
+  shuffleMaxima: false
+...''')
 
         #makes the amolqc run for the minimum single point calculation
         with cd(f'trajectory-{trajectory}/minimum'):
