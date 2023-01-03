@@ -271,8 +271,10 @@ def runtime_hours(runtime):
 
 def reading_saddlepoint_calculation_in(search):
     with open('saddlepoint_calculation.in', 'r') as reffile:
+        found = False
         for line in reffile:
             if search in line:
+                found = True
                 words = line.split()
                 try:
                     float(words[1])
@@ -283,14 +285,14 @@ def reading_saddlepoint_calculation_in(search):
                     return(float(words[1]))
                 else:
                     return(words[1])
-            #default values if not defined in .in file
-            else:
-                if search == 'threshold_DCP_guess':
-                    return(1e-1)
-                if search == 'method':
-                    return('gradient_norm')
-                if search  == 'deflection_factor':
-                    return(3e-3)
+        #default values if not defined in .in file
+        if not found:
+            if search == 'threshold_DCP_guess':
+                return(1e-1)
+            if search == 'method':
+                return('gradient_norm')
+            if search  == 'deflection_factor':
+                return(3e-3)
 
 
 #script starts here
