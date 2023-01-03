@@ -291,7 +291,7 @@ with open('saddlepoint_calculation.in', 'r') as reffile:
             
             
 #starts evaluation
-mkdir('eigenvector check')
+mkdir('eigenvector_check')
 
 for trajectory in range(1, count + 1):
     #checks if DCP was calculated
