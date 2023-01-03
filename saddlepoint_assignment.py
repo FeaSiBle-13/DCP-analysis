@@ -5,8 +5,6 @@ from pyscript import *
 import re
 from sigfig import round
 
-deflection_factor = 1e-3
-
 list_failure_DCP = []
 list_failure_statistics = []
 list_failure_trajectories = []
@@ -271,6 +269,22 @@ def runtime_hours(runtime):
     return np.round(runtime_hours, decimals = 3)
 
 
+def reading_saddlepoint_calculation_in(search):
+    with open('saddlepoint_calculation.in', 'r') as reffile:
+        for line in reffile:
+            if search in line:
+                words = line.split()
+                return(float(words[1]))
+            #default values if not defined in .in file
+            else:
+                if search == 'threshold_DCP_guess':
+                    return(1e-1)
+                if search == 'method':
+                    'gradient_norm'
+                if search  == 'deflection_factor'
+                    return(3e-3)
+
+
 #script starts here
 #reads out and defines count and n_elecs
 n_elecs = reading_n_elecs()
@@ -278,20 +292,9 @@ count = read_trajectory_ami('count')
 name = read_trajectory_ami('file')
             
 #reads saddlepoint_calculation.in file (would be nicer here with regular expressions)
-with open('saddlepoint_calculation.in', 'r') as reffile:
-    for line in reffile:
-        if 'threshold_DCP_guess' in line:
-            words = line.split()
-            threshold_molecule = float(words[1])
-        else:
-            threshold_molecule = 1e-1
-            
-        if 'method' in line:
-            words = line.split()
-            method = words[1]
-        else: 
-            method = 'gradient_norm'            
-            
+threshold_molecule = reading_saddlepoint_calculation_in('threshold_DCP_guess')
+method = reading_saddlepoint_calculation_in('method')
+deflection_factor = reading_saddlepoint_calculation_in('deflection_factor')
             
 #starts evaluation
 mkdir('eigenvector_check')
