@@ -5,8 +5,6 @@ from pyscript import *
 import re
 from sigfig import round
 
-threshold = 1e-2
-
 list_failure_DCP = []
 list_failure_statistics = []
 list_failure_trajectories = []
@@ -176,9 +174,9 @@ MaximaProcessing:
     return(print(f'minimum for eigenvector_check for trajectory-{trajectory} was calculated'))
 
 
-def compare_position(R1, R2, threshold):
+def compare_position(R1, R2, threshold_molecule):
     norm = np.linalg.norm(R1 - R2)
-    if norm <= threshold:
+    if norm <= threshold_molecule:
         return(True)
     else:
         return(False)
@@ -195,7 +193,7 @@ def compare_saddlepoints(R_new, trajectory):
     found = False
     for i_DCP, R_DCP in enumerate(list_DCP):
         norm = np.linalg.norm(R_new - R_DCP)
-        if norm <= threshold:
+        if norm <= threshold_molecule:
             list_statistics[i_DCP] += 1
             list_trajectories[i_DCP] += f', {trajectory}'
             found = True
@@ -254,9 +252,9 @@ with open('saddlepoint_calculation.in', 'r') as reffile:
     for line in reffile:
         if 'threshold_DCP_guess' in line:
             words = line.split()
-            threshold_DCP_guess = float(words[1])
+            threshold_molecule = float(words[1])
         else:
-            threshold_DCP_guess = 1e-1
+            threshold_molecule = 1e-1
             
         if 'method' in line:
             words = line.split()
