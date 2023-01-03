@@ -197,10 +197,18 @@ def compare_saddlepoints(R_new, trajectory):
     for i_DCP, R_DCP in enumerate(list_DCP):
         norm = np.linalg.norm(R_new - R_DCP)
         if norm <= threshold:
-            return('same')
+            list_statistics[i_DCP] += 1
+            list_trajectories[i_DCP] += f', {trajectory}'
+            found = True
+            break
     if not found:
-        return('different')
-
+        list_DCP.append(R_new)
+        list_statistics.append(1)
+        list_trajectories.append(f'{trajectory}')
+        list_enumerate_DCP.append(len(list_enumerate_DCP)+1)
+        list_phi_values.append(round(abs(phi_value(0, trajectory)-phi_value(1, trajectory)), sigfigs = 3 ))
+        list_order.append(f'{reading_order(trajectory)}. order')
+        
 
 def runtime():
     with open('trajectory.amo', 'r') as reffile:
@@ -265,19 +273,7 @@ for trajectory in range(1, count + 1):
             
     if found and not infty and not no_DCP:
         R_new = reading_coordinates(trajectory, method)
-
-        if compare_saddlepoints(R_new, trajectory) == 'same':
-            list_statistics[i_DCP] += 1
-            list_trajectories[i_DCP] += f', {trajectory}'
-            found = True
-            break
-        elif compare_saddlepoints(R_new, trajectory) == 'different':
-            list_DCP.append(R_new)
-            list_statistics.append(1)
-            list_trajectories.append(f'{trajectory}')
-            list_enumerate_DCP.append(len(list_enumerate_DCP)+1)
-            list_phi_values.append(round(abs(phi_value(0, trajectory)-phi_value(1, trajectory)), sigfigs = 3 ))
-            list_order.append(f'{reading_order(trajectory)}. order')
+        compare_saddlepoints(R_new, trajectory) 
 
     elif not found:
         found = False
