@@ -182,7 +182,7 @@ def compare_position(R1, R2, threshold_molecule):
         return(False)
     
     
-def ev_deflection_check(R_deflection, reading_coordinates, compare_positions):
+def ev_deflection_check():
     eigenvec = read_eigenvector(trajectory)
     saddlepoint = reading_coordinates(trajectory, method)
     
