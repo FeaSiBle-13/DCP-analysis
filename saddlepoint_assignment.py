@@ -274,7 +274,12 @@ def reading_saddlepoint_calculation_in(search):
         for line in reffile:
             if search in line:
                 words = line.split()
-                if words[1].isdigit():
+                try:
+                    float(words[1])
+                    is_float = True
+                except ValueError:
+                    is_float = False
+                if is_float:
                     return(float(words[1]))
                 else:
                     return(words[1])
