@@ -22,8 +22,8 @@ def read_trajectory_ami(search):
         if search == 'file':
             for line in reffile:
                 if 'file' in line and notdone_file:
-                name = re.search(r'file=([\'"]?)(.+?)\.wf\1', line).group(2)
-                break
+                    name = re.search(r'file=([\'"]?)(.+?)\.wf\1', line).group(2)
+                    break
         
         
     return(count)
