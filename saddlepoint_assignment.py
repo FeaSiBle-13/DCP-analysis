@@ -216,31 +216,24 @@ def ev_deflection_check():
         return('no_saddlepoint_of_adjacent_minima')
     
 
-def compare_saddlepoints(R_new, trajectory):
-    list_DCP = []
-    list_phi_values = []
-    list_enumerate_DCP =[]
-    list_statistics = []
-    list_trajectories = []
-    list_order = []
+def compare_saddlepoints(R_new, trajectory, list_compared):
+    #indices from list_compared: 0 = list_DCP, 1 = list_statistics, 2 = list_trajectories, 3 = list_enumerate_DCP, 4 = list_phi_values, 5 = list_order
     
     found = False
-    for i_DCP, R_DCP in enumerate(list_DCP):
+    for i_DCP, R_DCP in enumerate(list_compared[0]):
         norm = np.linalg.norm(R_new - R_DCP)
         if norm <= threshold_molecule:
-            list_statistics[i_DCP] += 1
-            list_trajectories[i_DCP] += f', {trajectory}'
+            list_compared[1][i_DCP] += 1
+            list_compared[2][i_DCP] += f', {trajectory}'
             found = True
             break
     if not found:
-        list_DCP.append(R_new)
-        list_statistics.append(1)
-        list_trajectories.append(f'{trajectory}')
-        list_enumerate_DCP.append(len(list_enumerate_DCP)+1)
-        list_phi_values.append(round(abs(phi_value(0, trajectory)-phi_value(1, trajectory)), sigfigs = 3 ))
-        list_order.append(f'{reading_order(trajectory)}. order')
-    list_compared = [list_DCP, list_statistics, list_trajectories, list_enumerate_DCP, list_phi_values, list_order]
-    print(list_compared)
+        list_compared[0].append(R_new)
+        list_compared[1].append(1)
+        list_compared[2].append(f'{trajectory}')
+        list_compared[3].append(len(list_enumerate_DCP)+1)
+        list_compared[4].append(round(abs(phi_value(0, trajectory)-phi_value(1, trajectory)), sigfigs = 3 ))
+        list_compared[5].append(f'{reading_order(trajectory)}. order')
     return(list_compared)
 
 
@@ -301,6 +294,7 @@ with open('saddlepoint_calculation.in', 'r') as reffile:
             
 #starts evaluation
 mkdir('eigenvector_check')
+list_compared = [[], [], [], [], []]
 
 for trajectory in range(1, count + 1):
     #checks if DCP was calculated
@@ -326,10 +320,11 @@ for trajectory in range(1, count + 1):
                         no_DCP = True
             
     #categorizes the calculated DCPs
+    list_compared_old = list_compared
     if found and not infty and not no_DCP:
         print(ev_deflection_check())
         R_new = reading_coordinates(trajectory, method)
-        list_compared = compare_saddlepoints(R_new, trajectory) 
+        list_compared = compare_saddlepoints(R_new, trajectory, list_compared_old) 
 
     elif not found:
         no_saddlepoint('no basin change')
