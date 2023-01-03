@@ -223,6 +223,7 @@ def compare_saddlepoints(R_new, trajectory):
     list_statistics = []
     list_trajectories = []
     list_order = []
+    list_compared = []
     
     found = False
     for i_DCP, R_DCP in enumerate(list_DCP):
