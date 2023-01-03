@@ -12,6 +12,7 @@ list_failure_statistics = []
 list_failure_trajectories = []
 list_failure_phi_values = []
 list_failure_order = []
+list_failure_DCP_location = []
 
 
 def read_trajectory_ami(search):
@@ -216,7 +217,7 @@ def ev_deflection_check():
     
 
 def compare_saddlepoints(R_new, trajectory, list_compared, ev_deflection_check):
-    #indices from list_compared: 0 = list_DCP, 1 = list_statistics, 2 = list_trajectories, 3 = list_enumerate_DCP, 4 = list_phi_values, 5 = list_order
+    #indices from list_compared: 0 = list_DCP, 1 = list_statistics, 2 = list_trajectories, 3 = list_enumerate_DCP, 4 = list_phi_values, 5 = list_order, 6 = saddlepoint_location 
     found = False
     for i_DCP, R_DCP in enumerate(list_compared[0]):
         norm = np.linalg.norm(R_new - R_DCP)
@@ -250,6 +251,7 @@ def no_saddlepoint(reason):
         list_failure_trajectories.append(f'{trajectory}')
         list_failure_phi_values.append('none')
         list_failure_order.append('none')
+        list_failure_DCP_location.append('none')
         
 
 def runtime():
@@ -338,13 +340,14 @@ statistics = list_compared[1] + list_failure_statistics
 trajectories = list_compared[2] + list_failure_trajectories
 Delta_phi = list_compared[4] + list_failure_phi_values
 order = list_compared[5] + list_failure_order
+DCP_location = list_compared[6] + list_failure_DCP_location
 
 
 #prints out .csv file
 with open(f'DCP-analysis_{method}.csv', 'w') as reffile:
-    reffile.write(f'runtime\t {runtime()}\t{runtime_hours(runtime())}\thours\t\n')
-    reffile.write(f'\tfrequency\tDelta_phi\torder\ttrajectories\n')
+    reffile.write(f'runtime\t {runtime()}\t{runtime_hours(runtime())}\thours\t\t\n')
+    reffile.write(f'\tfrequency\tDelta_phi\torder\ttrajectories\tsaddlepoint_location\n')
     for i_item, item in enumerate(enumeration):
-        reffile.write(f'{enumeration[i_item]}\t{statistics[i_item]}\t{Delta_phi[i_item]}\t{order[i_item]}\t{trajectories[i_item]}\n')
+        reffile.write(f'{enumeration[i_item]}\t{statistics[i_item]}\t{Delta_phi[i_item]}\t{order[i_item]}\t{trajectories[i_item]}\t{DCP_location[i_item]}\n')
 
 print(f'DCP-analysis_{method}.csv was generated')
