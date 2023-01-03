@@ -220,7 +220,7 @@ def compare_saddlepoints(R_new, trajectory, list_compared, ev_deflection_check):
     found = False
     for i_DCP, R_DCP in enumerate(list_compared[0]):
         norm = np.linalg.norm(R_new - R_DCP)
-        if norm <= threshold_molecule:
+        if norm <= threshold_molecule and ev_deflection_check == list_compared[6][i_DCP]:
             list_compared[1][i_DCP] += 1
             list_compared[2][i_DCP] += f', {trajectory}'
             found = True
@@ -323,7 +323,6 @@ for trajectory in range(1, count + 1):
     if found and not infty and not no_DCP:
         R_new = reading_coordinates(trajectory, method)
         list_compared = compare_saddlepoints(R_new, trajectory, list_compared_old, ev_deflection_check()) 
-        print(list_compared)
     elif not found:
         no_saddlepoint('no basin change')
 
