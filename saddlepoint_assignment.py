@@ -12,14 +12,20 @@ list_failure_phi_values = []
 list_failure_order = []
 
 
-def read_count():
-    with open(f'trajectory.ami', 'r') as ami_file:
-        notdone_count = True
-        notdone_file = True
-        for line in ami_file:
-            if 'count' in line and notdone_count:
-                count = int(re.search(r'\d+', line).group())
-                notdone_count = False
+def read_trajectory.ami(search):
+    with open(f'trajectory.ami', 'r') as reffile:
+        if search == 'count':
+            for line in reffile:
+               if 'count' in line and notdone_count:
+                   count = int(re.search(r'\d+', line).group())
+                   break
+        if search == 'file':
+            for line in reffile:
+                if 'file' in line and notdone_file:
+                name = re.search(r'file=([\'"]?)(.+?)\.wf\1', line).group(2)
+                break
+        
+        
     return(count)
 
 
@@ -272,7 +278,8 @@ def runtime_hours(runtime):
 #script starts here
 #reads out and defines count and n_elecs
 n_elecs = reading_n_elecs()
-count = read_count()
+count = read_trajectory.ami('count')
+name = read_trajectory.ami('file')
             
 #reads saddlepoint_calculation.in file (would be nicer here with regular expressions)
 with open('saddlepoint_calculation.in', 'r') as reffile:
