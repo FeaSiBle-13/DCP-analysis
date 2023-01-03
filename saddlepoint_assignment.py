@@ -178,7 +178,6 @@ MaximaProcessing:
     #makes the amolqc run for the minimum single point calculation
     with cd(f'eigenvector_check'):
         run('amolqc stedes.ami')
-    return(print(f'minimum for eigenvector_check for trajectory-{trajectory} was calculated'))
 
 
 def compare_position(R1, R2, threshold_molecule):
@@ -211,12 +210,12 @@ def ev_deflection_check():
                 break
     
     if list_found_min[0] and list_found_min[1]:
-        return('saddlepoint_of_adjacent_minima')
+        return('adjacent_minima')
     else:
-        return('no_saddlepoint_of_adjacent_minima')
+        return('no_adjacent_minima')
     
 
-def compare_saddlepoints(R_new, trajectory, list_compared):
+def compare_saddlepoints(R_new, trajectory, list_compared, ev_deflection_check):
     #indices from list_compared: 0 = list_DCP, 1 = list_statistics, 2 = list_trajectories, 3 = list_enumerate_DCP, 4 = list_phi_values, 5 = list_order
     found = False
     for i_DCP, R_DCP in enumerate(list_compared[0]):
@@ -233,6 +232,7 @@ def compare_saddlepoints(R_new, trajectory, list_compared):
         list_compared[3].append(len(list_compared[3])+1)
         list_compared[4].append(round(abs(phi_value(0, trajectory)-phi_value(1, trajectory)), sigfigs = 3 ))
         list_compared[5].append(f'{reading_order(trajectory)}. order')
+        list_compared[6].append(ev_deflection_check)
     return(list_compared)
 
 
@@ -321,10 +321,9 @@ for trajectory in range(1, count + 1):
     #categorizes the calculated DCPs
     list_compared_old = list_compared
     if found and not infty and not no_DCP:
-        print(ev_deflection_check())
         R_new = reading_coordinates(trajectory, method)
-        list_compared = compare_saddlepoints(R_new, trajectory, list_compared_old) 
-
+        list_compared = compare_saddlepoints(R_new, trajectory, list_compared_old, ev_deflection_check()) 
+        print(list_compared)
     elif not found:
         no_saddlepoint('no basin change')
 
