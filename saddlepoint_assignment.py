@@ -281,7 +281,7 @@ def reading_saddlepoint_calculation_in(search):
                     return(1e-1)
                 if search == 'method':
                     'gradient_norm'
-                if search  == 'deflection_factor'
+                if search  == 'deflection_factor':
                     return(3e-3)
 
 
