@@ -240,6 +240,7 @@ def compare_saddlepoints(R_new, trajectory):
         list_phi_values.append(round(abs(phi_value(0, trajectory)-phi_value(1, trajectory)), sigfigs = 3 ))
         list_order.append(f'{reading_order(trajectory)}. order')
     list_compared = [list_DCP, list_statistics, list_trajectories, list_enumerate_DCP, list_phi_values, list_order]
+    print(list_compared)
     return(list_compared)
 
 
