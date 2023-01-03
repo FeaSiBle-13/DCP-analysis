@@ -5,6 +5,8 @@ from pyscript import *
 import re
 from sigfig import round
 
+deflection_factor = 1e-3
+
 list_failure_DCP = []
 list_failure_statistics = []
 list_failure_trajectories = []
@@ -203,7 +205,7 @@ def ev_deflection_check():
     list_found_min = [False, False]
     for m in range(1, 3):
         for vectors in list_minimized_deflection:
-            same = compare_position(minimum(trajectory, m), vectors, threshold)
+            same = compare_position(minimum(trajectory, m), vectors, threshold_molecule)
             if same:
                 list_found_min[m-1] = True
                 break
