@@ -5,16 +5,6 @@ from pyscript import *
 import re
 from sigfig import round
 
-threshold = 1e-2
-
-
-list_DCP = []
-list_phi_values = []
-list_enumerate_DCP =[]
-list_statistics = []
-list_trajectories = []
-list_order = []
-
 list_failure_DCP = []
 list_failure_statistics = []
 list_failure_trajectories = []
@@ -184,19 +174,53 @@ MaximaProcessing:
     return(print(f'minimum for eigenvector_check for trajectory-{trajectory} was calculated'))
 
 
-def compare_position(R1, R2, threshold):
+def compare_position(R1, R2, threshold_molecule):
     norm = np.linalg.norm(R1 - R2)
-    if norm <= threshold:
+    if norm <= threshold_molecule:
         return(True)
     else:
         return(False)
-
+    
+    
+def ev_deflection_check(R_deflection, reading_coordinates, compare_positions):
+    eigenvec = read_eigenvector(trajectory)
+    saddlepoint = reading_coordinates(trajectory, method)
+    
+    #compares if stepest descent minimization ends in the starting or ending minimum
+    list_minimized_deflection = []
+    
+    for m in range(1, 3):
+        stepest_descent(trajectory, name, deflection_saddlepoint(eigenvec, saddlepoint, (-1) ** m * deflection_factor))
+        list_minimized_deflection.append(reading_coordinates(trajectory, 'stedes_eigvec'))
+        for obj in ls(f'eigenvector_check'):
+            rm(f'eigenvector_check/{obj}')
+    
+    list_found_min = [False, False]
+    for m in range(1, 3):
+        for vectors in list_minimized_deflection:
+            same = compare_position(minimum(trajectory, m), vectors, threshold)
+            if same:
+                list_found_min[m-1] = True
+                break
+    
+    if list_found_min[0] and list_found_min[1]:
+        return('saddlepoint_of_adjacent_minima')
+    else:
+        return('no_saddlepoint_of_adjacent_minima')
+    
 
 def compare_saddlepoints(R_new, trajectory):
+    list_DCP = []
+    list_phi_values = []
+    list_enumerate_DCP =[]
+    list_statistics = []
+    list_trajectories = []
+    list_order = []
+    
     found = False
     for i_DCP, R_DCP in enumerate(list_DCP):
         norm = np.linalg.norm(R_new - R_DCP)
-        if norm <= threshold:
+        if norm <= threshold_molecule:
             list_statistics[i_DCP] += 1
             list_trajectories[i_DCP] += f', {trajectory}'
             found = True
@@ -208,6 +232,24 @@ def compare_saddlepoints(R_new, trajectory):
         list_enumerate_DCP.append(len(list_enumerate_DCP)+1)
         list_phi_values.append(round(abs(phi_value(0, trajectory)-phi_value(1, trajectory)), sigfigs = 3 ))
         list_order.append(f'{reading_order(trajectory)}. order')
+    list_compared[list_DCP, list_statistics, list_trajectories, list_enumerate_DCP, list_phi_values, list_order]
+    return(list_compared)
+
+
+def no_saddlepoint(reason):
+    found = False
+    for i_no_DCP, no_DCP in enumerate(list_failure_DCP):
+        if no_DCP == reason:
+            list_failure_statistics[i_no_DCP] += 1
+            list_failure_trajectories[i_no_DCP] += f', {trajectory}'
+            found = True
+            break
+    if not found:
+        list_failure_DCP.append(reason)
+        list_failure_statistics.append(1)
+        list_failure_trajectories.append(f'{trajectory}')
+        list_failure_phi_values.append('none')
+        list_failure_order.append('none')
         
 
 def runtime():
@@ -237,9 +279,9 @@ with open('saddlepoint_calculation.in', 'r') as reffile:
     for line in reffile:
         if 'threshold_DCP_guess' in line:
             words = line.split()
-            threshold_DCP_guess = float(words[1])
+            threshold_molecule = float(words[1])
         else:
-            threshold_DCP_guess = 1e-1
+            threshold_molecule = 1e-1
             
         if 'method' in line:
             words = line.split()
@@ -249,6 +291,8 @@ with open('saddlepoint_calculation.in', 'r') as reffile:
             
             
 #starts evaluation
+mkdir('eigenvector check')
+
 for trajectory in range(1, count + 1):
     #checks if DCP was calculated
     with open(f'trajectory-{trajectory}-max.ref') as reffile:
@@ -261,6 +305,7 @@ for trajectory in range(1, count + 1):
                 if words[4] == 'Infinity':
                     infty = True
 
+                    
     #checks if DCP was found
     if found and not infty:
         with open(f'trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:
@@ -271,61 +316,27 @@ for trajectory in range(1, count + 1):
                     if words[1] == 'Infinity':
                         no_DCP = True
             
+    #categorizes the calculated DCPs
     if found and not infty and not no_DCP:
+        print(ev_deflection_check())
         R_new = reading_coordinates(trajectory, method)
-        compare_saddlepoints(R_new, trajectory) 
+        list_compared = compare_saddlepoints(R_new, trajectory) 
 
     elif not found:
-        found = False
-        for i_failure, t_failure in enumerate(list_failure_DCP):
-            if t_failure == 'no basin change':
-                list_failure_statistics[i_failure] += 1
-                list_failure_trajectories[i_failure] += f', {trajectory}'
-                found = True
-                break
-        if not found:
-            list_failure_DCP.append('no basin change')
-            list_failure_statistics.append(1)
-            list_failure_trajectories.append(f'{trajectory}')
-            list_failure_phi_values.append('none')
-            list_failure_order.append('none')
+        no_saddlepoint('no basin change')
 
     elif infty:
-        found = False
-        for i_failure, t_failure in enumerate(list_failure_DCP):
-            if t_failure == 'walked from basin to infty':
-                list_failure_statistics[i_failure] += 1
-                list_failure_trajectories[i_failure] += f', {trajectory}'
-                found = True
-                break
-        if not found:
-            list_failure_DCP.append('walked from basin to infty')
-            list_failure_statistics.append(1)
-            list_failure_trajectories.append(f'{trajectory}')
-            list_failure_phi_values.append('none')
-            list_failure_order.append('none')
+        no_saddlepoint('walked from basin to infty')
 
     elif no_DCP:
-        found = False
-        for i_failure, t_failure in enumerate(list_failure_DCP):
-            if t_failure == 'no DCP found':
-                list_failure_statistics[i_failure] += 1
-                list_failure_trajectories[i_failure] += f', {trajectory}'
-                found = True
-                break
-        if not found:
-            list_failure_DCP.append('no DCP found')
-            list_failure_statistics.append(1)
-            list_failure_trajectories.append(f'{trajectory}')
-            list_failure_phi_values.append('none')
-            list_failure_order.append('none')
+        no_saddlepoint('no DCP found')
 
-enumeration = list_enumerate_DCP + list_failure_DCP
-statistics = list_statistics + list_failure_statistics
-trajectories = list_trajectories + list_failure_trajectories
-Delta_phi = list_phi_values + list_failure_phi_values
-order = list_order + list_failure_order
-
+#indices from list_compared: 0 = list_DCP, 1 = list_statistics, 2 = list_trajectories, 3 = list_enumerate_DCP, 4 = list_phi_values, 5 = list_order
+enumeration = list_compared[3] + list_failure_DCP
+statistics = list_compared[1] + list_failure_statistics
+trajectories = list_compared[2] + list_failure_trajectories
+Delta_phi = list_compared[4] + list_failure_phi_values
+order = list_compared[5] + list_failure_order
 
 
 #prints out .csv file
