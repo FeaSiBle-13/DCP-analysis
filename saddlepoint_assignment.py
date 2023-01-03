@@ -218,7 +218,6 @@ def ev_deflection_check():
 
 def compare_saddlepoints(R_new, trajectory, list_compared):
     #indices from list_compared: 0 = list_DCP, 1 = list_statistics, 2 = list_trajectories, 3 = list_enumerate_DCP, 4 = list_phi_values, 5 = list_order
-    
     found = False
     for i_DCP, R_DCP in enumerate(list_compared[0]):
         norm = np.linalg.norm(R_new - R_DCP)
@@ -231,7 +230,7 @@ def compare_saddlepoints(R_new, trajectory, list_compared):
         list_compared[0].append(R_new)
         list_compared[1].append(1)
         list_compared[2].append(f'{trajectory}')
-        list_compared[3].append(len(list_enumerate_DCP)+1)
+        list_compared[3].append(len(list_compared[3])+1)
         list_compared[4].append(round(abs(phi_value(0, trajectory)-phi_value(1, trajectory)), sigfigs = 3 ))
         list_compared[5].append(f'{reading_order(trajectory)}. order')
     return(list_compared)
