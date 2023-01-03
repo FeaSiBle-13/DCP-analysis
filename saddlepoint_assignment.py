@@ -16,17 +16,16 @@ def read_trajectory_ami(search):
     with open(f'trajectory.ami', 'r') as reffile:
         if search == 'count':
             for line in reffile:
-               if 'count' in line and notdone_count:
+               if 'count' in line:
                    count = int(re.search(r'\d+', line).group())
                    break
+            return(count)
         if search == 'file':
             for line in reffile:
-                if 'file' in line and notdone_file:
+                if 'file' in line:
                     name = re.search(r'file=([\'"]?)(.+?)\.wf\1', line).group(2)
                     break
-        
-        
-    return(count)
+            return(name)
 
 
 def phi_value(x, trajectory):
