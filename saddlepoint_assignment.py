@@ -180,7 +180,34 @@ def compare_position(R1, R2, threshold_molecule):
         return(True)
     else:
         return(False)
-
+    
+    
+def ev_deflection_check(R_deflection, reading_coordinates, compare_positions):
+    eigenvec = read_eigenvector(trajectory)
+    saddlepoint = reading_coordinates(trajectory, method)
+    
+    #compares if stepest descent minimization ends in the starting or ending minimum
+    list_minimized_deflection = []
+    
+    for m in range(1, 3):
+        stepest_descent(trajectory, name, deflection_saddlepoint(eigenvec, saddlepoint, (-1) ** m * deflection_factor))
+        list_minimized_deflection.append(reading_coordinates(trajectory, 'stedes_eigvec'))
+        for obj in ls(f'eigenvector_check'):
+            rm(f'eigenvector_check/{obj}')
+    
+    list_found_min = [False, False]
+    for m in range(1, 3):
+        for vectors in list_minimized_deflection:
+            same = compare_position(minimum(trajectory, m), vectors, threshold)
+            if same:
+                list_found_min[m-1] = True
+                break
+    
+    if list_found_min[0] and list_found_min[1]:
+        return('saddlepoint_of_adjacent_minima')
+    else:
+        return('no_saddlepoint_of_adjacent_minima')
+    
 
 def compare_saddlepoints(R_new, trajectory):
     list_DCP = []
@@ -264,6 +291,8 @@ with open('saddlepoint_calculation.in', 'r') as reffile:
             
             
 #starts evaluation
+mkdir('eigenvector check')
+
 for trajectory in range(1, count + 1):
     #checks if DCP was calculated
     with open(f'trajectory-{trajectory}-max.ref') as reffile:
@@ -287,7 +316,9 @@ for trajectory in range(1, count + 1):
                     if words[1] == 'Infinity':
                         no_DCP = True
             
+    #categorizes the calculated DCPs
     if found and not infty and not no_DCP:
+        print(ev_deflection_check())
         R_new = reading_coordinates(trajectory, method)
         list_compared = compare_saddlepoints(R_new, trajectory) 
 
