@@ -274,7 +274,10 @@ def reading_saddlepoint_calculation_in(search):
         for line in reffile:
             if search in line:
                 words = line.split()
-                return(float(words[1]))
+                if words[1].isdigit():
+                    return(float(words[1]))
+                else:
+                    return(words[1])
             #default values if not defined in .in file
             else:
                 if search == 'threshold_DCP_guess':
