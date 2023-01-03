@@ -7,14 +7,6 @@ from sigfig import round
 
 threshold = 1e-2
 
-
-list_DCP = []
-list_phi_values = []
-list_enumerate_DCP =[]
-list_statistics = []
-list_trajectories = []
-list_order = []
-
 list_failure_DCP = []
 list_failure_statistics = []
 list_failure_trajectories = []
@@ -193,6 +185,13 @@ def compare_position(R1, R2, threshold):
 
 
 def compare_saddlepoints(R_new, trajectory):
+    list_DCP = []
+    list_phi_values = []
+    list_enumerate_DCP =[]
+    list_statistics = []
+    list_trajectories = []
+    list_order = []
+    
     found = False
     for i_DCP, R_DCP in enumerate(list_DCP):
         norm = np.linalg.norm(R_new - R_DCP)
@@ -208,6 +207,24 @@ def compare_saddlepoints(R_new, trajectory):
         list_enumerate_DCP.append(len(list_enumerate_DCP)+1)
         list_phi_values.append(round(abs(phi_value(0, trajectory)-phi_value(1, trajectory)), sigfigs = 3 ))
         list_order.append(f'{reading_order(trajectory)}. order')
+    list_compared[list_DCP, list_statistics, list_trajectories, list_enumerate_DCP, list_phi_values, list_order]
+    return(list_compared)
+
+
+def no_saddlepoint(reason):
+    found = False
+    for i_no_DCP, no_DCP in enumerate(list_failure_DCP):
+        if no_DCP == reason:
+            list_failure_statistics[i_no_DCP] += 1
+            list_failure_trajectories[i_no_DCP] += f', {trajectory}'
+            found = True
+            break
+    if not found:
+        list_failure_DCP.append(reason)
+        list_failure_statistics.append(1)
+        list_failure_trajectories.append(f'{trajectory}')
+        list_failure_phi_values.append('none')
+        list_failure_order.append('none')
         
 
 def runtime():
@@ -274,59 +291,23 @@ for trajectory in range(1, count + 1):
             
     if found and not infty and not no_DCP:
         R_new = reading_coordinates(trajectory, method)
-        compare_saddlepoints(R_new, trajectory) 
+        list_compared = compare_saddlepoints(R_new, trajectory) 
 
     elif not found:
-        found = False
-        for i_failure, t_failure in enumerate(list_failure_DCP):
-            if t_failure == 'no basin change':
-                list_failure_statistics[i_failure] += 1
-                list_failure_trajectories[i_failure] += f', {trajectory}'
-                found = True
-                break
-        if not found:
-            list_failure_DCP.append('no basin change')
-            list_failure_statistics.append(1)
-            list_failure_trajectories.append(f'{trajectory}')
-            list_failure_phi_values.append('none')
-            list_failure_order.append('none')
+        no_saddlepoint('no basin change')
 
     elif infty:
-        found = False
-        for i_failure, t_failure in enumerate(list_failure_DCP):
-            if t_failure == 'walked from basin to infty':
-                list_failure_statistics[i_failure] += 1
-                list_failure_trajectories[i_failure] += f', {trajectory}'
-                found = True
-                break
-        if not found:
-            list_failure_DCP.append('walked from basin to infty')
-            list_failure_statistics.append(1)
-            list_failure_trajectories.append(f'{trajectory}')
-            list_failure_phi_values.append('none')
-            list_failure_order.append('none')
+        no_saddlepoint('walked from basin to infty')
 
     elif no_DCP:
-        found = False
-        for i_failure, t_failure in enumerate(list_failure_DCP):
-            if t_failure == 'no DCP found':
-                list_failure_statistics[i_failure] += 1
-                list_failure_trajectories[i_failure] += f', {trajectory}'
-                found = True
-                break
-        if not found:
-            list_failure_DCP.append('no DCP found')
-            list_failure_statistics.append(1)
-            list_failure_trajectories.append(f'{trajectory}')
-            list_failure_phi_values.append('none')
-            list_failure_order.append('none')
+        no_saddlepoint('no DCP found')
 
-enumeration = list_enumerate_DCP + list_failure_DCP
-statistics = list_statistics + list_failure_statistics
-trajectories = list_trajectories + list_failure_trajectories
-Delta_phi = list_phi_values + list_failure_phi_values
-order = list_order + list_failure_order
-
+#indices from list_compared: 0 = list_DCP, 1 = list_statistics, 2 = list_trajectories, 3 = list_enumerate_DCP, 4 = list_phi_values, 5 = list_order
+enumeration = list_compared[3] + list_failure_DCP
+statistics = list_compared[1] + list_failure_statistics
+trajectories = list_compared[2] + list_failure_trajectories
+Delta_phi = list_compared[4] + list_failure_phi_values
+order = list_compared[5] + list_failure_order
 
 
 #prints out .csv file
