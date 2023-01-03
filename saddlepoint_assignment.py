@@ -293,7 +293,7 @@ with open('saddlepoint_calculation.in', 'r') as reffile:
             
 #starts evaluation
 mkdir('eigenvector_check')
-list_compared = [[], [], [], [], [], []]
+list_compared = [[], [], [], [], [], [], []]
 
 for trajectory in range(1, count + 1):
     #checks if DCP was calculated
