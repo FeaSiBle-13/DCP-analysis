@@ -261,6 +261,7 @@ for trajectory in range(1, count + 1):
                 if words[4] == 'Infinity':
                     infty = True
 
+                    
     #checks if DCP was found
     if found and not infty:
         with open(f'trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:
