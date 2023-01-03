@@ -4,12 +4,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 with open('saddlepoint_calculation.in', 'r') as reffile:
+    found = False
     for line in reffile:  
         if 'method' in line:
             words = line.split()
             method = words[1]
-        else: 
-            method = 'gradient_norm'       
+            found = True
+            break
+    if not found:
+        method = 'gradient_norm'       
 
 #reads out the different DCP from DCP-analysis.csv
 with open(f'DCP-analysis_{method}.csv', 'r') as reffile:
