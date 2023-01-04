@@ -95,10 +95,10 @@ def basin_enter(trajectory):
     return np.array(R_j)
  
     
-def DCP_guess_point(R_max1, R_max2, threshold_DCP_guess):
+def DCP_guess_point(R_max1, R_max2, threshold_molecule):
     for l in range(n_elecs):
         norm = np.linalg.norm(R_max1[l*3:l*3+3]-R_max2[l*3:l*3+3])
-        if norm < threshold_DCP_guess:
+        if norm < threshold_molecule:
             for r in R_max2[l*3:l*3+3]:
                 printfile.write(f'{r} ')
         else:
@@ -211,7 +211,7 @@ eigenvalue_threshold=1e-10)
 $init_walker(
 free
 ''')
-            DCP_guess_point(starting_maximum(trajectory), ending_maximum(trajectory), threshold_DCP_guess)
+            DCP_guess_point(starting_maximum(trajectory), ending_maximum(trajectory), threshold_molecule)
             printfile.write(''')
 $sample(create, size=1, single_point)
 ! maximize the walker
