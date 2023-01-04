@@ -10,7 +10,7 @@ name = 'ethane'
 trajectory = int(input(f'which trajectory should be calculated?'))
 threshold_DCP_guess = 1e-1
 ProcessMaxima = 'no'
-max_steps = 100
+max_steps = 20
 make_extended_calculation = True
 
 def reading_n_elecs():
