@@ -179,15 +179,17 @@ if make_extended_calculation:
 
     #makes a sampling outside of the interpolation distance
     vector = (start_pos1 - start_pos2)/length_outer_basin_points
+    print(vector)
+    print(start_pos1)
     
-    for step in range(1, 5):
-        intervall = 1/(20)
-        R_elecs = start_pos1 * vector * step
-        single_point_none(trajectory, n_elecs, R_elecs)
-        pot = np.round(phi_value(trajectory), 5)
-        position = np.round(- intervall * step, 5)
-        list_potentials.append(pot)
-        list_position.append(position) 
+#    for step in range(1, 5):
+#        intervall = 1/(20)
+#        R_elecs = start_pos1 * vector * step
+#        single_point_none(trajectory, n_elecs, R_elecs)
+#        pot = np.round(phi_value(trajectory), 5)
+#        position = np.round(- intervall * step, 5)
+#        list_potentials.append(pot)
+#        list_position.append(position) 
     
     
 with open(f'trajectory-{trajectory}/result/sampling.out', 'w') as printfile:
