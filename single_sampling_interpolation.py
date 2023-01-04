@@ -10,7 +10,7 @@ name = 'ethane'
 trajectory = int(input(f'which trajectory should be calculated?'))
 threshold_DCP_guess = 1e-1
 ProcessMaxima = 'no'
-max_steps = 20
+max_steps = 100
 make_extended_calculation = True
 
 def reading_n_elecs():
@@ -140,7 +140,26 @@ MaximaProcessing:
             else:
                 print(f'method none did not work for trajectory-{trajectory}')
     
-
+    
+def reading_coordinates(trajectory, calculation_type):
+    if calculation_type == method:
+        path = f'trajectory-{trajectory}/DCP_{method}/fort.100'
+    elif calculation_type == 'stedes_eigvec':
+        path = f'eigenvector_check/fort.100'
+    with open(path) as reffile:
+            R = []
+            for line in reffile:
+                if 'after minimize:' in line:
+                    line = reffile.readline()
+                    line = reffile.readline()
+                    for _ in range(n_elecs):
+                        line = reffile.readline()
+                        words = line.split()
+                        for word in words[1:]:
+                            R.append(float(word))
+    return(np.array(R))
+    
+    
 #interpolation starts here
 n_elecs = reading_n_elecs()
 
@@ -163,33 +182,20 @@ list_position = []
 
 for step in range(max_steps+1):
     intervall = 1/(max_steps)
-    single_point_none(trajectory, n_elecs, ( intervall * step * a + (1- intervall * step) * b ))
+    single_point_none(trajectory, n_elecs, (intervall * step * a + (1- intervall * step) * b ))
     pot = np.round(phi_value(trajectory), 5)
     position = np.round(intervall * step, 5)
     list_potentials.append(pot)
     list_position.append(position)
     
-
-if make_extended_calculation:
-    #makes calculation outside of interpolation point
-    start_pos1 = DCP_guess_point(basin_minimum(trajectory, 'basin1'), basin_minimum(trajectory, 'basin2'), basin_outer_point(trajectory, 'basin1'), threshold_DCP_guess)
-    start_pos2 =  DCP_guess_point(basin_minimum(trajectory, 'basin1'), basin_minimum(trajectory, 'basin2'), basin_outer_point(trajectory, 'basin2'), threshold_DCP_guess)
-    #calculate distance of both positions
-    length_outer_basin_points = np.linalg.norm(start_pos1 - start_pos2)
-
-    #makes a sampling outside of the interpolation distance
-    vector = (start_pos1 - start_pos2)/length_outer_basin_points
-    print(vector)
-    print(start_pos1)
+    #calculates distance from guess point to found DCP
+    distance_to_DCP = np.linalg.norm(reading_coordinates(trajectory, method) - (intervall * step * a + (1- intervall * step) * b ))
+    list_distance_to_DCP.append(distance_to_DCP)
     
-#    for step in range(1, 5):
-#        intervall = 1/(20)
-#        R_elecs = start_pos1 * vector * step
-#        single_point_none(trajectory, n_elecs, R_elecs)
-#        pot = np.round(phi_value(trajectory), 5)
-#        position = np.round(- intervall * step, 5)
-#        list_potentials.append(pot)
-#        list_position.append(position) 
+#calculate distance of both positions
+length_outer_basin_points = np.linalg.norm(start_pos1 - start_pos2)
+
+
     
     
 with open(f'trajectory-{trajectory}/result/sampling.out', 'w') as printfile:
@@ -198,5 +204,6 @@ with open(f'trajectory-{trajectory}/result/sampling.out', 'w') as printfile:
     printfile.write(f'maximum value at {list_position[list_potentials.index(max(list_potentials))]}: {max(list_potentials)}\n')
     printfile.write(f'list_position = {list_position}\n')
     printfile.write(f'list_potentials = {list_potentials}\n')
-    printfile.write(f'norm = {length_outer_basin_points}')
+    printfile.write(f'list_distance_to_DCP = {list_distance_to_DCP}\n')
+    printfile.write(f'norm = {length_outer_basin_points}'\n)
 print('sampling.out file was generated in folder result')
