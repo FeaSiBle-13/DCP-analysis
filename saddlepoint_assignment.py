@@ -137,7 +137,7 @@ def deflection_saddlepoint(eigenvector, saddlepoint, deflection_factor):
 
 
 def stepest_descent(trajectory, molecule, R):
-    cp('ethane.wf', f'eigenvector_check')
+    cp(f'{name}.wf', f'eigenvector_check')
     with open(f'eigenvector_check/stedes.ami', 'w') as printfile:
         printfile.write(f'''! seed for random number generation, not important
 $gen(seed=101)
