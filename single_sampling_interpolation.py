@@ -179,6 +179,7 @@ start_pot2 = phi_value(trajectory)
 
 list_potentials = []
 list_position = []
+list_distance_to_DCP = []
 
 for step in range(max_steps+1):
     intervall = 1/(max_steps)
