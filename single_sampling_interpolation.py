@@ -11,6 +11,7 @@ trajectory = int(input(f'which trajectory should be calculated?'))
 threshold_DCP_guess = 1e-1
 ProcessMaxima = 'no'
 max_steps = 100
+make_extended_calculation = True
 
 def reading_n_elecs():
     with open(f'trajectory-1-max.ref', 'r') as reffile:
@@ -139,6 +140,9 @@ MaximaProcessing:
             else:
                 print(f'method none did not work for trajectory-{trajectory}')
     
+    
+def extended_sampling(R_elecs):
+    vector = 
 
 #interpolation starts here
 n_elecs = reading_n_elecs()
@@ -167,11 +171,24 @@ for step in range(max_steps+1):
     position = np.round(intervall * step, 5)
     list_potentials.append(pot)
     list_position.append(position)
+    
 
+if make_extended_calculation:
+    #makes calculation outside of interpolation point
+    start_pos1 = DCP_guess_point(basin_minimum(trajectory, 'basin1'), basin_minimum(trajectory, 'basin2'), basin_outer_point(trajectory, 'basin1'), threshold_DCP_guess)
+    start_pos2 =  DCP_guess_point(basin_minimum(trajectory, 'basin1'), basin_minimum(trajectory, 'basin2'), basin_outer_point(trajectory, 'basin2'), threshold_DCP_guess)
+    #calculate distance of both positions
+    length_outer_basin_points = np.linalg.norm(start_pos1 - start_pos2)
+    
+    #makes a sampling outside of the interpolation distance
+    
+    
+    
 with open(f'trajectory-{trajectory}/result/sampling.out', 'w') as printfile:
     for i_item, item in enumerate(list_potentials):
         printfile.write(f'{list_position[i_item]}a: {item} \n')
     printfile.write(f'maximum value at {list_position[list_potentials.index(max(list_potentials))]}: {max(list_potentials)}\n')
     printfile.write(f'list_position = {list_position}\n')
     printfile.write(f'list_potentials = {list_potentials}\n')
+    printfile.write(f'norm = {length_outer_basin_points}')
 print('sampling.out file was generated in folder result')
