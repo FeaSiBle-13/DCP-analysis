@@ -140,9 +140,6 @@ MaximaProcessing:
             else:
                 print(f'method none did not work for trajectory-{trajectory}')
     
-    
-def extended_sampling(R_elecs):
-    vector = 
 
 #interpolation starts here
 n_elecs = reading_n_elecs()
@@ -179,9 +176,18 @@ if make_extended_calculation:
     start_pos2 =  DCP_guess_point(basin_minimum(trajectory, 'basin1'), basin_minimum(trajectory, 'basin2'), basin_outer_point(trajectory, 'basin2'), threshold_DCP_guess)
     #calculate distance of both positions
     length_outer_basin_points = np.linalg.norm(start_pos1 - start_pos2)
-    
+
     #makes a sampling outside of the interpolation distance
+    vector = (start_pos1 - start_pos2)/length_outer_basin_points
     
+    for step in range(1, 5):
+        intervall = 1/(20)
+        R_elecs = start_pos1 * vector * step
+        single_point_none(trajectory, n_elecs, R_elecs)
+        pot = np.round(phi_value(trajectory), 5)
+        position = np.round(- intervall * step, 5)
+        list_potentials.append(pot)
+        list_position.append(position) 
     
     
 with open(f'trajectory-{trajectory}/result/sampling.out', 'w') as printfile:
