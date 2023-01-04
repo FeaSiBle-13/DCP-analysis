@@ -191,7 +191,7 @@ for step in range(max_steps+1):
     
     #calculates distance from guess point to found DCP
     distance_to_DCP = np.linalg.norm(reading_coordinates(trajectory, method) - (intervall * step * a + (1- intervall * step) * b ))
-    list_distance_to_DCP.append(distance_to_DCP)
+    list_distance_to_DCP.append(np.round(distance_to_DCP, 5))
     
 #calculate distance of both positions
 length_outer_basin_points = np.linalg.norm(start_pos1 - start_pos2)
