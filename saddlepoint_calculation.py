@@ -106,37 +106,42 @@ def DCP_coordinates(trajectory, method):
     return(np.array(R_DCP))
         
     
+def reading_saddlepoint_calculation_in(search):
+    with open('saddlepoint_calculation.in', 'r') as reffile:
+        found = False
+        for line in reffile:
+            if search in line:
+                found = True
+                words = line.split()
+                try:
+                    float(words[1])
+                    is_float = True
+                except ValueError:
+                    is_float = False
+                if is_float:
+                    return(float(words[1]))
+                else:
+                    return(words[1])
+        #default values if not defined in .in file
+        if not found:
+            if search == 'threshold_DCP_guess':
+                return(1e-1)
+            if search == 'method':
+                return('gradient_norm')
+            if search  == 'deflection_factor':
+                return(3e-3)
 
-#reads count and wafefunction from .ami
-with open(f'trajectory.ami', 'r') as ami_file:
-    notdone_count = True
-    notdone_file = True
-    for line in ami_file:
-        if 'count' in line and notdone_count:
-            count = int(re.search(r'\d+', line).group())
-            notdone_count = False
-        elif 'file' in line and notdone_file:
-            name = re.search(r'file=([\'"]?)(.+?)\.wf\1', line).group(2)
-            notdone_file = False
-            
-#reads n_elecs
+
+#script starts here
+#reads out and defines count and n_elecs
 n_elecs = reading_n_elecs()
-
-#reads saddlepoint_calculation.in file (would be nicer here wirth regular expressions)
-with open('saddlepoint_calculation.in', 'r') as reffile:
-    for line in reffile:
-        if 'threshold_DCP_guess' in line:
-            words = line.split()
-            threshold_DCP_guess = float(words[1])
-        else:
-            threshold_DCP_guess = 1e-1
+count = read_trajectory_ami('count')
+name = read_trajectory_ami('file')
             
-        if 'method' in line:
-            words = line.split()
-            method = words[1]
-        else: 
-            method = 'gradient_norm'
-        
+#reads saddlepoint_calculation.in file (would be nicer here with regular expressions)
+threshold_molecule = reading_saddlepoint_calculation_in('threshold_DCP_guess')
+method = reading_saddlepoint_calculation_in('method')
+
 #loop for trajectories starts here        
 for trajectory in range(1, count+1):
     with open(f'trajectory-{trajectory}-max.ref') as reffile:
