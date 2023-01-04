@@ -118,7 +118,7 @@ def minimum(trajectory, x):
     
     
 def read_eigenvector(trajectory):
-    with open(f'trajectory-{trajectory}/DCP_newton/fort.100') as reffile:
+    with open(f'trajectory-{trajectory}/DCP_{method}/fort.100') as reffile:
         R = []
         for line in reffile:
             found = True
