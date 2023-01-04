@@ -205,5 +205,5 @@ with open(f'trajectory-{trajectory}/result/sampling.out', 'w') as printfile:
     printfile.write(f'list_position = {list_position}\n')
     printfile.write(f'list_potentials = {list_potentials}\n')
     printfile.write(f'list_distance_to_DCP = {list_distance_to_DCP}\n')
-    printfile.write(f'norm = {length_outer_basin_points}'\n)
+    printfile.write(f'norm = {length_outer_basin_points}\n')
 print('sampling.out file was generated in folder result')
