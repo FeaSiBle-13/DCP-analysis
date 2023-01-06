@@ -6,11 +6,6 @@ from pyscript import *
 import numpy as np
 import re
 
-deflection_factor = 1e-3
-method = 'newton'
-trajectory = int(input('which trajectory do you mean?'))
-name = 'ethane'
-threshold_molecule = 1e-2
 
 def reading_n_elecs():
     with open(f'trajectory-1-max.ref', 'r') as reffile:
@@ -94,7 +89,7 @@ def deflection_saddlepoint(eigenvector, saddlepoint, deflection_factor):
 
 
 def stepest_descent(trajectory, molecule, R, folder_path, ProcessMaxima = False):
-    cp('ethane.wf', f'{folder_path}')
+    cp(f'{name}.wf', f'{folder_path}')
     with open(f'{folder_path}/stedes.ami', 'w') as printfile:
         printfile.write(f'''! seed for random number generation, not important
 $gen(seed=101)
@@ -174,6 +169,8 @@ def reading_saddlepoint_calculation_in(search):
 
 
 #program starts here
+trajectory = int(input('which trajectory do you mean?'))
+
 n_elecs = reading_n_elecs()
 count = read_trajectory_ami('count')
 name = read_trajectory_ami('file')
