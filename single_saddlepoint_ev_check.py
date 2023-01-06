@@ -161,7 +161,7 @@ else:
     for i, min_deflec in enumerate(list_minimized_deflection):
         mkdir(f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima{i}')
         stepest_descent(trajectory, name, min_deflec, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima{i}', True)
-        cp('trajectory-{trajectory}/DCP_{method}/ev_deflection_minima{i}/cluster-out.yml', f'trajectory-{trajectory}/result/cluster_min_deflec{i}-out.yml')
+        cp(f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima{i}/cluster-out.yml', f'trajectory-{trajectory}/result/cluster_min_deflec{i}-out.yml')
     print('the DCP lies NOT between the starting minimum and the second minimum of the trajectory')
  
 rm('eigenvector_check', True)
