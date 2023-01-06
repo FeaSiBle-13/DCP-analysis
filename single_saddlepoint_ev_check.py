@@ -4,6 +4,7 @@ import subprocess
 
 from pyscript import *
 import numpy as np
+import re
 
 deflection_factor = 1e-3
 method = 'newton'
