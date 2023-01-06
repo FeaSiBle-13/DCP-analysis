@@ -355,6 +355,7 @@ Delta_phi = list_compared[4] + list_failure_phi_values
 order = list_compared[5] + list_failure_order
 DCP_location = list_compared[6] + list_failure_DCP_location
 
+rm('eigenvector_check', True)
 
 #prints out .csv file
 with open(f'DCP-analysis_{method}.csv', 'w') as reffile:
