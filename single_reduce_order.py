@@ -88,6 +88,7 @@ def read_eigenvector(trajectory, n_th):
                 for _ in range (n_th - 1):
                     for _ in range(n_elecs):
                         line = reffile.readline()
+                    line = reffile.readline()
                 for _ in range(n_elecs):
                     line = reffile.readline()
                     coordinates = line.split()
