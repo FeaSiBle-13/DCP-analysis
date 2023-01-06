@@ -131,6 +131,13 @@ def compare_position(R1, R2, threshold_molecule):
 
 #program starts here
 n_elecs = reading_n_elecs()
+count = read_trajectory_ami('count')
+name = read_trajectory_ami('file')
+            
+#reads saddlepoint_calculation.in file (would be nicer here with regular expressions)
+threshold_molecule = reading_saddlepoint_calculation_in('threshold_DCP_guess')
+method = reading_saddlepoint_calculation_in('method')
+deflection_factor = reading_saddlepoint_calculation_in('deflection_factor')
 
 mkdir(f'eigenvector_check')
 
