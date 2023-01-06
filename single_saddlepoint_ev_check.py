@@ -138,21 +138,28 @@ saddlepoint = reading_coordinates(trajectory, method)
 
 #compares if stepest descent minimization ends in the starting or ending minimum
 list_minimized_deflection = []
+list_found_min = [False, False]
 
 for m in range(1, 3):
     stepest_descent(trajectory, name, deflection_saddlepoint(eigenvec, saddlepoint, (-1) ** m * deflection_factor))
-    list_minimized_deflection.append(reading_coordinates(trajectory, 'stedes_eigvec'))
+    minimized_deflection = reading_coordinates(trajectory, 'stedes_eigvec')
+    list_minimized_deflection.append(minimized_deflection)
     for obj in ls(f'eigenvector_check'):
         rm(f'eigenvector_check/{obj}')
-
-
-list_found_min = [False, False]
-for m in range(1, 3):
-    for vectors in list_minimized_deflection:
-        same = compare_position(minimum(trajectory, m), vectors, threshold)
+    for n in range(1, 3):
+        same = compare_position(minimum(trajectory, n), minimized_deflection, threshold)
         if same:
             list_found_min[m-1] = True
             break
+
+
+#list_found_min = [False, False]
+#for m in range(1, 3):
+#    for vectors in list_minimized_deflection:
+#        same = compare_position(minimum(trajectory, m), vectors, threshold)
+#        if same:
+#            list_found_min[m-1] = True
+#            break
 
 if list_found_min[0] and list_found_min[1]:
     print('the DCP lies between the starting minimum and the second minimum of the trajectory')
