@@ -9,7 +9,7 @@ deflection_factor = 1e-3
 method = 'newton'
 trajectory = int(input('which trajectory do you mean?'))
 name = 'ethane'
-threshold = 1e-2
+threshold_molecule = 1e-2
 
 def reading_n_elecs():
     with open(f'trajectory-1-max.ref', 'r') as reffile:
@@ -75,9 +75,9 @@ def deflection_saddlepoint(eigenvector, saddlepoint, deflection_factor):
     return(eigenvector * deflection_factor + saddlepoint)
 
 
-def stepest_descent(trajectory, molecule, R):
-    cp('ethane.wf', f'eigenvector_check')
-    with open(f'eigenvector_check/stedes.ami', 'w') as printfile:
+def stepest_descent(trajectory, molecule, R, folder_path, ProecessMaxima = False):
+    cp('ethane.wf', f'{folder_path}')
+    with open(f'{folder_path}/stedes.ami', 'w') as printfile:
         printfile.write(f'''! seed for random number generation, not important
 $gen(seed=101)
 ! reading the wave function file
@@ -104,9 +104,9 @@ $sample(create, size=1, single_point)
 ! maximize the walker
 $maximize_sample()''')
 
-
-    with open(f'eigenvector_check/cluster.yml', 'w') as printfile:
-        printfile.write(f'''--- # MaximaProcessing
+    if ProcessMaxima:
+        with open(f'{folder_path}/cluster.yml', 'w') as printfile:
+            printfile.write(f'''--- # MaximaProcessing
 MaximaProcessing:
   binaryFileBasename: stedes
   calculateSpinCorrelations: false
@@ -114,14 +114,14 @@ MaximaProcessing:
 ...''')
 
     #makes the amolqc run for the minimum single point calculation
-    with cd(f'eigenvector_check'):
+    with cd(folder_path):
         run('amolqc stedes.ami')
-    return(print(f'minimum for eigenvector_check for trajectory-{trajectory} was calculated'))
+    return(print(f'minimum for {folder_path} for trajectory-{trajectory} was calculated'))
 
 
-def compare_position(R1, R2, threshold):
+def compare_position(R1, R2, threshold_molecule):
     norm = np.linalg.norm(R1 - R2)
-    if norm <= threshold:
+    if norm <= threshold_molecule:
         return(True)
     else:
         return(False)
@@ -141,28 +141,24 @@ list_minimized_deflection = []
 list_found_min = [False, False]
 
 for m in range(1, 3):
-    stepest_descent(trajectory, name, deflection_saddlepoint(eigenvec, saddlepoint, (-1) ** m * deflection_factor))
+    stepest_descent(trajectory, name, deflection_saddlepoint(eigenvec, saddlepoint, (-1) ** m * deflection_factor), 'eigenvector_check')
     minimized_deflection = reading_coordinates(trajectory, 'stedes_eigvec')
     list_minimized_deflection.append(minimized_deflection)
     for obj in ls(f'eigenvector_check'):
         rm(f'eigenvector_check/{obj}')
     for n in range(1, 3):
-        same = compare_position(minimum(trajectory, n), minimized_deflection, threshold)
+        same = compare_position(minimum(trajectory, n), minimized_deflection, threshold_molecule)
         if same:
-            list_found_min[m-1] = True
+            list_found_min[n-1] = True
             break
 
-
-#list_found_min = [False, False]
-#for m in range(1, 3):
-#    for vectors in list_minimized_deflection:
-#        same = compare_position(minimum(trajectory, m), vectors, threshold)
-#        if same:
-#            list_found_min[m-1] = True
-#            break
 
 if list_found_min[0] and list_found_min[1]:
     print('the DCP lies between the starting minimum and the second minimum of the trajectory')
 else:
+    for i, min_deflec in enumerate(list_minimized_deflection):
+        mkdir(f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima{i}')
+        stepest_descent(trajectory, name, min_deflec, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima{i}', True)
+        cp('cluster-out.yml', f'../result/cluster_min_deflec{i}-out.yml')
     print('the DCP lies NOT between the starting minimum and the second minimum of the trajectory')
-
+    
