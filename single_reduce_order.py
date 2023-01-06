@@ -155,7 +155,7 @@ $maximize_sample()''')
         with open(f'{folder_path}/cluster.yml', 'w') as printfile:
             printfile.write(f'''--- # MaximaProcessing
 MaximaProcessing:
-  binaryFileBasename: stedes
+  binaryFileBasename: newton
   calculateSpinCorrelations: false
   shuffleMaxima: false
 ...''')
