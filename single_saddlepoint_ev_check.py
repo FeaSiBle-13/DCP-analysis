@@ -235,12 +235,13 @@ else:
     print(f'psi_deflec_0: {psi_value_0}')
     print(f'psi_deflec_1: {psi_value_1}')
     
-    with open('trajectory-{trajectory}/result/single_deflection_results', 'w') as printfile:
+    with open(f'trajectory-{trajectory}/result/single_deflection_results.out', 'w') as printfile:
         printfile.write('the DCP lies NOT between the starting minimum and the second minimum of the trajectory\n')
         printfile.write(f'barrier from 0 -> 1: {phi_DCP - phi_deflec_0}\n')
         printfile.write(f'barrier from 1 -> 0: {phi_DCP - phi_deflec_0}\n')
         printfile.write(f'psi_deflec_0: {psi_value_0}')
         printfile.write(f'psi_deflec_1: {psi_value_1}')
+    print(f'trajectory-{trajectory}/result/single_deflection_results.out was generated')
         
         
         
