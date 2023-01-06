@@ -228,12 +228,20 @@ else:
     phi_deflec_0 = phi_value(trajectory, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_0/fort.100', 'Phi:')
     phi_deflec_1 = phi_value(trajectory, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_1/fort.100', 'Phi')
     phi_DCP = phi_value(trajectory, f'trajectory-{trajectory}/DCP_{method}/fort.100', 'Phi')
+    psi_value_0 = phi_value(trajectory, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_0/fort.100', 'Psi')
+    psi_value_1 = phi_value(trajectory, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_1/fort.100', 'Psi')
     print(f'barrier from 0 -> 1: {phi_DCP - phi_deflec_0}')
     print(f'barrier from 1 -> 0: {phi_DCP - phi_deflec_0}')
-    print(f'psi_deflec_0:', phi_value(trajectory, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_0/fort.100', 'Psi'))
-    print(f'psi_deflec_1:', phi_value(trajectory, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_1/fort.100', 'Psi'))
+    print(f'psi_deflec_0: {psi_value_0}')
+    print(f'psi_deflec_1: {psi_value_1}')
     
-    
-    
- 
+    with open('trajectory-{trajectory}/result/single_deflection_results', 'w') as printfile:
+        printfile.write('the DCP lies NOT between the starting minimum and the second minimum of the trajectory\n')
+        printfile.write(f'barrier from 0 -> 1: {phi_DCP - phi_deflec_0}\n')
+        printfile.write(f'barrier from 1 -> 0: {phi_DCP - phi_deflec_0}\n')
+        printfile.write(f'psi_deflec_0: {psi_value_0}')
+        printfile.write(f'psi_deflec_1: {psi_value_1}')
+        
+        
+        
 rm('eigenvector_check', True)
