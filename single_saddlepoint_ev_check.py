@@ -18,7 +18,7 @@ def reading_n_elecs():
     return n_elecs
 
 
-def phi_value(x, trajectory, path, search):
+def phi_value(trajectory, path, search):
     with open(path) as reffile:
         found = False
         for line in reffile:
@@ -225,13 +225,13 @@ else:
         cp(f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_{i}/cluster-out.yml', f'trajectory-{trajectory}/result/cluster_min_deflec_{i}-out.yml')
     print('the DCP lies NOT between the starting minimum and the second minimum of the trajectory')
     #gives barrier and psi values
-    Phi_deflec_0 = phi_value(x, trajectory, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_0/fort.100', 'Phi:')
-    Phi_deflec_1 = phi_value(x, trajectory, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_1/fort.100', 'Phi')
+    Phi_deflec_0 = phi_value(trajectory, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_0/fort.100', 'Phi:')
+    Phi_deflec_1 = phi_value(trajectory, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_1/fort.100', 'Phi')
     Phi_DCP = phi_value(x, trajectory, f'trajectory-{trajectory}/DCP_{method}/fort.100', 'Phi')
     print(f'barrier from 0 -> 1: {phi_DCP - phi_deflec_0}')
     print(f'barrier from 1 -> 0: {phi_DCP - phi_deflec_0}')
-    print(f'psi_deflec_0:', phi_value(x, trajectory, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_0/fort.100', 'Psi'))
-    print(f'psi_deflec_1:', phi_value(x, trajectory, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_1/fort.100', 'Psi'))
+    print(f'psi_deflec_0:', phi_value(trajectory, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_0/fort.100', 'Psi'))
+    print(f'psi_deflec_1:', phi_value(trajectory, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_1/fort.100', 'Psi'))
     
     
     
