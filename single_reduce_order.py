@@ -125,5 +125,5 @@ trajectory = int(input('Which trajectory do you mean?'))
 
 n_elecs = reading_n_elecs()
 
-eigenvector = read_eigenvector(442, 2)
+eigenvector = read_eigenvector(trajectory, 2)
 print(eigenvector)
