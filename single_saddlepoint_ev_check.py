@@ -75,7 +75,7 @@ def deflection_saddlepoint(eigenvector, saddlepoint, deflection_factor):
     return(eigenvector * deflection_factor + saddlepoint)
 
 
-def stepest_descent(trajectory, molecule, R, folder_path, ProecessMaxima = False):
+def stepest_descent(trajectory, molecule, R, folder_path, ProcessMaxima = False):
     cp('ethane.wf', f'{folder_path}')
     with open(f'{folder_path}/stedes.ami', 'w') as printfile:
         printfile.write(f'''! seed for random number generation, not important
@@ -163,4 +163,5 @@ else:
         stepest_descent(trajectory, name, min_deflec, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima{i}', True)
         cp('cluster-out.yml', f'../result/cluster_min_deflec{i}-out.yml')
     print('the DCP lies NOT between the starting minimum and the second minimum of the trajectory')
-    
+ 
+rm('eigenvector_check', True)
