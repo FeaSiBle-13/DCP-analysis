@@ -169,7 +169,7 @@ MaximaProcessing:
                 run(f'/home/theochem/Scripts/EVanalysis/EVanalysis.py {name}.wf cluster-out.yml')
             except subprocess.CalledProcessError:
                 pass
-            cp('cluster-out.yml', f'../../result/cluster_{method}_reduced_order-out_ev.yml')
+            cp('cluster-out_ev.yml', f'../../result/cluster_{method}_reduced_order-out_ev.yml')
     return(print(f'newton for {folder_path} for trajectory-{trajectory} was calculated'))
     
 
