@@ -22,6 +22,23 @@ def reading_n_elecs():
     return n_elecs
 
 
+def read_trajectory_ami(search):
+    with open(f'trajectory.ami', 'r') as reffile:
+        if search == 'count':
+            for line in reffile:
+               if 'count' in line:
+                   count = int(re.search(r'\d+', line).group())
+                   break
+            return(count)
+        if search == 'file':
+            for line in reffile:
+                if 'file' in line:
+                    name = re.search(r'file=([\'"]?)(.+?)\.wf\1', line).group(2)
+                    break
+            return(name)
+
+
+
 def reading_coordinates(trajectory, calculation_type):
     if calculation_type == method:
         path = f'trajectory-{trajectory}/DCP_{method}/fort.100'
