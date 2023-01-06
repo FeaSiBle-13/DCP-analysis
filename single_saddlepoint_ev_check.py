@@ -227,7 +227,7 @@ else:
     #gives barrier and psi values
     Phi_deflec_0 = phi_value(trajectory, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_0/fort.100', 'Phi:')
     Phi_deflec_1 = phi_value(trajectory, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_1/fort.100', 'Phi')
-    Phi_DCP = phi_value(x, trajectory, f'trajectory-{trajectory}/DCP_{method}/fort.100', 'Phi')
+    Phi_DCP = phi_value(trajectory, f'trajectory-{trajectory}/DCP_{method}/fort.100', 'Phi')
     print(f'barrier from 0 -> 1: {phi_DCP - phi_deflec_0}')
     print(f'barrier from 1 -> 0: {phi_DCP - phi_deflec_0}')
     print(f'psi_deflec_0:', phi_value(trajectory, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_0/fort.100', 'Psi'))
