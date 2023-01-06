@@ -121,10 +121,64 @@ def compare_position(R1, R2, threshold_molecule):
     else:
         return(False)
     
+    
+def newton(trajectory, molecule, R, folder_path, ProcessMaxima = False):
+    cp(f'{name}.wf', f'{folder_path}')
+    with open(f'{folder_path}/newton.ami', 'w') as printfile:
+        printfile.write(f'''! seed for random number generation, not important
+$gen(seed=101)
+! reading the wave function file
+$wf(read,file='{name}.wf')
+$init_rawdata_generation()
+$init_max_search(
+step_size=0.1,
+correction_mode=none,
+singularity_threshold=0.0001,
+method=newton,
+verbose=2,
+negative_eigenvalues=-1,
+eigenvalue_threshold=1e-10)
+! setting the initial position
+$init_walker(
+free
+''')
+        for s in range(n_elecs):
+            for t in R[s*3:s*3+3]:
+                printfile.write(f'{t} ')
+            printfile.write('\n')
+        printfile.write(''')
+$sample(create, size=1, single_point)
+! maximize the walker
+$maximize_sample()''')
+
+    if ProcessMaxima:
+        with open(f'{folder_path}/cluster.yml', 'w') as printfile:
+            printfile.write(f'''--- # MaximaProcessing
+MaximaProcessing:
+  binaryFileBasename: stedes
+  calculateSpinCorrelations: false
+  shuffleMaxima: false
+...''')
+
+    #makes the amolqc run for the minimum single point calculation
+    with cd(folder_path):
+        run('amolqc newton.ami')
+        if ProcessMaxima:
+            run('ProcessMaxima cluster.yml')
+    return(print(f'newton for {folder_path} for trajectory-{trajectory} was calculated'))
+    
+
 #script starts here
 trajectory = int(input('Which trajectory do you mean?'))
 
 n_elecs = reading_n_elecs()
+method = reading_saddlepoint_calculation_in('method')
+deflection_factor = int(input('What is the deflection_factor ?'))
 
-eigenvector = read_eigenvector(trajectory, 2)
-print(eigenvector)
+mkdir(f'trajectory-{trajectory}/DCP_{method}/reduce_order')
+eigenvector = read_eigenvector(trajectory, 2) 
+saddlepoint = reading_coordinates(trajectory, method)
+deflected_saddlepoint = deflection_saddlepoint(eigenvector, saddlepoint, deflection_factor)
+newton(trajectory, name, deflected_saddlepoint, f'trajectory-{trajectory}/DCP_{method}/reduce_order', True)
+
+print(f'newton calculation with deflection_factor of {deflection_factor} was done.')
