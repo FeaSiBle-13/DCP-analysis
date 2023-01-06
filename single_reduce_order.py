@@ -123,5 +123,7 @@ def compare_position(R1, R2, threshold_molecule):
 #script starts here
 trajectory = int(input('Which trajectory do you mean?'))
 
+n_elecs = reading_n_elecs()
+
 eigenvector = read_eigenvector(442, 2)
 print(eigenvector)
