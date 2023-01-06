@@ -116,6 +116,8 @@ MaximaProcessing:
     #makes the amolqc run for the minimum single point calculation
     with cd(folder_path):
         run('amolqc stedes.ami')
+        if ProcessMaxima:
+            run('ProcessMaxima cluster.yml')
     return(print(f'minimum for {folder_path} for trajectory-{trajectory} was calculated'))
 
 
