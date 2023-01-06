@@ -127,6 +127,32 @@ def compare_position(R1, R2, threshold_molecule):
         return(True)
     else:
         return(False)
+    
+    
+def reading_saddlepoint_calculation_in(search):
+    with open('saddlepoint_calculation.in', 'r') as reffile:
+        found = False
+        for line in reffile:
+            if search in line:
+                found = True
+                words = line.split()
+                try:
+                    float(words[1])
+                    is_float = True
+                except ValueError:
+                    is_float = False
+                if is_float:
+                    return(float(words[1]))
+                else:
+                    return(words[1])
+        #default values if not defined in .in file
+        if not found:
+            if search == 'threshold_DCP_guess':
+                return(1e-1)
+            if search == 'method':
+                return('gradient_norm')
+            if search  == 'deflection_factor':
+                return(3e-3)
 
 
 #program starts here
