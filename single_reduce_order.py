@@ -165,6 +165,10 @@ MaximaProcessing:
         run('amolqc newton.ami')
         if ProcessMaxima:
             run('ProcessMaxima cluster.yml')
+            try:
+                run(f'/home/theochem/Scripts/EVanalysis/EVanalysis.py ../minimum/{name}.wf cluster-out.yml')
+            except subprocess.CalledProcessError:
+                pass
     return(print(f'newton for {folder_path} for trajectory-{trajectory} was calculated'))
     
 
