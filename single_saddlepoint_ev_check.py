@@ -86,7 +86,7 @@ $init_rawdata_generation()
 $init_max_search(
 step_size=0.1,
 correction_mode=cut,
-singularity_threshold=0.001,
+singularity_threshold=0.00001,
 method=steepest_descent,
 verbose=2,
 negative_eigenvalues=0,
