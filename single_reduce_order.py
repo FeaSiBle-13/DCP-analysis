@@ -172,6 +172,52 @@ MaximaProcessing:
             cp('cluster-out_ev.yml', f'../../result/cluster_{method}_reduced_order-out_ev.yml')
     return(print(f'newton for {folder_path} for trajectory-{trajectory} was calculated'))
     
+    
+def stepest_descent(trajectory, molecule, R, folder_path, ProcessMaxima = False):
+    cp(f'{name}.wf', f'{folder_path}')
+    with open(f'{folder_path}/stedes.ami', 'w') as printfile:
+        printfile.write(f'''! seed for random number generation, not important
+$gen(seed=101)
+! reading the wave function file
+$wf(read,file='{name}.wf')
+$init_rawdata_generation()
+$init_max_search(
+step_size=0.1,
+correction_mode=cut,
+singularity_threshold=0.00001,
+method=steepest_descent,
+verbose=2,
+negative_eigenvalues=0,
+eigenvalue_threshold=1e-10)
+! setting the initial position
+$init_walker(
+free
+''')
+        for s in range(n_elecs):
+            for t in R[s*3:s*3+3]:
+                printfile.write(f'{t} ')
+            printfile.write('\n')
+        printfile.write(''')
+$sample(create, size=1, single_point)
+! maximize the walker
+$maximize_sample()''')
+
+    if ProcessMaxima:
+        with open(f'{folder_path}/cluster.yml', 'w') as printfile:
+            printfile.write(f'''--- # MaximaProcessing
+MaximaProcessing:
+  binaryFileBasename: stedes
+  calculateSpinCorrelations: false
+  shuffleMaxima: false
+...''')
+
+    #makes the amolqc run for the minimum single point calculation
+    with cd(folder_path):
+        run('amolqc stedes.ami')
+        if ProcessMaxima:
+            run('ProcessMaxima cluster.yml')
+    return(print(f'minimum for {folder_path} for trajectory-{trajectory} was calculated'))
+
 
 #script starts here
 trajectory = int(input('Which trajectory do you mean?'))
