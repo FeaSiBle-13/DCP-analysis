@@ -64,6 +64,8 @@ def reading_coordinates(trajectory, calculation_type):
         path = f'trajectory-{trajectory}/DCP_{method}/fort.100'
     elif calculation_type == 'stedes_eigvec':
         path = f'eigenvector_check/fort.100'
+    elif calculation_type = 'reduced_order':
+        path = f'trajectory-{trajectory}/DCP_{method}/reduce_order/fort.100'
     with open(path) as reffile:
             R = []
             for line in reffile:
@@ -240,10 +242,12 @@ print(f'newton calculation with deflection_factor of {deflection_factor} was don
 phi_deflec = []
 psi_value = []
 #deflects reduced saddlepoint to find minima
+saddlepoint_reduced = reading_coordinates(trajectory, 'reduced_order') 
+eigenvector = reading_eigenvector(trajectory, 1)
 for m in range(1, 3):
     path = f'trajectory-{trajectory}/DCP_{method}/reduced_ev_deflection_{m-1}'
     mkdir(path)
-    stepest_descent(trajectory, name, deflection_saddlepoint(eigenvector, saddlepoint, (-1) ** m * deflection_factor), path, True)
+    stepest_descent(trajectory, name, deflection_saddlepoint(eigenvector, saddlepoint_reduced, (-1) ** m * deflection_factor), path, True)
     cp(path + '/cluster-out.yml', f'trajectory-{trajectory}/result/cluster_reduced_min_deflec_{m-1}-out.yml')
     #prints stuff
     phi_deflec.append(phi_value(trajectory, path + '/fort.100', 'Phi:'))
