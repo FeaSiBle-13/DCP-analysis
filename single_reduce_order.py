@@ -207,7 +207,7 @@ for m in range(1, 3):
     with open(f'trajectory-{trajectory}/result/single_deflection_results.out', 'w') as printfile:
         printfile.write('the DCP lies NOT between the starting minimum and the second minimum of the trajectory\n')
         for i_value, value in enumerate(phi_deflec):
-        printfile.write(f'barrier from 0 -> 1: {np.round(phi_DCP - value, 4)}\n')
-        printfile.write(f'psi_deflec_0: {psi_value[i_value]}\n')
+            printfile.write(f'barrier from 0 -> 1: {np.round(phi_DCP - value, 4)}\n')
+            printfile.write(f'psi_deflec_0: {psi_value[i_value]}\n')
     print(f'trajectory-{trajectory}/result/single_deflection_results.out was generated')
     
