@@ -243,7 +243,7 @@ phi_deflec = []
 psi_value = []
 #deflects reduced saddlepoint to find minima
 saddlepoint_reduced = reading_coordinates(trajectory, 'reduced_order') 
-eigenvector = reading_eigenvector(trajectory, 1)
+eigenvector = read_eigenvector(trajectory, 1)
 for m in range(1, 3):
     path = f'trajectory-{trajectory}/DCP_{method}/reduced_ev_deflection_{m-1}'
     mkdir(path)
