@@ -64,7 +64,7 @@ def reading_coordinates(trajectory, calculation_type):
         path = f'trajectory-{trajectory}/DCP_{method}/fort.100'
     elif calculation_type == 'stedes_eigvec':
         path = f'eigenvector_check/fort.100'
-    elif calculation_type = 'reduced_order':
+    elif calculation_type == 'reduced_order':
         path = f'trajectory-{trajectory}/DCP_{method}/reduce_order/fort.100'
     with open(path) as reffile:
             R = []
