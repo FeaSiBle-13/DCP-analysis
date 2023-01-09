@@ -257,7 +257,7 @@ phi_DCP = phi_value(trajectory, f'trajectory-{trajectory}/DCP_{method}/reduce_or
     
 with open(f'trajectory-{trajectory}/result/reduced_deflection_results.out', 'w') as printfile:
     printfile.write('the DCP lies NOT between the starting minimum and the second minimum of the trajectory\n')
-    printfile.write(f'deflection_ev factor = {deflection_ev}')
+    printfile.write(f'deflection_ev factor = {deflection_ev}\n')
     for i_value, value in enumerate(phi_deflec):
         printfile.write(f'barrier from 0 -> 1: {np.round(phi_DCP - value, 4)}\n')
         printfile.write(f'psi_deflec_0: {psi_value[i_value]}\n')
