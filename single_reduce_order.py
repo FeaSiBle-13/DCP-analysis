@@ -181,6 +181,7 @@ method = reading_saddlepoint_calculation_in('method')
 name = read_trajectory_ami('file')
 deflection_factor = int(input('What is the deflection_factor ?'))
 
+#order is reduced
 mkdir(f'trajectory-{trajectory}/DCP_{method}/reduce_order')
 eigenvector = read_eigenvector(trajectory, 2) 
 saddlepoint = reading_coordinates(trajectory, method)
@@ -188,3 +189,25 @@ deflected_saddlepoint = deflection_saddlepoint(eigenvector, saddlepoint, deflect
 newton(trajectory, name, deflected_saddlepoint, f'trajectory-{trajectory}/DCP_{method}/reduce_order', True)
 
 print(f'newton calculation with deflection_factor of {deflection_factor} was done.')
+
+phi_deflec = []
+psi_value = []
+#deflects reduced saddlepoint to find minima
+for m in range(1, 3):
+    path = f'trajectory-{trajectory}/DCP_{method}/reduced_ev_deflection_{m}'
+    mkdir(path)
+    stepest_descent(trajectory, name, deflection_saddlepoint(eigenvector, saddlepoint, (-1) ** m * deflection_factor), path, True)
+    cp(path + '/cluster-out.yml', f'trajectory-{trajectory}/result/cluster_reduced_min_deflec_{m}-out.yml')
+    #prints stuff
+    phi_deflec.append(phi_value(trajectory, path + '/fort.100', 'Phi:'))
+    phi_DCP = phi_value(trajectory, f'trajectory-{trajectory}/DCP_{method}/reduce_order/fort.100', 'Phi')
+    psi_value.append(np.round(phi_value(trajectory, path + '/fort.100', 'Psi'), 4))
+    
+    
+    with open(f'trajectory-{trajectory}/result/single_deflection_results.out', 'w') as printfile:
+        printfile.write('the DCP lies NOT between the starting minimum and the second minimum of the trajectory\n')
+        for i_value, value in enumerate(phi_deflec):
+        printfile.write(f'barrier from 0 -> 1: {np.round(phi_DCP - value, 4)}\n')
+        printfile.write(f'psi_deflec_0: {psi_value[i_value]}\n')
+    print(f'trajectory-{trajectory}/result/single_deflection_results.out was generated')
+    
