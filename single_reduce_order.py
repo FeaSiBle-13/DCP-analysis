@@ -247,8 +247,8 @@ for m in range(1, 3):
     cp(path + '/cluster-out.yml', f'trajectory-{trajectory}/result/cluster_reduced_min_deflec_{m-1}-out.yml')
     #prints stuff
     phi_deflec.append(phi_value(trajectory, path + '/fort.100', 'Phi:'))
-    phi_DCP = phi_value(trajectory, f'trajectory-{trajectory}/DCP_{method}/reduce_order/fort.100', 'Phi')
     psi_value.append(np.round(phi_value(trajectory, path + '/fort.100', 'Psi'), 4))
+phi_DCP = phi_value(trajectory, f'trajectory-{trajectory}/DCP_{method}/reduce_order/fort.100', 'Phi')
     
     
     with open(f'trajectory-{trajectory}/result/reduced_deflection_results.out', 'w') as printfile:
