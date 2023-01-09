@@ -225,13 +225,14 @@ trajectory = int(input('Which trajectory do you mean?'))
 n_elecs = reading_n_elecs()
 method = reading_saddlepoint_calculation_in('method')
 name = read_trajectory_ami('file')
-deflection_factor = int(input('What is the deflection_factor ?'))
+deflection_factor = reading_saddlepoint_calculation_in('deflection_factor')
+deflection_ev = int(input('What is the deflection_factor ?'))
 
 #order is reduced
 mkdir(f'trajectory-{trajectory}/DCP_{method}/reduce_order')
 eigenvector = read_eigenvector(trajectory, 2) 
 saddlepoint = reading_coordinates(trajectory, method)
-deflected_saddlepoint = deflection_saddlepoint(eigenvector, saddlepoint, deflection_factor)
+deflected_saddlepoint = deflection_saddlepoint(eigenvector, saddlepoint, deflection_ev)
 newton(trajectory, name, deflected_saddlepoint, f'trajectory-{trajectory}/DCP_{method}/reduce_order', True)
 
 print(f'newton calculation with deflection_factor of {deflection_factor} was done.')
