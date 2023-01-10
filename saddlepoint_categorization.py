@@ -117,11 +117,11 @@ with open (f'assignment_graph_{method}.out', 'w') as printfile:
     for item in list_final_frequencies: 
         printfile.write(f'{item} ')
     printfile.write('\n')
-    printfile.write('frequency: adjacent')
+    printfile.write('frequency adjacent: ')
     for item in list_final_frequencies_adj: 
         printfile.write(f'{item} ')
     printfile.write('\n')
-    printfile.write('frequency: not adjacent')
+    printfile.write('frequency not adjacent: ')
     for item in list_final_frequencies_not_adj: 
         printfile.write(f'{item} ')
 print(f'assignment_graph_{method}.out was generated') 
