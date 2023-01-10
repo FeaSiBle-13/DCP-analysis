@@ -28,7 +28,7 @@ with open(f'DCP-analysis_{method}.csv', 'r') as reffile:
         list_barrier.append(words[2])
         list_frequency.append(int(words[1]))
         print(words[5])
-        if words[5] == 'adjacent_minima':
+        if str(words[5]) == 'adjacent_minima':
             list_adjacent.append(True)
         else:
             list_adjacent.append(False)
