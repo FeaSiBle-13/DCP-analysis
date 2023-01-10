@@ -29,12 +29,14 @@ with open(f'DCP-analysis_{method}.csv', 'r') as reffile:
         list_frequency.append(int(words[1]))
         if words[5] == 'adjacent_minima':
             list_adjacent.append(True)
-        elif words[5] == 'no_adjacent_minima':
+        else:
             list_adjacent.append(False)
         if 'none' in line:
             list_label_temp.append(words[0])
             list_frequency_temp.append(int(words[1]))            
 
+print(list_adjacent)
+            
 #reads out the input information for the plot 
 with open('assignment_graph.in', 'r') as reffile:
     list_category = []
