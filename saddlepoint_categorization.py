@@ -27,17 +27,18 @@ with open(f'DCP-analysis_{method}.csv', 'r') as reffile:
         words = line.split('\t')
         if len(words) == 0:
             break
-        list_barrier.append(words[2])
-        list_frequency.append(int(words[1]))
-        if words[5] == 'adjacent_minima\n':
-            list_adjacent.append('adj')
-        elif words[5] == 'no_adjacent_minima\n':
-            list_adjacent.append('not_adj')
         else:
-            list_adjacent.append('none')
-        if 'none' in line:
-            list_label_temp.append(words[0])
-            list_frequency_temp.append(int(words[1]))            
+            list_barrier.append(words[2])
+            list_frequency.append(int(words[1]))
+            if words[5] == 'adjacent_minima\n':
+                list_adjacent.append('adj')
+            elif words[5] == 'no_adjacent_minima\n':
+                list_adjacent.append('not_adj')
+            else:
+                list_adjacent.append('none')
+            if 'none' in line:
+                list_label_temp.append(words[0])
+                list_frequency_temp.append(int(words[1]))            
             
 #reads out the input information for the plot 
 with open('assignment_graph.in', 'r') as reffile:
