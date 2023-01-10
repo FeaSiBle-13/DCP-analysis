@@ -103,7 +103,7 @@ for i_label, label in enumerate(list_label):
     else:
         list_final_frequencies[list_final_label.index(label)] += list_category_frequency[i_label]
         list_final_frequencies_adj[list_final_label.index(label)] += list_category_frequency_adj[i_label]
-        list_final_frequencies_not_adj[list_final_label.index(label)] += list_category_frequency_adj[i_label]
+        list_final_frequencies_not_adj[list_final_label.index(label)] += list_category_frequency_not_adj[i_label]
 
 #relabels import names from .csv
 list_final_label[list_final_label.index('walked from basin to infty')] = 'to_infty'
