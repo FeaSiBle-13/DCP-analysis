@@ -82,8 +82,6 @@ for i_barrier, barrier in enumerate(list_barrier):
                 elif list_adjacent[i_barrier] == 'not_adj':
                     list_category_frequency_not_adj[i_category] += list_frequency[i_barrier]
                 break
-print(list_category_frequency_not_adj)
-print(list_category)
        
 list_label += list_label_temp
 list_category_frequency += list_frequency_temp
