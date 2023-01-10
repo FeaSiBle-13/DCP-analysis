@@ -29,7 +29,7 @@ with open(f'DCP-analysis_{method}.csv', 'r') as reffile:
         list_frequency.append(int(words[1]))
         if words[5] == 'adjacent_minima':
             list_adjacent.append(True)
-        else:
+        elif words[5] == 'no_adjacent_minima':
             list_adjacent.append(False)
         if 'none' in line:
             list_label_temp.append(words[0])
@@ -117,9 +117,11 @@ with open (f'assignment_graph_{method}.out', 'w') as printfile:
     for item in list_final_frequencies: 
         printfile.write(f'{item} ')
     printfile.write('\n')
+    printfile.write('frequency: adjacent')
     for item in list_final_frequencies_adj: 
         printfile.write(f'{item} ')
     printfile.write('\n')
+    printfile.write('frequency: not adjacent')
     for item in list_final_frequencies_not_adj: 
         printfile.write(f'{item} ')
 print(f'assignment_graph_{method}.out was generated') 
