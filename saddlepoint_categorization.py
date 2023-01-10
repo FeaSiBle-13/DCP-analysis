@@ -27,7 +27,6 @@ with open(f'DCP-analysis_{method}.csv', 'r') as reffile:
         words = line.split('\t')
         list_barrier.append(words[2])
         list_frequency.append(int(words[1]))
-        print(words[5])
         if words[5] == 'adjacent_minima\n':
             list_adjacent.append(True)
         else:
@@ -35,8 +34,6 @@ with open(f'DCP-analysis_{method}.csv', 'r') as reffile:
         if 'none' in line:
             list_label_temp.append(words[0])
             list_frequency_temp.append(int(words[1]))            
-
-print(list_adjacent)
             
 #reads out the input information for the plot 
 with open('assignment_graph.in', 'r') as reffile:
