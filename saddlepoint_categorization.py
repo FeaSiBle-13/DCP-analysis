@@ -28,9 +28,11 @@ with open(f'DCP-analysis_{method}.csv', 'r') as reffile:
         list_barrier.append(words[2])
         list_frequency.append(int(words[1]))
         if words[5] == 'adjacent_minima\n':
-            list_adjacent.append(True)
+            list_adjacent.append('adj')
+        elif words[5] == 'no_adjacent_minima\n':
+            list_adjacent.append('not_adj')
         else:
-            list_adjacent.append(False)
+            list_adjacent.append('none')
         if 'none' in line:
             list_label_temp.append(words[0])
             list_frequency_temp.append(int(words[1]))            
@@ -66,17 +68,17 @@ list_category_frequency_not_adj.append(0)
 for i_barrier, barrier in enumerate(list_barrier):
     if barrier not in list_category and barrier != 'none':
         list_category_frequency[-1] += list_frequency[i_barrier]
-        if list_adjacent[i_barrier]:
-            list_category_frequency_adj[i_category] += list_frequency[i_barrier]
-        else:
-            list_category_frequency_not_adj[i_category] += list_frequency[i_barrier]
+        if list_adjacent[i_barrier] == 'adj':
+            list_category_frequency_adj[-1] += list_frequency[i_barrier]
+        elif list_adjacent[i_barrier] == 'not_adj':
+            list_category_frequency_not_adj[-1] += list_frequency[i_barrier]
     else:    
         for i_category, category in enumerate(list_category):
             if barrier == category:
                 list_category_frequency[i_category] += list_frequency[i_barrier]
-                if list_adjacent[i_barrier]:
+                if list_adjacent[i_barrier] == 'adj':
                     list_category_frequency_adj[i_category] += list_frequency[i_barrier]
-                else:
+                elif list_adjacent[i_barrier] == 'not_adj':
                     list_category_frequency_not_adj[i_category] += list_frequency[i_barrier]
                 break
        
