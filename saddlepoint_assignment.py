@@ -332,6 +332,10 @@ for trajectory in range(1, count + 1):
                     words = line.split()
                     if words[1] == 'Infinity':
                         no_DCP = True
+                if 'converged=' in line:
+                    words = line.split()
+                    if words[1] == 'F':
+                        no_DCP = True
             
     #categorizes the calculated DCPs
     list_compared_old = list_compared
