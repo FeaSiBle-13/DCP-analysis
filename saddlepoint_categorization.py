@@ -89,7 +89,7 @@ list_category_frequency_not_adj += list_frequency_temp
 list_final_label = []
 list_final_frequencies = []
 list_final_frequencies_adj = []
-list_final_frequencies_no_adj = []
+list_final_frequencies_not_adj = []
 for i_label, label in enumerate(list_label):
     if label not in list_final_label:
         list_final_label.append(label)
