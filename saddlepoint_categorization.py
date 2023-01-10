@@ -79,7 +79,7 @@ for i_barrier, barrier in enumerate(list_barrier):
                 if list_adjacent[i_barrier] == 'adj':
                     list_category_frequency_adj[i_category] += list_frequency[i_barrier]
                 elif list_adjacent[i_barrier] == 'not_adj':
-                    list_category_frequency_not_adj[i_category] += list_frequency[i_barrier]
+                    list_category_frequency_not_adj[i_barrier] += list_frequency[i_barrier]
                 break
        
 list_label += list_label_temp
