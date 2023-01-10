@@ -379,5 +379,5 @@ with open(f'DCP-analysis_{method}.csv', 'w') as reffile:
     for i_item, item in enumerate(enumeration):
         reffile.write(f'{enumeration[i_item]}\t{statistics[i_item]}\t{Delta_phi[i_item]}\t{order[i_item]}\t{trajectories[i_item]}\t{DCP_location[i_item]}\n')
     reffile.write('\n')
-    reffile.write(f'frequency_adjacent\t{frequency_adjacent}\t\t\t\n')
+    reffile.write(f'frequency_adjacent\t{frequency_adjacent}\n')
 print(f'DCP-analysis_{method}.csv was generated')
