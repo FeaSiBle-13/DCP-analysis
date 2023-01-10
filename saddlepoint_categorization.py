@@ -25,6 +25,7 @@ with open(f'DCP-analysis_{method}.csv', 'r') as reffile:
     line = reffile.readline()
     for line in reffile:
         words = line.split('\t')
+        print(len(words))
         if len(words) == 0:
             break
         else:
