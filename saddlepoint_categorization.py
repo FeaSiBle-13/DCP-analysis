@@ -25,8 +25,7 @@ with open(f'DCP-analysis_{method}.csv', 'r') as reffile:
     line = reffile.readline()
     for line in reffile:
         words = line.split('\t')
-        print(len(words))
-        if len(words) != 1:
+        if len(words) >= 6:
             list_barrier.append(words[2])
             list_frequency.append(int(words[1]))
             if words[5] == 'adjacent_minima\n':
