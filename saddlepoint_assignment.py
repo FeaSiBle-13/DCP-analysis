@@ -347,7 +347,7 @@ for trajectory in range(1, count + 1):
     elif no_DCP:
         no_saddlepoint('no DCP found')
 
-#indices from list_compared: 0 = list_DCP, 1 = list_statistics, 2 = list_trajectories, 3 = list_enumerate_DCP, 4 = list_phi_values, 5 = list_order
+#indices from list_compared: 0 = list_DCP, 1 = list_statistics, 2 = list_trajectories, 3 = list_enumerate_DCP, 4 = list_phi_values, 5 = list_order 6 = saddlepoint_location
 enumeration = list_compared[3] + list_failure_DCP
 statistics = list_compared[1] + list_failure_statistics
 trajectories = list_compared[2] + list_failure_trajectories
@@ -357,11 +357,19 @@ DCP_location = list_compared[6] + list_failure_DCP_location
 
 rm('eigenvector_check', True)
 
+#frequency of saddlepoints which are between the minima from *max.ref file
+frequency_adjacent = 0
+for i_item, item in enumerate(DCP_location):
+    if item == 'adjacent_minima':
+        frequency_adjacent += statistics[i_item]
+        
+
 #prints out .csv file
 with open(f'DCP-analysis_{method}.csv', 'w') as reffile:
     reffile.write(f'runtime\t {runtime()}\t{runtime_hours(runtime())}\thours\t\t\n')
     reffile.write(f'\tfrequency\tDelta_phi\torder\ttrajectories\tsaddlepoint_location\n')
     for i_item, item in enumerate(enumeration):
         reffile.write(f'{enumeration[i_item]}\t{statistics[i_item]}\t{Delta_phi[i_item]}\t{order[i_item]}\t{trajectories[i_item]}\t{DCP_location[i_item]}\n')
-
+    reffile.write('\n')
+    reffile.write(f'frequency_adjacent\t{frequency_adjacent}\t\t\t\n')
 print(f'DCP-analysis_{method}.csv was generated')
