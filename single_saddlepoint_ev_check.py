@@ -226,7 +226,7 @@ else:
     for i, min_deflec in enumerate(list_minimized_deflection):
         mkdir(f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_{i}')
         stepest_descent(trajectory, name, min_deflec, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_{i}', True)
-        cp(f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_{i}/cluster-out.yml', f'trajectory-{trajectory}/result/cluster_min_deflec_{i}-out.yml')
+        cp(f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_{i}/cluster-out.yml', f'trajectory-{trajectory}/result/cluster_{method}_min_deflec_{i}-out.yml')
     print('the DCP lies NOT between the starting minimum and the second minimum of the trajectory')
     #gives barrier and psi values
     phi_deflec_0 = phi_value(trajectory, f'trajectory-{trajectory}/DCP_{method}/ev_deflection_minima_0/fort.100', 'Phi:')
