@@ -316,7 +316,7 @@ mkdir('eigenvector_check')
 list_compared = [[], [], [], [], [], [], []]
 
 for trajectory in range(1, count + 1):
-    print(f'iteration = {trajectory})
+    print(f'iteration = {trajectory}')
     #checks if DCP was calculated
     with open(f'trajectory-{trajectory}-max.ref') as reffile:
         found = False
