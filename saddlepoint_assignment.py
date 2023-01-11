@@ -199,6 +199,7 @@ def ev_deflection_check():
     list_minimized_deflection = []
     
     for m in range(1, 3):
+        print(f'at {iteration} in stedes for max {m}')
         stepest_descent(trajectory, name, deflection_saddlepoint(eigenvec, saddlepoint, (-1) ** m * deflection_factor))
         list_minimized_deflection.append(reading_coordinates(trajectory, 'stedes_eigvec'))
         for obj in ls(f'eigenvector_check'):
@@ -315,6 +316,7 @@ mkdir('eigenvector_check')
 list_compared = [[], [], [], [], [], [], []]
 
 for trajectory in range(1, count + 1):
+    print(f'iteration = {trajectory})
     #checks if DCP was calculated
     with open(f'trajectory-{trajectory}-max.ref') as reffile:
         found = False
