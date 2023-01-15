@@ -45,7 +45,7 @@ with open(f'DCP-analysis_gradient_norm.csv', 'r') as reffile:
                             list_trajectory_change.append(item)
                             list_potential_newton.append(list_potential[i_item])
                             list_potential_gradient.append(potential)
-                            list_adjacent_newton.append(searched)
+                            list_adjacent_gradient.append(searched)
                         
 
 list_statistic = []
