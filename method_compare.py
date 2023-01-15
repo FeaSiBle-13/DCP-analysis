@@ -12,6 +12,7 @@ list_adjacent_newton = []
 list_adjacent_gradient = []
 list_stat_adjacent_newton = []
 list_stat_adjacent_gradient = []
+list_adjacent_temp = []
 
 with open(f'DCP-analysis_newton.csv', 'r') as reffile:
     line = reffile.readline()
