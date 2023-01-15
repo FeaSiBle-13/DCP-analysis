@@ -33,8 +33,7 @@ with open(f'DCP-analysis_gradient_norm.csv', 'r') as reffile:
     line = reffile.readline()
     for line in reffile:
         words = line.split('\t')
-        print(len(words))
-        if len(words) >= 5:
+        if len(words) >= :
             trajectories = words[4].split(',')
             for item in trajectories:
                 trajectory = re.search(r'\d+', item).group()
