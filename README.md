@@ -8,7 +8,8 @@ After a trajectory run with Amolqc, the second minima of a trajectory run are ca
 After a trajectory run with Amolqc and after a run with minimum_calcuation.py, saddlepoints can be calculated with this script. The script is to be started in the folder where the Amolqc run was started. An input file 'saddlepoint_calculation.in' is required. For example:
 
 > threshold_DCP_guess= 1e-1  
-  method= gradient_norm 
+  method= gradient_norm  
+  deflection_factor= 3e-3 
   
 'threshold_DCP_guess' defines above which value the electron positions of two vectors are set as different.
 'method' can be 'newton', 'gradient_norm' or 'none'.
