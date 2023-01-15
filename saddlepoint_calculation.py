@@ -289,9 +289,9 @@ $maximize_sample()''')
                     success = False
                     
             if success:
-                print('newton_singlepoint was calculated')
+                print(f'trajectory = {trajectory} newton_singlepoint was calculated')
             else:
-                print('newton_singlepoint could not be calculated')
+                print(f'trajectory = {trajectory} newton_singlepoint could not be calculated')
 
     else:
         print(f'trajectory-{trajectory} could not be calculated')                                                     
