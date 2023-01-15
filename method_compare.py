@@ -81,7 +81,7 @@ with open('method_compare.out', 'w') as printfile:
         printfile.write(f'\t{list_stat_potential_newton[i_item]}\t{list_stat_potential_gradient[i_item]}\t{list_stat_adjacent_newton[i_item]}\t {list_stat_adjacent_gradient[i_item]}\t{item}\n')
     printfile.write('\t \t \t \t \t \n')
     for i_item, item in enumerate(list_trajectory_change):
-        printfile.write(f'{item}\t{list_potential_newton[i_item]}\t{list_potential_gradient[i_item]}\t{list_stat_adjacent_newton[i_item]}\t{list_stat_adjacent_gradient[i_item]}\n')
+        printfile.write(f'{item}\t{list_potential_newton[i_item]}\t{list_potential_gradient[i_item]}\t{list_adjacent_newton[i_item]}\t{list_adjacent_gradient[i_item]}\n')
   
 print(list_statistic)
 print(list_stat_potential_newton)
