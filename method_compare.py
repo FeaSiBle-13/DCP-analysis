@@ -26,7 +26,7 @@ with open(f'DCP-analysis_newton.csv', 'r') as reffile:
                 searched = words[5].split('\n')
                 list_trajectory.append(trajectory)
                 list_potential.append(potential)
-                list_adjacent_newton.append(searched[0])
+                list_adjacent_temp.append(searched[0])
 
 with open(f'DCP-analysis_gradient_norm.csv', 'r') as reffile:
     line = reffile.readline()
@@ -46,6 +46,7 @@ with open(f'DCP-analysis_gradient_norm.csv', 'r') as reffile:
                             list_potential_newton.append(list_potential[i_item])
                             list_potential_gradient.append(potential)
                             list_adjacent_gradient.append(searched[0])
+                            list_adjacent_newton.append(list_adjacent_temp[i_item])
                         
 
 list_statistic = []
