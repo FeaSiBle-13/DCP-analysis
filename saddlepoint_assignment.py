@@ -311,6 +311,7 @@ method = reading_saddlepoint_calculation_in('method')
 deflection_factor = reading_saddlepoint_calculation_in('deflection_factor')
             
 #starts evaluation
+rm('eigenvector_check', True)
 mkdir('eigenvector_check')
 list_compared = [[], [], [], [], [], [], []]
 
