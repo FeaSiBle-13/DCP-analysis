@@ -313,7 +313,7 @@ deflection_factor = reading_saddlepoint_calculation_in('deflection_factor')
 #starts evaluation
 try:
     rm('eigenvector_check', True)
-else:
+except subprocess.CalledProcessError:
     pass
 
 mkdir('eigenvector_check')
