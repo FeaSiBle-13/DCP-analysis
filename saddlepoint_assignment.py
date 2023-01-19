@@ -1,4 +1,5 @@
 #!/bin/env python3
+import subprocess
 
 import numpy as np
 from pyscript import *
