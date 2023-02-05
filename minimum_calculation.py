@@ -19,10 +19,10 @@ def read_n_elecs():
 
 
 def read_ref_file(reffile, coordinate_position):
+    temp = reffile.upper()
     with open(f'trajectory-{trajectory}-{reffile}.ref', 'r') as reffile:
         R = []
         line = reffile.readline()
-        temp = reffile.upper()
         while f'{coordinate_position} F({temp}):' not in line:
             line = reffile.readline()
         line = reffile.readline()
