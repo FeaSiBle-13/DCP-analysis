@@ -98,7 +98,7 @@ def read_saddlepoint_calculation_in(search):
                     return(words[1])
         #default values if not defined in .in file
         if not found:
-            if search == 'threshold_DCP_guess':
+            if search == 'threshold_molecule':
                 return(1e-1)
             if search == 'method':
                 return('gradient_norm')
@@ -113,7 +113,7 @@ count = read_trajectory_ami('count')
 name = read_trajectory_ami('file')
             
 #reads saddlepoint_calculation.in file 
-threshold_molecule = read_saddlepoint_calculation_in('threshold_DCP_guess')
+threshold_molecule = read_saddlepoint_calculation_in('threshold_molecule')
 method = read_saddlepoint_calculation_in('method')
 
 #loop for trajectories starts here        
