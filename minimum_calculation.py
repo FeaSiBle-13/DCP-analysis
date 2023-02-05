@@ -7,7 +7,7 @@ import re
 import numpy as np
 
 
-def reading_n_elecs():
+def read_n_elecs():
     with open(f'trajectory-1-max.ref', 'r') as reffile:
         line = reffile.readline()
         while 'MAX:' not in line:
@@ -18,50 +18,64 @@ def reading_n_elecs():
     return n_elecs
 
 
-def starting_maximum(trajectory):
-    with open(f'trajectory-{trajectory}-max.ref', 'r') as reffile:
-        R_max = []
+def read_ref_file(reffile, coordinate_position):
+    with open(f'trajectory-{trajectory}-{reffile}.ref', 'r') as reffile:
+        R = []
         line = reffile.readline()
-        while '1 F(MAX):' not in line:
+        while f'{cooridnate_position} F({reffile.upper()}):' not in line:
             line = reffile.readline()
         line = reffile.readline()
         for _ in range(n_elecs):
             line = reffile.readline()
             words = line.split()
             for word in words:
-                R_max.append(float(word))
-        return np.array(R_max)
+                R.append(float(word))
+        return np.array(R)
+        
+        
+def read_coordinates(trajectory, calculation_type):
+    if calculation_type == method:
+        path = f'trajectory-{trajectory}/DCP_{method}/fort.100'
+    elif calculation_type == 'stedes_eigvec':
+        path = f'eigenvector_check/fort.100'
+    with open(path) as reffile:
+            R = []
+            for line in reffile:
+                if 'after minimize:' in line:
+                    line = reffile.readline()
+                    line = reffile.readline()
+                    for _ in range(n_elecs):
+                        line = reffile.readline()
+                        words = line.split()
+                        for word in words[1:]:
+                            R.append(float(word))
+    return(np.array(R))
 
 
-def ending_maximum(trajectory):
-    with open(f'trajectory-{trajectory}-max.ref', 'r') as reffile:
-        R_max = []
-        line = reffile.readline()
-        while '2 F(MAX):' not in line:
-            line = reffile.readline()
-        line = reffile.readline()
-        for _ in range(n_elecs):
-            line = reffile.readline()
-            words = line.split()
-            for word in words:
-                R_max.append(float(word))
-        return np.array(R_max)
-        print(R_max)
+def read_trajectory_ami(search):
+    with open(f'trajectory.ami', 'r') as reffile:
+        if search == 'count':
+            for line in reffile:
+               if 'count' in line:
+                   count = int(re.search(r'\d+', line).group())
+                   break
+            return(count)
+        if search == 'file':
+            for line in reffile:
+                if 'file' in line:
+                    wavefunction = re.search(r'file=([\'"]?)(.+?)\.wf\1', line).group(2)
+                    break
+            return(wavefunction)
 
 
-#reads count from .ami
-with open(f'trajectory.ami', 'r') as ami_file:
-    notdone_count = True
-    notdone_file = True
-    for line in ami_file:
-        if 'count' in line and notdone_count:
-            count = int(re.search(r'\d+', line).group())
-            notdone_count = False
-        elif 'file' in line and notdone_file:
-            name = re.search(r'file=([\'"]?)(.+?)\.wf\1', line).group(2)
-            notdone_file = False
+#script starts here
+#definitions
+count = read_trajectory_ami('count')
+wavefunction = read_trajectory_ami('file')
+n_elecs = read_n_elecs()
 
 for trajectory in range(1, count+1):
+    #checks if a second minimum was identified and if the second potetial is infty
     with open(f'trajectory-{trajectory}-max.ref') as reffile:
         found = False
         infty = False
@@ -74,24 +88,22 @@ for trajectory in range(1, count+1):
 
     #calculates the minimum
     if found and not infty:
-        
-        #makes folders
+        #creates folderstructure
         mkdir(f'trajectory-{trajectory}')
         mkdir(f'trajectory-{trajectory}/result')
         cp(f'trajectory-start/result/cluster_start-out.yml', f'trajectory-{trajectory}/result')
         mkdir(f'trajectory-{trajectory}/minimum')
-        cp(f'{name}.wf', f'trajectory-{trajectory}/minimum')
+        cp(f'{wavefunction}.wf', f'trajectory-{trajectory}/minimum')
 
-        #reads out the coordinates of the starting minimum
-        n_elecs = reading_n_elecs()
-        R_max = ending_maximum(trajectory)
+        #reads out the coordinates of the ending minimum
+        R_max = read_ref_file('max', 2)
 
-        #creates ami file for Amolqc
+        #creates .ami file for Amolqc to make a single point run
         with open(f'trajectory-{trajectory}/minimum/stedes.ami', 'w') as sted_file:
             sted_file.write(f'''! seed for random number generation, not important
 $gen(seed=101)
 ! reading the wave function file
-$wf(read,file='{name}.wf')
+$wf(read,file='{wavefunction}.wf')
 $init_rawdata_generation()
 $init_max_search(
 step_size=0.1,
@@ -129,6 +141,6 @@ MaximaProcessing:
             run('ProcessMaxima cluster.yml')
             cp('cluster-out.yml', '../result/cluster_end-out.yml')
 
-        print(f'Second minimum for trajectory-{trajectory} was calculated')
+        print(f'Minimum calculated for trajectory-{trajectory}')
         
-    else: print(f'Second minimum for trajectory-{trajectory} does not exist')   
+    else: print(f'Minimum NOT calculated for trajectory-{trajectory}')   
