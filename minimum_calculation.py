@@ -22,14 +22,14 @@ def read_ref_file(reffile, coordinate_position):
     with open(f'trajectory-{trajectory}-{reffile}.ref', 'r') as reffile:
         R = []
         for line in reffile:
-        if f'{coordinate_position} F({temp}):' in line:
-            line = reffile.readline()
-            for _ in range(n_elecs):
+            if f'{coordinate_position} F({temp}):' in line:
                 line = reffile.readline()
-                words = line.split()
-                for word in words:
-                    R.append(float(word))
-            return np.array(R)
+                for _ in range(n_elecs):
+                    line = reffile.readline()
+                    words = line.split()
+                    for word in words:
+                        R.append(float(word))
+                return np.array(R)
         
         
 def read_coordinates(trajectory, calculation_type):
