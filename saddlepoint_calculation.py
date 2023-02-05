@@ -47,9 +47,13 @@ def read_ref_file(reffile, coordinate_position):
                     for word in words:
                         R.append(float(word))
                 return np.array(R)
- 
+            
+
+def interpolation(R_OBP1, R_OBP2):
+    return( R_OBP1 + R_OBP2) / 2
+
     
-def initial_guess_point(R_max1, R_max2, threshold_molecule):
+def initial_guess_point(R_max1, R_max2, R_int, threshold_molecule):
     for l in range(n_elecs):
         norm = np.linalg.norm(R_max1[l*3:l*3+3]-R_max2[l*3:l*3+3])
         if norm < threshold_molecule:
@@ -100,7 +104,7 @@ def read_saddlepoint_calculation_in(search):
                 return('gradient_norm')
             if search  == 'deflection_factor':
                 return(3e-3)
-
+            
 
 #script starts here
 #reads out and defines count and n_elecs
@@ -130,9 +134,6 @@ for trajectory in range(1, count+1):
         #makes folders
         mkdir(f'trajectory-{trajectory}/DCP_{method}')
         cp(f'{name}.wf', f'trajectory-{trajectory}/DCP_{method}')
-
-        #interpolation of both -traj- vectors
-        R_int = ( basin_left(trajectory) + basin_enter(trajectory) ) / 2
 
 
 #creates the {method}.ami with the interpolated vectors and the input with the fixed e positions
@@ -166,7 +167,7 @@ $init_walker(
 free
 ''')
             #prints the initial guess point
-            initial_guess_point(starting_maximum(trajectory), ending_maximum(trajectory), threshold_molecule)
+            initial_guess_point(read_ref_file('max', 1), read_ref_file('max', 2),  interpolation(read_ref_file('traj', 1), read_ref_file('traj', 2)), threshold_molecule)
             printfile.write(''')
 $sample(create, size=1, single_point)
 ! maximize the walker
