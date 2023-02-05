@@ -184,14 +184,14 @@ MaximaProcessing:
         run('amolqc stedes.ami')
 
 
-def compare_position(R1, R2, threshold_molecule, Three_N_norm):
+def compare_position(R1, R2, threshold_molecule, compare_mode):
     norm = np.linalg.norm(R1 - R2)
-    if Three_N_norm:
+    if compare_mode == 'molecule_wise':
         if norm <= threshold_molecule:
             return(True)
         else:
             return(False)
-    else:
+    elif: compare_mode == 'electron_wise':
         for l in range(n_elecs):
             same = True
             norm = np.linalg.norm(R1[l*3:l*3+3]-R2[l*3:l*3+3])
@@ -311,6 +311,8 @@ def read_saddlepoint_calculation_in(search):
                 return('gradient_norm')
             if search  == 'deflection_factor':
                 return(3e-3)
+            if search  == 'compare_mode':
+                return('electron_wise')
 
 
 #script starts here
@@ -325,6 +327,7 @@ method = read_saddlepoint_calculation_in('method')
 deflection_factor = read_saddlepoint_calculation_in('deflection_factor')
 compare_position_mode = False
 threshold_electrons = read_saddlepoint_calculation_in('threshold_electrons')
+compare_mode = read_saddlepoint_calculation_in('compare_mode')
 
 
             
