@@ -31,11 +31,11 @@ def read_trajectory_ami(search):
 
 
 def phi_value(point_at_MPP, trajectory):
-    if x == 'start':
+    if point_at_MPP == 'start':
         path = f'trajectory-start/minimum/fort.100'
-    elif x == 'DCP':
+    elif point_at_MPP == 'DCP':
         path = f'trajectory-{trajectory}/DCP_{method}/fort.100'
-    elif x == 'end':
+    elif point_at_MPP == 'end':
         path = f'trajectory-{trajectory}/minimum/fort.100'
     with open(path) as reffile:
         found = False
