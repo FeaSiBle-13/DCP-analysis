@@ -7,7 +7,7 @@ import re
 import numpy as np
 
 
-def reaD_n_elecs():
+def read_n_elecs():
     with open(f'trajectory-1-max.ref', 'r') as reffile:
         for line in reffile:
             if 'MAX:' in line:  
