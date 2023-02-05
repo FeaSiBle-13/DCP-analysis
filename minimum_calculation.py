@@ -7,14 +7,13 @@ import re
 import numpy as np
 
 
-def read_n_elecs():
+def reading_n_elecs():
     with open(f'trajectory-1-max.ref', 'r') as reffile:
-        line = reffile.readline()
-        while 'MAX:' not in line:
-            line = reffile.readline()
-        line = reffile.readline()
-        words = line.split()
-        n_elecs = int(words[0])
+        for line in reffile:
+            if 'MAX:' in line:  
+                line = reffile.readline()
+                words = line.split()
+                n_elecs = int(words[0])
     return n_elecs
 
 
@@ -22,16 +21,15 @@ def read_ref_file(reffile, coordinate_position):
     temp = reffile.upper()
     with open(f'trajectory-{trajectory}-{reffile}.ref', 'r') as reffile:
         R = []
-        line = reffile.readline()
-        while f'{coordinate_position} F({temp}):' not in line:
+        for line in reffile:
+        if f'{coordinate_position} F({temp}):' in line:
             line = reffile.readline()
-        line = reffile.readline()
-        for _ in range(n_elecs):
-            line = reffile.readline()
-            words = line.split()
-            for word in words:
-                R.append(float(word))
-        return np.array(R)
+            for _ in range(n_elecs):
+                line = reffile.readline()
+                words = line.split()
+                for word in words:
+                    R.append(float(word))
+            return np.array(R)
         
         
 def read_coordinates(trajectory, calculation_type):
