@@ -219,7 +219,7 @@ def ev_deflection_check():
     list_found_min = [False, False]
     for m in range(1, 3):
         for vectors in list_minimized_deflection:
-            same = compare_position(read_ref_file('max', m), vectors, threshold_molecule, False)
+            same = compare_position(read_ref_file('max', m), vectors, threshold_molecule, electron_positions)
             if same:
                 list_found_min[m-1] = True
                 break
@@ -321,6 +321,7 @@ name = read_trajectory_ami('file')
 threshold_molecule = read_saddlepoint_calculation_in('threshold_DCP_guess')
 method = read_saddlepoint_calculation_in('method')
 deflection_factor = read_saddlepoint_calculation_in('deflection_factor')
+compare_positions = False
             
 #starts evaluation
 try:
