@@ -22,7 +22,7 @@ def read_ref_file(reffile, coordinate_position):
     with open(f'trajectory-{trajectory}-{reffile}.ref', 'r') as reffile:
         R = []
         line = reffile.readline()
-        while f'{cooridnate_position} F({reffile.upper()}):' not in line:
+        while f'{coordinate_position} F({reffile.upper()}):' not in line:
             line = reffile.readline()
         line = reffile.readline()
         for _ in range(n_elecs):
