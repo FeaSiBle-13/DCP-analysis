@@ -193,7 +193,7 @@ def compare_position(R1, R2, threshold_molecule, Three_N_norm):
             return(False)
     else:
         for l in range(n_elecs):
-            same = False
+            same = True
             norm = np.linalg.norm(R1[l*3:l*3+3]-R2[l*3:l*3+3])
             if norm > threshold_molecule:
                 same = False
