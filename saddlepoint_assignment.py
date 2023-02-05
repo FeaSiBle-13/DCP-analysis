@@ -303,6 +303,8 @@ def read_saddlepoint_calculation_in(search):
                     return(words[1])
         #default values if not defined in .in file
         if not found:
+            if search == 'threshold_electrons':
+                return(1e-3)
             if search == 'threshold_molecule':
                 return(1e-1)
             if search == 'method':
@@ -322,6 +324,8 @@ threshold_molecule = read_saddlepoint_calculation_in('threshold_molecule')
 method = read_saddlepoint_calculation_in('method')
 deflection_factor = read_saddlepoint_calculation_in('deflection_factor')
 compare_position_mode = False
+threshold_electrons = read_saddlepoint_calculation_in('threshold_electrons')
+
 
             
 #starts evaluation
