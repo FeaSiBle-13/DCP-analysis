@@ -219,7 +219,7 @@ def ev_deflection_check():
     list_found_min = [False, False]
     for m in range(1, 3):
         for vectors in list_minimized_deflection:
-            same = compare_position(read_ref_file('max', m), vectors, threshold_molecule, compare_positions)
+            same = compare_position(read_ref_file('max', m), vectors, threshold_molecule, compare_position_threshold)
             if same:
                 list_found_min[m-1] = True
                 break
@@ -234,8 +234,8 @@ def compare_saddlepoints(R_new, trajectory, list_compared, ev_deflection_check):
     #indices from list_compared: 0 = list_DCP, 1 = list_statistics, 2 = list_trajectories, 3 = list_enumerate_DCP, 4 = list_phi_values, 5 = list_order, 6 = saddlepoint_location 
     found = False
     for i_DCP, R_DCP in enumerate(list_compared[0]):
-        norm = np.linalg.norm(R_new - R_DCP)
-        if norm <= threshold_molecule and ev_deflection_check == list_compared[6][i_DCP]:
+        same = compare_position(R_new, R_DCP, threshold_molecule, compare_position_threshold)
+        if same and ev_deflection_check == list_compared[6][i_DCP]:
             list_compared[1][i_DCP] += 1
             list_compared[2][i_DCP] += f', {trajectory}'
             found = True
@@ -321,7 +321,7 @@ name = read_trajectory_ami('file')
 threshold_molecule = read_saddlepoint_calculation_in('threshold_DCP_guess')
 method = read_saddlepoint_calculation_in('method')
 deflection_factor = read_saddlepoint_calculation_in('deflection_factor')
-compare_positions = False
+compare_position_threshold = False
             
 #starts evaluation
 try:
