@@ -325,7 +325,6 @@ name = read_trajectory_ami('file')
 threshold_molecule = read_saddlepoint_calculation_in('threshold_molecule')
 method = read_saddlepoint_calculation_in('method')
 deflection_factor = read_saddlepoint_calculation_in('deflection_factor')
-compare_position_mode = False
 threshold_electrons = read_saddlepoint_calculation_in('threshold_electrons')
 compare_mode = read_saddlepoint_calculation_in('compare_mode')
 
