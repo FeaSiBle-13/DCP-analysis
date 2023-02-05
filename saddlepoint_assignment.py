@@ -219,7 +219,7 @@ def ev_deflection_check():
     list_found_min = [False, False]
     for m in range(1, 3):
         for vectors in list_minimized_deflection:
-            same = compare_position(read_ref_file('max', m), vectors, threshold_molecule)
+            same = compare_position(read_ref_file('max', m), vectors, threshold_molecule, False)
             if same:
                 list_found_min[m-1] = True
                 break
