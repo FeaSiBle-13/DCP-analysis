@@ -5,23 +5,25 @@ After a trajectory run with Amolqc, the second minima of a trajectory run are ca
 
 
 ## saddlepoint_calculation
-After a trajectory run with Amolqc and after a run with minimum_calcuation.py, saddlepoints can be calculated with this script. The script is to be started in the folder where the Amolqc run was started. An input file 'saddlepoint_calculation.in' is required. For example:
+After a trajectory run with Amolqc and after a run with minimum_calcuation.py, saddle points can be identified with this script. The script is to be started in the folder where the Amolqc run was started. An input file 'DCP-analysis.in' is required. For example:
 
-> threshold_DCP_guess= 1e-1  
+> compare_mode= electron_wise   
+> threshold_molecule= 1e-1  
+> threshold_electrons= 1e-3
   method= gradient_norm  
-  deflection_factor= 3e-3 
+  deflection_factor= 3e-3  
   
-'threshold_DCP_guess' defines above which value the electron positions of two vectors are set as different.
-'method' can be 'newton', 'gradient_norm' or 'none'.
-As seperator a space is used after '='.
+compare_mode defines how the coordinates of two molecules are compared. With 'molecule_wise', the 3N norm is compared with the threshold 'threshold_molecule'. With 'electron_wise' the norm of each electron position is compared.
+'method' can be 'newton', 'gradient_norm' or 'none'. The 'deflection_factor' defines extent of the deflection along the eigenvector.
+As seperator a space is used after '='. 
 
 
 ## saddlepoint_assignment
-After a run with saddlepoint_calculation.py the saddlepoints are compared which eachother and are summarized in groups of same saddlepoints with this script. The script is to be started in the folder where the Amolqc run was started. A DCP-analysis_method.csv file is generated, in which the saddlepoints are summarized with information about the **frequency**, the **potentialbarrier**, **order** and the **trajectories** according to the group. Additionally the **runtime** for the saddlepoint_calculation run is given.
+After a run with saddlepoint_calculation.py the saddle points are compared which each other and are summarized in groups of same saddle points with this script. The script is to be started in the folder where the Amolqc run was started. A DCP-analysis_method.csv file is generated, in which the saddlepoints are summarized with information about the **frequency**, the **potentialbarrier**, **order** and the **trajectories** according to the group. Additionally the **runtime** for the saddlepoint_calculation run is given. The method, deflection_factor, compare_mode with corresponding thresholds are defined in DCP-analysis.in.
 
 ## saddlepoint_categorization
 The saddlepoint_categorization.py script can be used, when a DCP-analysis_method.csv file was generated with the script saddlepoint_assignment. The script is to be started in the folder where the Amolqc run was started.
-An assignment_graph.in file is required. For example:
+An DCP-assignment.in file is required. For example:
 
 > category: 0.0337 0.0334 0.164 1.23 0.0326 0.0328 0.0323  
   label: CH_ion CH_ion CC_cov 3_same_spin CH_ion CH_ion CH_ion
