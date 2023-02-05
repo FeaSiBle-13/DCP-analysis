@@ -9,7 +9,7 @@ After a trajectory run with Amolqc and after a run with minimum_calcuation.py, s
 
 > compare_mode= electron_wise   
 > threshold_molecule= 1e-1  
-> threshold_electrons= 1e-3
+> threshold_electrons= 1e-3  
   method= gradient_norm  
   deflection_factor= 3e-3  
   
