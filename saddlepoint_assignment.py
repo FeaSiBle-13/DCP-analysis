@@ -191,7 +191,7 @@ def compare_position(R1, R2, threshold_molecule, compare_mode):
             return(True)
         else:
             return(False)
-    elif: compare_mode == 'electron_wise':
+    elif compare_mode == 'electron_wise':
         for l in range(n_elecs):
             same = True
             norm = np.linalg.norm(R1[l*3:l*3+3]-R2[l*3:l*3+3])
