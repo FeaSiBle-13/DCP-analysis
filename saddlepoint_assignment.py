@@ -195,7 +195,7 @@ def compare_position(R1, R2, threshold_molecule, compare_mode):
         for l in range(n_elecs):
             same = True
             norm = np.linalg.norm(R1[l*3:l*3+3]-R2[l*3:l*3+3])
-            if norm > threshold_molecule:
+            if norm > threshold_electrons:
                 same = False
                 break
                 return(False)
