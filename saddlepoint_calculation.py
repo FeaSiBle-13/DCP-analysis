@@ -23,7 +23,7 @@ def read_trajectory_ami(search):
             return(name)
         
         
-def reading_n_elecs():
+def read_n_elecs():
     with open(f'trajectory-1-max.ref', 'r') as reffile:
         line = reffile.readline()
         while 'MAX:' not in line:
@@ -34,68 +34,22 @@ def reading_n_elecs():
     return n_elecs
 
 
-def starting_maximum(trajectory):
-    with open(f'trajectory-{trajectory}-max.ref', 'r') as reffile:
-        R_max = []
-        line = reffile.readline()
-        while '1 F(MAX):' not in line:
-            line = reffile.readline()
-        line = reffile.readline()
-        for _ in range(n_elecs):
-            line = reffile.readline()
-            words = line.split()
-            for word in words:
-                R_max.append(float(word))
-        return np.array(R_max)
-
-
-def ending_maximum(trajectory):
-    with open(f'trajectory-{trajectory}-max.ref', 'r') as reffile:
-        R_max = []
-        line = reffile.readline()
-        while '2 F(MAX):' not in line:
-            line = reffile.readline()
-        line = reffile.readline()
-        for _ in range(n_elecs):
-            line = reffile.readline()
-            words = line.split()
-            for word in words:
-                R_max.append(float(word))
-        return np.array(R_max)
-        print(R_max)
-
-
-def basin_left(trajectory):
-    with open(f'./trajectory-{trajectory}-traj.ref', 'r') as reffile:
-        R_i = []
-        line = reffile.readline()
-        while '1 F(TRAJ):' not in line:
-            line = reffile.readline()
-        line = reffile.readline()
-        for _ in range(n_elecs):
-            line = reffile.readline()
-            words = line.split()
-            for word in words:
-                R_i.append(float(word))
-    return np.array(R_i)
-
-
-def basin_enter(trajectory):
-    with open(f'./trajectory-{trajectory}-traj.ref', 'r') as reffile:
-        R_j = []
-        line = reffile.readline()
-        while '2 F(TRAJ):' not in line:
-            line = reffile.readline()
-        line = reffile.readline()
-        for _ in range(n_elecs):
-            line = reffile.readline()
-            words = line.split()
-            for word in words:
-                R_j.append(float(word))
-    return np.array(R_j)
+def read_ref_file(reffile, coordinate_position):
+    temp = reffile.upper()
+    with open(f'trajectory-{trajectory}-{reffile}.ref', 'r') as reffile:
+        R = []
+        for line in reffile:
+            if f'{coordinate_position} F({temp}):' in line:
+                line = reffile.readline()
+                for _ in range(n_elecs):
+                    line = reffile.readline()
+                    words = line.split()
+                    for word in words:
+                        R.append(float(word))
+                return np.array(R)
  
     
-def DCP_guess_point(R_max1, R_max2, threshold_molecule):
+def initial_guess_point(R_max1, R_max2, threshold_molecule):
     for l in range(n_elecs):
         norm = np.linalg.norm(R_max1[l*3:l*3+3]-R_max2[l*3:l*3+3])
         if norm < threshold_molecule:
@@ -122,7 +76,7 @@ def DCP_coordinates(trajectory, method):
     return(np.array(R_DCP))
         
     
-def reading_saddlepoint_calculation_in(search):
+def read_saddlepoint_calculation_in(search):
     with open('saddlepoint_calculation.in', 'r') as reffile:
         found = False
         for line in reffile:
@@ -150,16 +104,17 @@ def reading_saddlepoint_calculation_in(search):
 
 #script starts here
 #reads out and defines count and n_elecs
-n_elecs = reading_n_elecs()
+n_elecs = read_n_elecs()
 count = read_trajectory_ami('count')
 name = read_trajectory_ami('file')
             
-#reads saddlepoint_calculation.in file (would be nicer here with regular expressions)
-threshold_molecule = reading_saddlepoint_calculation_in('threshold_DCP_guess')
-method = reading_saddlepoint_calculation_in('method')
+#reads saddlepoint_calculation.in file 
+threshold_molecule = read_saddlepoint_calculation_in('threshold_DCP_guess')
+method = read_saddlepoint_calculation_in('method')
 
 #loop for trajectories starts here        
 for trajectory in range(1, count+1):
+    #checks if a second minimum was identified and if the second potetial is infty
     with open(f'trajectory-{trajectory}-max.ref') as reffile:
         found = False
         infty = False
@@ -171,8 +126,7 @@ for trajectory in range(1, count+1):
                     infty = True
 
     if found and not infty:
-        
-    #calculates saddlepoints with method input
+    #calculates saddlepoints with method from input
         #makes folders
         mkdir(f'trajectory-{trajectory}/DCP_{method}')
         cp(f'{name}.wf', f'trajectory-{trajectory}/DCP_{method}')
@@ -193,7 +147,7 @@ step_size=0.1,
 correction_mode=none,
 singularity_threshold=0.0001,
 ''')
-             #continue here
+            #prints inputs for the chosen method
             if method == 'newton':
                 printfile.write('method=newton,')
             elif method == 'none':
@@ -211,7 +165,8 @@ eigenvalue_threshold=1e-10)
 $init_walker(
 free
 ''')
-            DCP_guess_point(starting_maximum(trajectory), ending_maximum(trajectory), threshold_molecule)
+            #prints the initial guess point
+            initial_guess_point(starting_maximum(trajectory), ending_maximum(trajectory), threshold_molecule)
             printfile.write(''')
 $sample(create, size=1, single_point)
 ! maximize the walker
@@ -249,7 +204,7 @@ MaximaProcessing:
                     pass
 
                 
-#makes a single point newton calculation to obtain the order of the saddlepoint and the eigenvectors if gradient norm is method
+#makes a single point newton calculation, to obtain the order of the saddle point and the eigenvectors if gradient norm is the used method
         if method == 'gradient_norm':
             mkdir(f'trajectory-{trajectory}/DCP_{method}/newton_singlepoint')
             cp(f'{name}.wf', f'trajectory-{trajectory}/DCP_{method}/newton_singlepoint')
