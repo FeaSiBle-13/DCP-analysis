@@ -221,7 +221,7 @@ n_elecs = read_n_elecs()
 
 method = read_DCP_analysis_in('method')
 name = read_trajectory_ami('file')
-deflection_factor = read_analysis_in('deflection_factor')
+deflection_factor = read_DCP_analysis_in('deflection_factor')
 compare_mode = read_DCP_analysis_in('compare_mode')
 threshold_electrons = read_DCP_analysis_in('threshold_electrons')
 threshold_molecule = read_DCP_analysis_in('threshold_molecule')
