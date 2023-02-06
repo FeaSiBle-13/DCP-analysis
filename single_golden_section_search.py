@@ -178,7 +178,7 @@ threshold_electrons = read_DCP_analysis_in('threshold_electrons')
 method = read_DCP_analysis_in('method')
 
 #manual input of the trajectory
-trajectory = int(input('which trajectory should be calculated?'))
+trajectory = int(input('Which trajectory should be calculated?'))
 
 #creates file structure
 try:
