@@ -35,3 +35,9 @@ A saddlepoint_categorization.out file is generated with **categories** and the *
 >categories: CH_ion CC_cov 3_same_spin other_DCPs no_DCP to_infty  
  frequency: 1423 45 15 495 8 14
  
+## golden_sec_search
+With the golden_sec_search script, the maximum potential along the interpolation distance of the OBPs can be identified for a single trajectory. The script results with the potential of the OBPs, the vector of the identified maximum and the potential of the identified maximum.
+
+## reduce_order
+With the script reduce order, it is tried to reduce the order of 2nd order DCPs. The deflection factor and the single trajectory are asked by the script. As output the obtained DCP with its SCPs on both sides is given as .yml files in the folder 'result'. Beside that a reduced_order.out file is generated, containing the results.
+
