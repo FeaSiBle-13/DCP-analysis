@@ -93,7 +93,7 @@ def read_ref_file(reffile, coordinate_position):
                 return np.array(R)
 
 
-def initial_guess_point(R_max1, R_max2, basin_outer_point, threshold_DCP_guess):
+def initial_guess_point(R_max1, R_max2, basin_outer_point, threshold_electrons):
     R = []
     for l in range(n_elecs):
         norm = np.linalg.norm(R_max1[l*3:l*3+3]-R_max2[l*3:l*3+3])
@@ -190,8 +190,8 @@ mkdir(f'trajectory-{trajectory}/temp')
 cp(f'{name}.wf', f'trajectory-{trajectory}/temp')
 
 #makes the interpolation for the initial guess point
-a =  initial_guess_point(read_ref_file('max', 1), read_ref_file('max', 2), read_ref_file('traj', 1), threshold_DCP_guess)
-b =  initial_guess_point(read_ref_file('max', 1), read_ref_file('max', 2), read_ref_file('traj', 2), threshold_DCP_guess)
+a =  initial_guess_point(read_ref_file('max', 1), read_ref_file('max', 2), read_ref_file('traj', 1), threshold_electrons)
+b =  initial_guess_point(read_ref_file('max', 1), read_ref_file('max', 2), read_ref_file('traj', 2), threshold_electrons)
 
 #makes single point none calculation to obtain the potential
 single_point_none(trajectory, n_elecs, a)
