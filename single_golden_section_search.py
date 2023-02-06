@@ -194,10 +194,10 @@ b =  initial_guess_point(read_ref_file('max', 1), read_ref_file('max', 2), read_
 
 #makes single point none calculation to obtain the potential
 single_point_none(trajectory, n_elecs, a)
-print(phi_value(trajectory))
+print(f'potential of OBP in starting basin = {phi_value(trajectory)}')
 
 single_point_none(trajectory, n_elecs, b)
-print(phi_value(trajectory))
+print(f'potential of OBP in ending basin = {phi_value(trajectory)}')
 
 #defines the golden ratio
 gr = (np.sqrt(5) + 1) / 2 
@@ -205,8 +205,8 @@ gr = (np.sqrt(5) + 1) / 2
 #makes the golden section search
 R_new = golden_sec_search(f, a, b)
 
-print(R_new)
-print(f(R_new, trajectory))
+print(f'coordinates of golden section search maximum = {R_new}')
+print(f'potential of golden section search maximum = {(R_new, trajectory)}')
 
 #removes temporary folder
 rm(f'trajectory-{trajectory}/temp', True)     
