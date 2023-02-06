@@ -226,7 +226,7 @@ for m in range(1, 3):
     for obj in ls(f'eigenvector_check'):
         rm(f'eigenvector_check/{obj}')
     for n in range(1, 3):
-        same = compare_position(minimum(trajectory, n), minimized_deflection, compare_mode)
+        same = compare_position(read_ref_file('max', n), minimized_deflection, compare_mode)
         if same:
             list_found_min[n-1] = True
             break
