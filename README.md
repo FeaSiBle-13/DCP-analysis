@@ -23,12 +23,12 @@ After a run with saddlepoint_calculation.py the saddle points are compared which
 
 ## saddlepoint_categorization
 The saddlepoint_categorization.py script can be used, when a DCP-analysis_method.csv file was generated with the script saddlepoint_assignment. The script is to be started in the folder where the Amolqc run was started.
-An DCP-assignment.in file is required. For example:
+An DCP_analysis.in file is required, which contains for example:
 
 > category: 0.0337 0.0334 0.164 1.23 0.0326 0.0328 0.0323  
   label: CH_ion CH_ion CC_cov 3_same_spin CH_ion CH_ion CH_ion
  
-As seperator a space is used. 
+The DCP_analysis.in file can contain inputs for all DCP-analysis calculations at the same time. As seperator a space is used. 
 It needs to contain a line with 'category:' and a line with 'label:'. After 'category' the categories are defined in which the saddlepoints should be summarized in. With 'label' the category names are defined. If several categories are accorded to the same label  the categories need to have the same label name. 
 A assignment_graph.out file is generated with **categories** and the **frequency** of the saddlepoints according to the categories. The category **other_DCPs** is always given, when potentials are found, which are not given in the input file as 'category'. The categories **no_DCP**, **to_infty** and **same_basin** are generated, when the potential is 'none' in the DCP-analysis_method.csv file. The .out file is for example:
 
