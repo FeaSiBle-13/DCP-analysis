@@ -16,6 +16,22 @@ def read_n_elecs():
     return n_elecs
 
 
+def read_trajectory_ami(search):
+    with open(f'trajectory.ami', 'r') as reffile:
+        if search == 'count':
+            for line in reffile:
+               if 'count' in line:
+                   count = int(re.search(r'\d+', line).group())
+                   break
+            return(count)
+        if search == 'file':
+            for line in reffile:
+                if 'file' in line:
+                    name = re.search(r'file=([\'"]?)(.+?)\.wf\1', line).group(2)
+                    break
+            return(name)
+
+
 def read_DCP_analysis_in(search):
     with open('DCP_analysis.in', 'r') as reffile:
         found = False
@@ -61,25 +77,6 @@ def phi_value(trajectory):
         return(phi)
 
 
-def basin_outer_point(trajectory, basin):
-    with open(f'./trajectory-{trajectory}-traj.ref', 'r') as reffile:
-        if basin == 'basin1':
-            x = 1 
-        elif basin == 'basin2':
-            x = 2 
-        R = []
-        line = reffile.readline()
-        for line in reffile: 
-            if f'{x} F(TRAJ):' in line:
-                line = reffile.readline()
-                for _ in range(n_elecs):
-                    line = reffile.readline()
-                    words = line.split()
-                    for word in words:
-                        R.append(float(word))
-    return np.array(R)
-
-
 def read_ref_file(reffile, coordinate_position):
     temp = reffile.upper()
     with open(f'trajectory-{trajectory}-{reffile}.ref', 'r') as reffile:
@@ -93,25 +90,6 @@ def read_ref_file(reffile, coordinate_position):
                     for word in words:
                         R.append(float(word))
                 return np.array(R)
-            
-            
-def basin_minimum(trajectory, basin):
-    with open(f'./trajectory-{trajectory}-max.ref', 'r') as reffile:
-        if basin == 'basin1':
-            x = 1 
-        elif basin == 'basin2':
-            x = 2 
-        R = []
-        line = reffile.readline()
-        for line in reffile: 
-            if f'{x} F(MAX):' in line:
-                line = reffile.readline()
-                for _ in range(n_elecs):
-                    line = reffile.readline()
-                    words = line.split()
-                    for word in words:
-                        R.append(float(word))
-    return np.array(R)
 
 
 def initial_guess_point(R_max1, R_max2, basin_outer_point, threshold_DCP_guess):
