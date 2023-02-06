@@ -3,7 +3,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-with open('saddlepoint_calculation.in', 'r') as reffile:
+with open('DCP_analysis.in', 'r') as reffile:
     found = False
     for line in reffile:  
         if 'method' in line:
@@ -129,21 +129,3 @@ with open (f'assignment_graph_{method}.out', 'w') as printfile:
         printfile.write(f'{item} ')
 print(f'assignment_graph_{method}.out was generated') 
 
-#makes bar diagram
-#plt.rcParams['figure.figsize'] = (10, 8.5)
-#plt.rcParams['font.size'] = 14
-#plt.rcParams['lines.linewidth'] = 2
-#plt.rc ('axes', titlesize = 20)
-#plt.rc ('axes', labelsize = 18)
-#plt.rc ('xtick', labelsize = 10) 
-#
-#plt.ylabel('frequency', labelpad = 15) 
-#
-#x_values = range(len(list_final_frequencies))
-#
-#plt.xticks(x_values, list_final_label)  
-#
-#plt.bar(x_values, list_final_frequencies, width = 0.5, label = list_label)
-#
-#plt.savefig(f'assignment_graph_{method}.png')
-#print(f'assignment_graph_{method}.png was generated')
