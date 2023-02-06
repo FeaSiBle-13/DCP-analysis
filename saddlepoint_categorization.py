@@ -39,7 +39,7 @@ with open(f'DCP-analysis_{method}.csv', 'r') as reffile:
                 list_frequency_temp.append(int(words[1]))            
             
 #reads out the input information for the plot 
-with open('assignment_graph.in', 'r') as reffile:
+with open('DCP_analysis.in', 'r') as reffile:
     list_category = []
     list_label = []
     for line in reffile:
@@ -111,7 +111,7 @@ if 'no basin change' in list_final_label:
     list_final_label[list_final_label.index('no basin change')] = 'same_basin'
     
 #creates output file
-with open (f'assignment_graph_{method}.out', 'w') as printfile:
+with open (f'saddlepoint_categorization_{method}.out', 'w') as printfile:
     printfile.write('categories: ')
     for item in list_final_label: 
         printfile.write(f'{item} ')
@@ -127,5 +127,5 @@ with open (f'assignment_graph_{method}.out', 'w') as printfile:
     printfile.write('frequency not adjacent: ')
     for item in list_final_frequencies_not_adj: 
         printfile.write(f'{item} ')
-print(f'assignment_graph_{method}.out was generated') 
+print(f'saddlepoint_categorization_{method}.out was generated') 
 
