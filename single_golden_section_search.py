@@ -181,7 +181,10 @@ method = read_DCP_analysis_in('method')
 trajectory = int(input('which trajectory should be calculated?'))
 
 #creates file structure
-rm(f'trajectory-{trajectory}/temp', True)
+try:
+    rm(f'trajectory-{trajectory}/temp', True)
+except subprocess.CalledProcessError:
+
 mkdir(f'trajectory-{trajectory}/temp')
 cp(f'{name}.wf', f'trajectory-{trajectory}/temp')
 
