@@ -196,7 +196,7 @@ def read_DCP_analysis_in(search):
 
 
 #script starts here
-trajectory = int(input('which trajectory do you mean?'))
+trajectory = int(input('Which trajectory should be calculated?'))
 
 n_elecs = read_n_elecs()
 count = read_trajectory_ami('count')
