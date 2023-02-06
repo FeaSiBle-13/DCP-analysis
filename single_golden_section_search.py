@@ -202,10 +202,8 @@ gr = (np.sqrt(5) + 1) / 2
 #makes the golden section search
 R_new = golden_sec_search(f, a, b)
 
-#removes temporary folder
-rm(f'trajectory-{trajectory}/temp', True)
-
 print(R_new)
 print(f(R_new, trajectory))
 
-                           
+#removes temporary folder
+rm(f'trajectory-{trajectory}/temp', True)     
