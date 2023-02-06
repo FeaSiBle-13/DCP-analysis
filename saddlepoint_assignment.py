@@ -285,8 +285,8 @@ def runtime_hours(runtime):
     return np.round(runtime_hours, decimals = 3)
 
 
-def read_saddlepoint_calculation_in(search):
-    with open('saddlepoint_calculation.in', 'r') as reffile:
+def read_DCP_analysis_in(search):
+    with open('DCP_analysis.in', 'r') as reffile:
         found = False
         for line in reffile:
             if search in line:
@@ -321,12 +321,12 @@ n_elecs = read_n_elecs()
 count = read_trajectory_ami('count')
 name = read_trajectory_ami('file')
             
-#reads saddlepoint_calculation.in file (would be nicer here with regular expressions)
-threshold_molecule = read_saddlepoint_calculation_in('threshold_molecule')
-method = read_saddlepoint_calculation_in('method')
-deflection_factor = read_saddlepoint_calculation_in('deflection_factor')
-threshold_electrons = read_saddlepoint_calculation_in('threshold_electrons')
-compare_mode = read_saddlepoint_calculation_in('compare_mode')
+#reads DCP_analysis.in file (would be nicer here with regular expressions)
+threshold_molecule = read_DCP_analysis_in('threshold_molecule')
+method = read_DCP_analysis_in('method')
+deflection_factor = read_DCP_analysis_in('deflection_factor')
+threshold_electrons = read_DCP_analysis_in('threshold_electrons')
+compare_mode = read_DCP_analysis_in('compare_mode')
 
 
             
