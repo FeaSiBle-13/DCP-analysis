@@ -30,9 +30,8 @@ An DCP_analysis.in file is required, which contains for example:
  
 The DCP_analysis.in file can contain inputs for all DCP-analysis calculations at the same time. As seperator a space is used. 
 It needs to contain a line with 'category:' and a line with 'label:'. After 'category' the categories are defined in which the saddlepoints should be summarized in. With 'label' the category names are defined. If several categories are accorded to the same label  the categories need to have the same label name. 
-A assignment_graph.out file is generated with **categories** and the **frequency** of the saddlepoints according to the categories. The category **other_DCPs** is always given, when potentials are found, which are not given in the input file as 'category'. The categories **no_DCP**, **to_infty** and **same_basin** are generated, when the potential is 'none' in the DCP-analysis_method.csv file. The .out file is for example:
+A saddlepoint_categorization.out file is generated with **categories** and the **frequency** of the saddlepoints according to the categories. The category **other_DCPs** is always given, when potentials are found, which are not given in the input file as 'category'. The categories **no_DCP**, **to_infty** and **same_basin** are generated, when the potential is 'none' in the DCP-analysis_method.csv file. The .out file is for example:
 
 >categories: CH_ion CC_cov 3_same_spin other_DCPs no_DCP to_infty  
  frequency: 1423 45 15 495 8 14
-
-Additionally an assignment_graph_method.png file with a bar diagram is generated.
+ 
