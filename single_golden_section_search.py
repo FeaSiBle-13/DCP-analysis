@@ -206,7 +206,7 @@ gr = (np.sqrt(5) + 1) / 2
 R_new = golden_sec_search(f, a, b)
 
 print(f'coordinates of golden section search maximum = {R_new}\n')
-print(f'potential of golden section search maximum = {f(R_new, trajectory)}')
+print(f'potential of golden section search maximum = {f(R_new, trajectory)}\n')
 
 #removes temporary folder
 rm(f'trajectory-{trajectory}/temp', True)     
