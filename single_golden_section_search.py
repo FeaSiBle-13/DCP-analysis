@@ -2,6 +2,7 @@
 
 import subprocess
 
+import re
 import numpy as np
 from pyscript import *
 
