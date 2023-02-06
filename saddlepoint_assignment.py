@@ -398,11 +398,11 @@ for i_item, item in enumerate(DCP_location):
         
 
 #prints out .csv file
-with open(f'DCP-analysis_{method}.csv', 'w') as reffile:
+with open(f'DCP_analysis_{method}.csv', 'w') as reffile:
     reffile.write(f'runtime\t {runtime()}\t{runtime_hours(runtime())}\thours\t\t\n')
     reffile.write(f'\tfrequency\tDelta_phi\torder\ttrajectories\tsaddlepoint_location\n')
     for i_item, item in enumerate(enumeration):
         reffile.write(f'{enumeration[i_item]}\t{statistics[i_item]}\t{Delta_phi[i_item]}\t{order[i_item]}\t{trajectories[i_item]}\t{DCP_location[i_item]}\n')
     reffile.write('\n')
     reffile.write(f'frequency_adjacent\t{frequency_adjacent}\n')
-print(f'DCP-analysis_{method}.csv was generated')
+print(f'DCP_analysis_{method}.csv was generated')
