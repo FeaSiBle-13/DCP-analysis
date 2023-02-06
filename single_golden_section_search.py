@@ -184,7 +184,7 @@ trajectory = int(input('which trajectory should be calculated?'))
 try:
     rm(f'trajectory-{trajectory}/temp', True)
 except subprocess.CalledProcessError:
-
+    pass
 mkdir(f'trajectory-{trajectory}/temp')
 cp(f'{name}.wf', f'trajectory-{trajectory}/temp')
 
