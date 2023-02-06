@@ -181,6 +181,7 @@ method = read_DCP_analysis_in('method')
 trajectory = int(input('which trajectory should be calculated?'))
 
 #creates file structure
+rm(f'trajectory-{trajectory}/temp', True)
 mkdir(f'trajectory-{trajectory}/temp')
 cp(f'{name}.wf', f'trajectory-{trajectory}/temp')
 
@@ -201,6 +202,10 @@ gr = (np.sqrt(5) + 1) / 2
 #makes the golden section search
 R_new = golden_sec_search(f, a, b)
 
+#removes temporary folder
+rm(f'trajectory-{trajectory}/temp', True)
+
 print(R_new)
 print(f(R_new, trajectory))
+
                            
