@@ -217,11 +217,11 @@ MaximaProcessing:
 
 
 #script starts here
-n_elecs = reading_n_elecs()
+n_elecs = read_n_elecs()
 
-method = reading_DCP_analysis_in('method')
+method = read_DCP_analysis_in('method')
 name = read_trajectory_ami('file')
-deflection_factor = reading_analysis_in('deflection_factor')
+deflection_factor = read_analysis_in('deflection_factor')
 compare_mode = read_DCP_analysis_in('compare_mode')
 threshold_electrons = read_DCP_analysis_in('threshold_electrons')
 threshold_molecule = read_DCP_analysis_in('threshold_molecule')
@@ -232,7 +232,7 @@ trajectory = int(input('Which trajectory do you mean?'))
 #order is reduced
 mkdir(f'trajectory-{trajectory}/DCP_{method}/reduce_order')
 eigenvector = read_eigenvector(trajectory, 2) 
-saddlepoint = reading_coordinates(trajectory, method)
+saddlepoint = read_coordinates(trajectory, method)
 deflected_saddlepoint = deflection_saddlepoint(eigenvector, saddlepoint, deflection_ev)
 newton(trajectory, name, deflected_saddlepoint, f'trajectory-{trajectory}/DCP_{method}/reduce_order', True)
 
@@ -241,7 +241,7 @@ print(f'newton calculation with deflection_factor of {deflection_factor} was don
 #deflects reduced saddlepoint to find minima
 phi_deflec = []
 psi_value = []
-saddlepoint_reduced = reading_coordinates(trajectory, 'reduced_order') 
+saddlepoint_reduced = read_coordinates(trajectory, 'reduced_order') 
 eigenvector = read_eigenvector(trajectory, 1)
 for m in range(1, 3):
     path = f'trajectory-{trajectory}/DCP_{method}/reduced_ev_deflection_{m-1}'
