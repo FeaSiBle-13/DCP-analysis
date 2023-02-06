@@ -7,14 +7,13 @@ import numpy as np
 import re
 
 
-def reading_n_elecs():
+def read_n_elecs():
     with open(f'trajectory-1-max.ref', 'r') as reffile:
-        line = reffile.readline()
-        while 'MAX:' not in line:
-            line = reffile.readline()
-        line = reffile.readline()
-        words = line.split()
-        n_elecs = int(words[0])
+        for line in reffile:
+            if 'MAX:' in line:  
+                line = reffile.readline()
+                words = line.split()
+                n_elecs = int(words[0])
     return n_elecs
 
 
@@ -48,7 +47,7 @@ def read_trajectory_ami(search):
 
 
 
-def reading_coordinates(trajectory, calculation_type):
+def read_coordinates(trajectory, calculation_type):
     if calculation_type == method:
         path = f'trajectory-{trajectory}/DCP_{method}/fort.100'
     elif calculation_type == 'stedes_eigvec':
@@ -67,19 +66,19 @@ def reading_coordinates(trajectory, calculation_type):
     return(np.array(R))
 
 
-def minimum(trajectory, x):
-    with open(f'trajectory-{trajectory}-max.ref', 'r') as reffile:
+def read_ref_file(reffile, coordinate_position):
+    temp = reffile.upper()
+    with open(f'trajectory-{trajectory}-{reffile}.ref', 'r') as reffile:
         R = []
-        line = reffile.readline()
-        while f'{x} F(MAX):' not in line:
-            line = reffile.readline()
-        line = reffile.readline()
-        for _ in range(n_elecs):
-            line = reffile.readline()
-            words = line.split()
-            for word in words:
-                R.append(float(word))
-        return np.array(R)
+        for line in reffile:
+            if f'{coordinate_position} F({temp}):' in line:
+                line = reffile.readline()
+                for _ in range(n_elecs):
+                    line = reffile.readline()
+                    words = line.split()
+                    for word in words:
+                        R.append(float(word))
+                return np.array(R)
 
 
 def read_eigenvector(trajectory):
@@ -151,16 +150,27 @@ MaximaProcessing:
     return(print(f'minimum for {folder_path} for trajectory-{trajectory} was calculated'))
 
 
-def compare_position(R1, R2, threshold_molecule):
+def compare_position(R1, R2, compare_mode):
     norm = np.linalg.norm(R1 - R2)
-    if norm <= threshold_molecule:
-        return(True)
-    else:
-        return(False)
+    if compare_mode == 'molecule_wise':
+        if norm <= threshold_molecule:
+            return(True)
+        else:
+            return(False)
+    elif compare_mode == 'electron_wise':
+        for l in range(n_elecs):
+            same = True
+            norm = np.linalg.norm(R1[l*3:l*3+3]-R2[l*3:l*3+3])
+            if norm > threshold_electrons:
+                same = False
+                break
+                return(False)
+        if same:
+            return(True)
     
     
-def reading_saddlepoint_calculation_in(search):
-    with open('saddlepoint_calculation.in', 'r') as reffile:
+def read_DCP_analysis_in(search):
+    with open('DCP_analysis.in', 'r') as reffile:
         found = False
         for line in reffile:
             if search in line:
@@ -188,19 +198,21 @@ def reading_saddlepoint_calculation_in(search):
 #program starts here
 trajectory = int(input('which trajectory do you mean?'))
 
-n_elecs = reading_n_elecs()
+n_elecs = read_n_elecs()
 count = read_trajectory_ami('count')
 name = read_trajectory_ami('file')
             
 #reads saddlepoint_calculation.in file (would be nicer here with regular expressions)
-threshold_molecule = reading_saddlepoint_calculation_in('threshold_DCP_guess')
-method = reading_saddlepoint_calculation_in('method')
-deflection_factor = reading_saddlepoint_calculation_in('deflection_factor')
+compare_mode = read_DCP_analysis_in('compare_mode')
+threshold_molecule = read_DCP_analysis_in('threshold_molecule')
+threshold_electrons = read_DCP_analysis_in('threshold_electrons')
+method = read_DCP_analysis_in('method')
+deflection_factor = read_DCP_analysis_in('deflection_factor')
 
 mkdir(f'eigenvector_check')
 
 eigenvec = read_eigenvector(trajectory)
-saddlepoint = reading_coordinates(trajectory, method)
+saddlepoint = read_coordinates(trajectory, method)
 
 
 #compares if stepest descent minimization ends in the starting or ending minimum
@@ -209,12 +221,12 @@ list_found_min = [False, False]
 
 for m in range(1, 3):
     stepest_descent(trajectory, name, deflection_saddlepoint(eigenvec, saddlepoint, (-1) ** m * deflection_factor), 'eigenvector_check')
-    minimized_deflection = reading_coordinates(trajectory, 'stedes_eigvec')
+    minimized_deflection = read_coordinates(trajectory, 'stedes_eigvec')
     list_minimized_deflection.append(minimized_deflection)
     for obj in ls(f'eigenvector_check'):
         rm(f'eigenvector_check/{obj}')
     for n in range(1, 3):
-        same = compare_position(minimum(trajectory, n), minimized_deflection, threshold_molecule)
+        same = compare_position(minimum(trajectory, n), minimized_deflection, compare_mode)
         if same:
             list_found_min[n-1] = True
             break
