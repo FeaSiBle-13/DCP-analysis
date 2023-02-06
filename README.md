@@ -15,7 +15,7 @@ After a trajectory run with Amolqc and after a run with minimum_calcuation.py, s
   
 compare_mode defines how the coordinates of two molecules are compared. With 'molecule_wise', the 3N norm is compared with the threshold 'threshold_molecule'. With 'electron_wise' the norm of each electron position is compared.
 'method' can be 'newton', 'gradient_norm' or 'none'. The 'deflection_factor' defines the extent of the deflection along the eigenvector.
-As seperator a space is used after '='. 
+As seperator space is used after '='. 
 
 
 ## saddlepoint_assignment
