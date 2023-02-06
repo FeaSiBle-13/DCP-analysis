@@ -226,8 +226,9 @@ compare_mode = read_DCP_analysis_in('compare_mode')
 threshold_electrons = read_DCP_analysis_in('threshold_electrons')
 threshold_molecule = read_DCP_analysis_in('threshold_molecule')
 
+trajectory = int(input('Which trajectory should be calculated?'))
 deflection_ev = float(input('What is the deflection_ev factor ?'))
-trajectory = int(input('Which trajectory do you mean?'))
+
 
 #order is reduced
 mkdir(f'trajectory-{trajectory}/DCP_{method}/reduce_order')
