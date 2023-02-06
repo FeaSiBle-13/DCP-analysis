@@ -36,8 +36,10 @@ A saddlepoint_categorization.out file is generated with **categories** and the *
  frequency: 1423 45 15 495 8 14
  
 ## golden_sec_search
-With the golden_sec_search script, the maximum potential along the interpolation distance of the OBPs can be identified for a single trajectory. The script results with the potential of the OBPs, the vector of the identified maximum and the potential of the identified maximum.
+With the golden_sec_search script, the maximum potential along the interpolation distance of the OBPs can be identified for a single trajectory. The script results with the potential of the OBPs, the vector of the identified maximum and the potential of the identified maximum. 
 
 ## reduce_order
-With the script reduce order, it is tried to reduce the order of 2nd order DCPs. The deflection factor and the single trajectory are asked by the script. As output the obtained DCP with its SCPs on both sides is given as .yml files in the folder 'result'. Beside that a reduced_order.out file is generated, containing the results.
+With the script reduce order, it is tried to reduce the order of 2nd order DCPs. The deflection factor and the single trajectory are asked by the script. As output, the obtained DCP with its SCPs on both sides is given as .yml files in the folder 'result'. Beside that a reduced_order.out file is generated, containing the results. Which DCP is minimized, is defined in the DCP_analysis.in file unter 'method'.
 
+## ev_check
+With the ev_check script the SCPs on both sides of one DCP can be identified. The results are given in the terminal, as well as in an ev_check.out file in the folder 'result'. It containes the .yml files of the identified minima (\*deflec_0-out.yml & \*deflec10-out.yml). Which DCP is minimized, is defined in the DCP_analysis.in file unter 'method'.
