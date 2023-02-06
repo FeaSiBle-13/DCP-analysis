@@ -166,11 +166,6 @@ def golden_sec_search(f, a, b, tol=1e-1):
         # We recompute both c and d here to avoid loss of precision which may lead to incorrect results or infinite loop
         c = b - (b - a) / gr
         d = a + (b - a) / gr
-        print(f'step ={step+1}')
-        print(f'a = {a}')
-        print(f'b = {b}')
-        print(f'c = {c}')
-        print(f'd = {d}\n')
     return ((b + a) / 2)
     
 
