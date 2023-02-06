@@ -195,22 +195,28 @@ def read_DCP_analysis_in(search):
                 return(3e-3)
 
 
-#program starts here
+#script starts here
 trajectory = int(input('which trajectory do you mean?'))
 
 n_elecs = read_n_elecs()
 count = read_trajectory_ami('count')
 name = read_trajectory_ami('file')
             
-#reads saddlepoint_calculation.in file (would be nicer here with regular expressions)
+#reads DCP_analysis.in file
 compare_mode = read_DCP_analysis_in('compare_mode')
 threshold_molecule = read_DCP_analysis_in('threshold_molecule')
 threshold_electrons = read_DCP_analysis_in('threshold_electrons')
 method = read_DCP_analysis_in('method')
 deflection_factor = read_DCP_analysis_in('deflection_factor')
 
+#makes folder structure
+try:
+    rm('eigenvector_check', True)
+except subprocess.CalledProcessError:
+    pass
 mkdir(f'eigenvector_check')
 
+#reads eigenvector and DCP
 eigenvec = read_eigenvector(trajectory)
 saddlepoint = read_coordinates(trajectory, method)
 
