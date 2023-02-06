@@ -80,8 +80,8 @@ def DCP_coordinates(trajectory, method):
     return(np.array(R_DCP))
         
     
-def read_saddlepoint_calculation_in(search):
-    with open('saddlepoint_calculation.in', 'r') as reffile:
+def read_DCP_analysis_in(search):
+    with open('DCP_analysis.in', 'r') as reffile:
         found = False
         for line in reffile:
             if search in line:
@@ -112,9 +112,9 @@ n_elecs = read_n_elecs()
 count = read_trajectory_ami('count')
 name = read_trajectory_ami('file')
             
-#reads saddlepoint_calculation.in file 
-threshold_molecule = read_saddlepoint_calculation_in('threshold_molecule')
-method = read_saddlepoint_calculation_in('method')
+#reads DCP_analysis.in file 
+threshold_molecule = read_DCP_analysis_in('threshold_molecule')
+method = read_DCP_analysis_in('method')
 
 #loop for trajectories starts here        
 for trajectory in range(1, count+1):
