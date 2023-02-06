@@ -22,8 +22,8 @@ def read_trajectory_ami(search):
             return(name)
         
         
-def reading_saddlepoint_calculation_in(search):
-    with open('saddlepoint_calculation.in', 'r') as reffile:
+def read_DCP_analysis_in(search):
+    with open('DCP_analysis.in', 'r') as reffile:
         found = False
         for line in reffile:
             if search in line:
@@ -40,26 +40,29 @@ def reading_saddlepoint_calculation_in(search):
                     return(words[1])
         #default values if not defined in .in file
         if not found:
-            if search == 'threshold_DCP_guess':
+            if search == 'threshold_electrons':
+                return(1e-3)
+            if search == 'threshold_molecule':
                 return(1e-1)
             if search == 'method':
                 return('gradient_norm')
             if search  == 'deflection_factor':
                 return(3e-3)
+            if search  == 'compare_mode':
+                return('electron_wise')
         
         
-def reading_n_elecs():
+def read_n_elecs():
     with open(f'trajectory-1-max.ref', 'r') as reffile:
-        line = reffile.readline()
-        while 'MAX:' not in line:
-            line = reffile.readline()
-        line = reffile.readline()
-        words = line.split()
-        n_elecs = int(words[0])
+        for line in reffile:
+            if 'MAX:' in line:  
+                line = reffile.readline()
+                words = line.split()
+                n_elecs = int(words[0])
     return n_elecs
 
 
-def reading_coordinates(trajectory, calculation_type):
+def read_coordinates(trajectory, calculation_type):
     if calculation_type == method:
         path = f'trajectory-{trajectory}/DCP_{method}/fort.100'
     elif calculation_type == 'stedes_eigvec':
@@ -114,14 +117,6 @@ def phi_value(trajectory, path, search):
         if not found:
             print(f'Phi from {path} was not found')
     return phi
-
-
-def compare_position(R1, R2, threshold_molecule):
-    norm = np.linalg.norm(R1 - R2)
-    if norm <= threshold_molecule:
-        return(True)
-    else:
-        return(False)
     
     
 def newton(trajectory, molecule, R, folder_path, ProcessMaxima = False):
@@ -222,13 +217,17 @@ MaximaProcessing:
 
 
 #script starts here
-trajectory = int(input('Which trajectory do you mean?'))
-
 n_elecs = reading_n_elecs()
-method = reading_saddlepoint_calculation_in('method')
+
+method = reading_DCP_analysis_in('method')
 name = read_trajectory_ami('file')
-deflection_factor = reading_saddlepoint_calculation_in('deflection_factor')
+deflection_factor = reading_analysis_in('deflection_factor')
+compare_mode = read_DCP_analysis_in('compare_mode')
+threshold_electrons = read_DCP_analysis_in('threshold_electrons')
+threshold_molecule = read_DCP_analysis_in('threshold_molecule')
+
 deflection_ev = float(input('What is the deflection_ev factor ?'))
+trajectory = int(input('Which trajectory do you mean?'))
 
 #order is reduced
 mkdir(f'trajectory-{trajectory}/DCP_{method}/reduce_order')
@@ -239,9 +238,9 @@ newton(trajectory, name, deflected_saddlepoint, f'trajectory-{trajectory}/DCP_{m
 
 print(f'newton calculation with deflection_factor of {deflection_factor} was done.')
 
+#deflects reduced saddlepoint to find minima
 phi_deflec = []
 psi_value = []
-#deflects reduced saddlepoint to find minima
 saddlepoint_reduced = reading_coordinates(trajectory, 'reduced_order') 
 eigenvector = read_eigenvector(trajectory, 1)
 for m in range(1, 3):
@@ -249,7 +248,7 @@ for m in range(1, 3):
     mkdir(path)
     stepest_descent(trajectory, name, deflection_saddlepoint(eigenvector, saddlepoint_reduced, (-1) ** m * deflection_factor), path, True)
     cp(path + '/cluster-out.yml', f'trajectory-{trajectory}/result/cluster_reduced_min_deflec_{m-1}-out.yml')
-    #prints stuff
+    #prints potentials and psi-values of the minima
     phi_deflec.append(phi_value(trajectory, path + '/fort.100', 'Phi:'))
     psi_value.append(np.round(phi_value(trajectory, path + '/fort.100', 'Psi'), 4))
 phi_DCP = phi_value(trajectory, f'trajectory-{trajectory}/DCP_{method}/reduce_order/fort.100', 'Phi')
